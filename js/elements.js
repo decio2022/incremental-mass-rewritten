@@ -226,6 +226,8 @@ function setupHTML() {
 	}
 	confirm_table.setHTML(table)
 
+	setupAllStatsHTML()
+
     tmp.el = {}
 	let all = document.getElementsByTagName("*")
 	for (let i=0;i<all.length;i++) {
@@ -646,6 +648,9 @@ function updateHTML() {
 			updateExoticHTML()
 		}
 		if (tmp.tab == 8) {
+			updateAllStatsHTML()
+		}
+		if (tmp.tab == 9) {
 			updateOptionsHTML()
 		}
 	}

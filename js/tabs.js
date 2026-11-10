@@ -19,6 +19,7 @@ const TABS = {
         { id: "Supernova", unl() { return player.supernova.times.gte(1) || quUnl() || player.superGal.gte(1)}, style: "sn" },
         { id: "Quantum", unl() { return quUnl() }, style: "qu" },
         { id: "Exotic", unl() { return player.exotic.times.gte(1) }, style: "red" },
+        { id: "Stats" },
         { id: "Options" },
     ],
     2: {
@@ -74,6 +75,18 @@ const TABS = {
             { id: "Dark Run", unl() { return hasElement(450) } },
             { id: "The Matters", unl() { return hasElement(486) } },
             { id: "Axions", unl() { return hasElement(534) } },
+        ],
+        8: [
+            { id: "All Tabs" },
+            { id: "Main" },
+            { id: "Rewards & Scaling" },
+            { id: "Upgrades" },
+            { id: "Challenges" },
+            { id: "Atom", style: "atom" },
+            { id: "Supernova", style: "sn" },
+            { id: "Quantum", style: "qu" },
+            { id: "Exotic", style: "red" },
+            { id: "Options" },
         ],
     },
 }
