@@ -1776,6 +1776,38 @@ function sbPreNebulaState() {
     player.reset_msg = "";
     player.main_upg_msg = [0, 0];
 
+    // ---- Switch hardcaps off -------------------------------------------------
+    // A hardcap (default Fe308) would immediately pin every fresh value, which
+    // is exactly the "everything reads Fe308" state this preset is meant to end.
+    step(() => {
+        const sb = sbEnsureState();
+        if (sb && sb.caps) for (const id in sb.caps) if (sb.caps[id]) sb.caps[id].enabled = false;
+        SANDBOX_STATE.draftCaps = {};
+        SANDBOX_STATE.draftValues = {};
+        SANDBOX_STATE.lastValCache = {};
+        SANDBOX_STATE.lastCapBtnCache = {};
+    });
+
+    // ---- Repair anything already clamped to the sandbox max --------------
+    // (e.g. a save where the anti-NaN guard already pushed stats to Fe308)
+    step(() => {
+        const repair = (obj, depth) => {
+            if (!obj || typeof obj !== "object" || depth > 6) return;
+            for (const k in obj) {
+                const v = obj[k];
+                if (v instanceof Decimal) {
+                    if (v.mag === Infinity || v.layer === Infinity || v.gte(SANDBOX_MAX)) obj[k] = BIG;
+                } else if (typeof v === "number") {
+                    if (!Number.isFinite(v)) obj[k] = 1e10;
+                } else if (v && typeof v === "object") {
+                    repair(v, depth + 1);
+                }
+            }
+        };
+        repair(player, 0);
+        player.mass = MASS;
+    });
+
     // ---- Nebula stays untouched ------------------------------------------
     if (!player.nebula) player.nebula = {};
     player.nebula.unl = false;
@@ -1814,7 +1846,7 @@ const SANDBOX = {
                 updateNebulaTemp();
                 updateHTML();
             }
-            SANDBOX_STATE.globalFeedback = "Jumped to the pre-Nebula endgame: mass eee100 g, every layer below the Nebula completed, Nebula at 0 collapses.";
+            SANDBOX_STATE.globalFeedback = "Jumped to the pre-Nebula endgame: mass eee100 g, every layer below the Nebula completed, Nebula at 0 collapses. Hardcaps switched off.";
         } catch (e) {
             SANDBOX_STATE.globalFeedback = "Jump failed: " + e.message;
         }
@@ -2120,7 +2152,7 @@ const SANDBOX = {
                     <div class="sb_toolbar_row sb_jump_row">
                         <span class="sb_bulk_label">Presets:</span>
                         <button class="btn stats_btn_sm sb_jump_btn" onclick="SANDBOX.jumpPreNebula()">Unlock Everything Before the Nebula</button>
-                        <span class="sb_jump_note">Mass eee100 g, every upgrade, element, challenge and tree node below the Nebula. Nebula progress is reset to zero (it unlocks on the next tick).</span>
+                        <span class="sb_jump_note">Mass eee100 g, every upgrade, element, challenge and tree node below the Nebula; also repairs stats stuck at Fe308 and switches hardcaps off. Nebula progress resets to zero (it unlocks on the next tick).</span>
                     </div>
                     <div class="sb_help">
                         Formats: <code>1e100</code>, <code>ee50</code>, <code>eee10</code>, <code>Fe308</code> (= 10^^1e308 max), <code>10^^1e308</code>, <code>(e^L)M</code>.
@@ -2172,7 +2204,9 @@ const SANDBOX = {
         const valDraft = SANDBOX_STATE.draftValues[c.id] !== undefined
             ? SANDBOX_STATE.draftValues[c.id]
             : (c.isNumber ? String(Math.floor(curVal.toNumber())) : sbFormat(curVal));
-        const capDraft = SANDBOX_STATE.draftCaps[c.id] !== undefined ? SANDBOX_STATE.draftCaps[c.id] : cap.val;
+        const capDraft = SANDBOX_STATE.draftCaps[c.id] !== undefined
+            ? SANDBOX_STATE.draftCaps[c.id]
+            : (cap.enabled ? cap.val : "");
         const maxHint = c.isNumber ? "1e308" : SANDBOX_MAX_STR;
         const fb = SANDBOX_STATE.feedback[c.id];
         const editControls = c.readOnlyCurrency
