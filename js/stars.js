@@ -180,7 +180,6 @@ function setupStarsHTML() {
             <div id="star_gen_div_${i}" style="width: 250px;">
                 <img src="images/star_${5-i}.png"><br><br>
                 <div id="star_gen_${i}">X</div>
-                <div class="formula_line" data-formula-id="star_gen_${i}"></div>
             </div>
         `
 	}

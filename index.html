@@ -106,7 +106,6 @@
         <div id="stab_frame5_0">
             <div style="min-height: 130px;">
                 You have <span id="neutronStar">X</span> <span id="treeResName">Neutron star</span>.<br>
-                <div class="formula_line" data-formula-id="neutron_star"></div>
             <span id="resetAxionicTree"><button class="btn" onclick="EXOTIC.resetTree()">Respec Axionic Tree</button><br></span>
                 <div id="tree_desc" style="margin-top: 3px;">
     
@@ -120,34 +119,27 @@
                 <div class="table_center">
                     <div class="graviton sub_b">
                         You have <span id="graviton_amt">X</span> Graviton, which speeds Bosons production by <span id="graviton_eff0">Y</span>
-                        <div class="formula_line" data-formula-id="graviton"></div>
                     </div>
                     <div class="higgs_boson sub_b">
                         You have <span id="hb_amt">X</span> Higgs Boson, which raises Gravitons effect by <span id="hb_eff0">Y</span>
-                        <div class="formula_line" data-formula-id="hb"></div>
                     </div>
                 </div><div class="table_center">
                     <div class="photon sub_b">
-                        You have <span id="photon_amt">X</span> Photon
-                        <div class="formula_line" data-formula-id="photon"></div><br>
+                        You have <span id="photon_amt">X</span> Photon<br><br>
                         <div id="photon_upgs_table" class="table_center"></div>
                     </div>
                     <div class="gluon sub_b">
-                        You have <span id="gluon_amt">X</span> Gluon
-                        <div class="formula_line" data-formula-id="gluon"></div><br>
+                        You have <span id="gluon_amt">X</span> Gluon<br><br>
                         <div id="gluon_upgs_table" class="table_center"></div>
                     </div>
                 </div><div class="table_center">
                     <div class="w_boson sub_b">
                         You have <span id="pos_w_amt">X</span> W<sup>+</sup> Boson, which multiplies Mass gain by <span id="pos_w_eff0">Y</span>,<br> multiplies W<sup>-</sup> Bosons gain by <span id="pos_w_eff1">Y</span>
-                        <div class="formula_line" data-formula-id="pos_w"></div>
-                        <br>
+                        <br><br>
                         You have <span id="neg_w_amt">X</span> W<sup>-</sup> Boson, which makes Mass gains softcap^2 starts ^<span id="neg_w_eff0">Y</span> later,<br> multiplies W<sup>+</sup> Bosons gain by <span id="neg_w_eff1">Y</span>
-                        <div class="formula_line" data-formula-id="neg_w"></div>
                     </div>
                     <div class="z_boson sub_b">
                         You have <span id="z_boson_amt">X</span> Z<sup>0</sup> Boson, which multiplies Tickspeed Power by <span id="z_boson_eff0">Y</span>,<br> multiplies W Bosons gain by <span id="z_boson_eff1">Y</span>
-                        <div class="formula_line" data-formula-id="z_boson"></div>
                     </div>
                 </div>
             </div>
@@ -156,19 +148,16 @@
             <button class="btn" onclick="FERMIONS.backNormal()">Back to Normal</button><br><br>
             <div class="fermions">
                 <div class="f_quark sub_f">
-                    You have <span id="fquarkAmt">X</span> U-Quark
-                    <div class="formula_line" data-formula-id="f_quark"></div><br>
+                    You have <span id="fquarkAmt">X</span> U-Quark<br><br>
                     <div id="fermions_quark_table" class="table_center"></div>
                 </div>
                 <div class="f_lepton sub_f">
-                    You have <span id="fleptonAmt">X</span> U-Lepton
-                    <div class="formula_line" data-formula-id="f_lepton"></div><br>
+                    You have <span id="fleptonAmt">X</span> U-Lepton<br><br>
                     <div id="fermions_lepton_table" class="table_center"></div>
                 </div>
             </div>
         </div><div id="stab_frame5_3">
             Your frequency is <span id="frequency">0</span> Hz, which multiples any Fermions gain by <span id="frequency_eff">1</span>x<br>
-            <div class="formula_line" data-formula-id="rad_hz"></div>
             <span id="nr_div">At <span id="next_radiation">0</span> of frequency, unlock <span id="unl_radiation">X</span></span><br><br>
             <div id="radiation_table"></div>
         </div><div id="stab_frame5_4">
@@ -180,13 +169,13 @@
 			</div>
 			<hr>
 			<span id="galPowNextspan">Next Galactic resource at <span id="galPowNext">0</span> Supernova Galaxies<br></span>
-			<span id="galPow0span">You have <span id="galPow0">0</span> Galactic Power (gain based on neutron star), which are boosting mass gain by ^<span id="galPow0_eff">1</span><div class="formula_line" data-formula-id="galPow0"></div></span>
-			<span id="galPow2span">You have <span id="galPow2">0</span> Galactic Dark Energy (gain based on dark matter), which are boosting black hole mass gain by ^<span id="galPow2_eff">1</span><div class="formula_line" data-formula-id="galPow2"></div></span>
-			<span id="galPow1span">You have <span id="galPow1">0</span> Galactic Atoms (gain based on atoms), which are boosting quark gain by ^<span id="galPow1_eff">1</span><div class="formula_line" data-formula-id="galPow1"></div></span>
-			<span id="galPow3span">You have <span id="galPow3">0</span> Galactic Bosons (gain based on Photons and Gluons), which are boosting all bosons gain by ^<span id="galPow3_eff">1</span><div class="formula_line" data-formula-id="galPow3"></div></span>
-			<span id="galPow4span">You have <span id="galPow4">0</span> Galactic U-Fermions (gain based on U-Quarks and U-Leptons), which are boosting all U-Fermions gain by ^<span id="galPow4_eff">1</span><div class="formula_line" data-formula-id="galPow4"></div></span>
-			<span id="galPow5span">You have <span id="galPow5">0</span> Galactic Radiation (gain based on frequency), which are boosting all radiation gain by ^<span id="galPow5_eff">1</span><div class="formula_line" data-formula-id="galPow5"></div></span>
-			<span id="galQkspan">You have <span id="galQk">0</span> Galactic Quarks (gain based on Quarks and U-Quarks)<div class="formula_line" data-formula-id="galQk"></div></span>
+			<span id="galPow0span">You have <span id="galPow0">0</span> Galactic Power (gain based on neutron star), which are boosting mass gain by ^<span id="galPow0_eff">1</span><br></span>
+			<span id="galPow2span">You have <span id="galPow2">0</span> Galactic Dark Energy (gain based on dark matter), which are boosting black hole mass gain by ^<span id="galPow2_eff">1</span><br></span>
+			<span id="galPow1span">You have <span id="galPow1">0</span> Galactic Atoms (gain based on atoms), which are boosting quark gain by ^<span id="galPow1_eff">1</span><br></span>
+			<span id="galPow3span">You have <span id="galPow3">0</span> Galactic Bosons (gain based on Photons and Gluons), which are boosting all bosons gain by ^<span id="galPow3_eff">1</span><br></span>
+			<span id="galPow4span">You have <span id="galPow4">0</span> Galactic U-Fermions (gain based on U-Quarks and U-Leptons), which are boosting all U-Fermions gain by ^<span id="galPow4_eff">1</span><br></span>
+			<span id="galPow5span">You have <span id="galPow5">0</span> Galactic Radiation (gain based on frequency), which are boosting all radiation gain by ^<span id="galPow5_eff">1</span><br></span>
+			<span id="galQkspan">You have <span id="galQk">0</span> Galactic Quarks (gain based on Quarks and U-Quarks)</span>
         </div><div id="stab_frame5_5">
             Choosing any Galactic Fermion will force a Supernova Galaxy reset!<br>
             In Galactic Fermions, you can't gain Infinity and Eternity mass!<br>
@@ -210,69 +199,69 @@
 			<div id="superClusterEff">
 			</div>
 			<hr>
-			<span id="galPow6span">You have <span id="galPow6">0</span> Galactic Mass (gain based on Supernova Galaxies), which are boosting Galactic Resources gain in Galaxy Tab by <span id="galPow6_eff">1</span>x<div class="formula_line" data-formula-id="galPow6"></div></span>
-			<span id="stardustspan">You have <span id="stardust">0</span> Stardust (gain based on Supernova), Super Supernova Galaxies starts <span id="stardustEff">1</span> later<div class="formula_line" data-formula-id="stardust"></div></span>
+			<span id="galPow6span">You have <span id="galPow6">0</span> Galactic Mass (gain based on Supernova Galaxies), which are boosting Galactic Resources gain in Galaxy Tab by <span id="galPow6_eff">1</span>x<br></span>
+			<span id="stardustspan">You have <span id="stardust">0</span> Stardust (gain based on Supernova), Super Supernova Galaxies starts <span id="stardustEff">1</span> later</span>
         </div>
     </div>
     <div id='app' style='display: none'>
         <div id="star"></div>
         <div style='height: 5px'></div>
-        <div id="table_res_wrapper" style="min-height: 175px">
+        <div style="height: 160px">
             <div id="chal_upper" style='height: 40px'></div>
             <div id="table_res_main" class="table_left">
                 <div style="width: 100px;"></div>
                 <div id="table_resources" class="top_text">
                     <div class="resources sml">
                         <div tooltip="Mass" t-size="small"><img class="res_img" src="images/mass.png"></div>
-                        <div class="res_text_col"><span id="mass">X</span><div class="res_formula" data-formula-id="mass"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="mass">X</span>
                     </div><div class="resources sml red" id="rp_div">
                         <div tooltip="Rage Power" t-size="small"><img class="res_img" src="images/rp.png" onclick="FORMS.rp.reset()" onmousemove="FORMS.reset_msg.set('rp')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="rpAmt">X</span><div class="res_formula" data-formula-id="rp"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="rpAmt">X</span>
                     </div><div class="resources sml yellow" id="dm_div">
                         <div tooltip="Dark Matter" t-size="small"><img class="res_img" src="images/dm.png" onclick="FORMS.bh.reset()" onmousemove="FORMS.reset_msg.set('dm')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="dmAmt">X</span><div class="res_formula" data-formula-id="dm"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="dmAmt">X</span>
                     </div><div class="resources sml yellow" id="bh_div">
                         <div tooltip="Black Hole" t-size="small"><img class="res_img" src="images/bh.png"></div>
-                        <div class="res_text_col"><span id="bhMass">X</span><div class="res_formula" data-formula-id="bh_mass"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="bhMass">X</span>
                     </div><div class="resources sml" id="atom_div">
                         <div tooltip="Atom" t-size="small"><img class="res_img" src="images/atom.png" onclick="ATOM.reset()" onmousemove="FORMS.reset_msg.set('atom')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="atomAmt">X</span><div class="res_formula" data-formula-id="atom"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="atomAmt">X</span>
                     </div><div class="resources sml quark_color" id="quark_div">
                         <div tooltip="Quark" t-size="small"><img class="res_img" src="images/quark.png"></div>
-                        <div class="res_text_col"><span id="quarkAmt">X</span><div class="res_formula" data-formula-id="quarks"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="quarkAmt">X</span>
                     </div><div class="resources sml green" id="md_div">
                         <div tooltip="Mass Dilation" t-size="small"><img class="res_img" src="images/md.png" onclick="MASS_DILATION.onactive()" onmousemove="FORMS.reset_msg.set('md')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="md_massAmt">X</span><div class="res_formula" data-formula-id="md_mass"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="md_massAmt">X</span>
                     </div><div class="resources sml" id="sn_div" style="color:#ff009d;">
                         <div tooltip="Supernova" t-size="small"><img class="res_img" src="images/sn.png" onclick="SUPERNOVA.reset(false,false,true)" onmousemove="FORMS.reset_msg.set('sn')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="supernovaAmt">X</span><div class="res_formula" data-formula-id="supernova"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="supernovaAmt">X</span>
                     </div><div class="resources sml light_green" id="qu_div">
                         <div tooltip="Quantum Foam" t-size="small"><img class="res_img" src="images/qu.png" onclick="QUANTUM.enter()" onmousemove="FORMS.reset_msg.set('qu')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="quAmt">X</span><div class="res_formula" data-formula-id="qu"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="quAmt">X</span>
                     </div><div class="resources sml orange" id="gs1_div">
                         <div tooltip="Pre-Quantum Global Speed" t-size="medium"><img class="res_img" src="images/preQGSpeed.png"></div>
-                        <div class="res_text_col"><span id="preQGSpeed">X</span><div class="res_formula" data-formula-id="pre_qu_gs"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="preQGSpeed">X</span>
                     </div><div class="resources sml light_red" id="br_div">
                         <div tooltip="Death Shard" t-size="small"><img class="res_img" src="images/br.png" onclick="BIG_RIP.rip()" onmousemove="FORMS.reset_msg.set('br')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="brAmt">X</span><div class="res_formula" data-formula-id="rip"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="brAmt">X</span>
                     </div><div class="resources sml" id="infinity_div">
                         <div tooltip="Infinity Mass" t-size="small"><img class="res_img" src="images/inf.png" onclick="INFINITY_LAYER.enter()" onmousemove="FORMS.reset_msg.set('infinity')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="infAmt">X</span><div class="res_formula" data-formula-id="inf"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="infAmt">X</span>
                     </div><div class="resources sml" id="eternity_div" style="color:#ff00ff;">
                         <div tooltip="Eternal Mass" t-size="small"><img class="res_img" src="images/et.png" onclick="ETERNITY_LAYER.enter()" onmousemove="FORMS.reset_msg.set('eternity')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="etAmt">X</span><div class="res_formula" data-formula-id="et"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="etAmt">X</span>
                     </div><div class="resources sml" id="superGal_div" style="color:#ff009d;">
                         <div tooltip="Supernova Galaxies" t-size="small"><img class="res_img" src="images/sg.png" onclick="SUPERNOVA_GALAXY.reset()" onmousemove="FORMS.reset_msg.set('superGal')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="superGalAmt">X</span><div class="res_formula" data-formula-id="superGal"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="superGalAmt">X</span>
                     </div><div class="resources sml quark_color" id="galQk_div">
                         <div tooltip="Galactic Quark" t-size="small"><img class="res_img" src="images/sgq.png"></div>
-                        <div class="res_text_col"><span id="galQkAmt">X</span><div class="res_formula" data-formula-id="galQk"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="galQkAmt">X</span>
                     </div><div class="resources sml red" id="exotic_div">
                         <div tooltip="Exotic Matter" t-size="small"><img class="res_img" src="images/exotic.png" onclick="EXOTIC.enter()" onmousemove="FORMS.reset_msg.set('exotic')" onmouseleave="FORMS.reset_msg.reset()" style="cursor: pointer;"></div>
-                        <div class="res_text_col"><span id="exoticAmt">X</span><div class="res_formula" data-formula-id="exotic"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="exoticAmt">X</span>
                     </div><div class="resources sml" id="stardust_div" style="color:#00ffff;">
                         <div tooltip="Stardust" t-size="small"><img class="res_img" src="images/sd.png"></div>
-                        <div class="res_text_col"><span id="stardustAmt">X</span><div class="res_formula" data-formula-id="stardust"></div></div>
+                        <span style="margin-left: 5px; text-align: left;" id="stardustAmt">X</span>
                     </div>
                 </div>
             </div>
@@ -297,14 +286,14 @@
                 </div><div id="rank_tab1">
                     Your Prestige base is <span id="pres_base"></span> (based on products of Rank tiers)<br><br>
                     <div id="pres_table" class="table_center" style="min-height: 180px;"></div><br>
-					<div id="pres_mass">You have  <span id="pres_mass2">X</span> Prestige mass (Gain is based on Prestige Base, Prestige Level, Honor<span id="pres_mass4"> and Glory</span>)<br>Which are weakening Tetr scalings before meta by <span id="pres_mass3"></span><div class="formula_line" data-formula-id="prestige_mass"></div></div>
-					<div id="pres_rp">You have  <span id="pres_rp2">X</span> Prestige Rage Power (Gain is based on Prestige Mass)<br>Which are adding Overpower Power by <span id="pres_rp3"></span><div class="formula_line" data-formula-id="prestige_rp"></div></div>
-					<div id="pres_bh">You have <span id="pres_bh2">X</span> of Prestige Black Hole (Gain is based on Prestige Mass and Prestige Black Hole)<br>Which are multiplying Prestige Mass by <span id="pres_bh3"></span><div class="formula_line" data-formula-id="prestige_bh"></div></div>
-					<div id="pres_dm">You have <span id="pres_dm2">X</span> Prestige Dark Matter (Gain is based on Prestige Rage Power)<br>Which are weakening 2nd Black Hole Overflow effect by <span id="pres_dm3"></span><div class="formula_line" data-formula-id="prestige_dm"></div></div>
+					<div id="pres_mass">You have  <span id="pres_mass2">X</span> Prestige mass (Gain is based on Prestige Base, Prestige Level, Honor<span id="pres_mass4"> and Glory</span>)<br>Which are weakening Tetr scalings before meta by <span id="pres_mass3"></span></div>
+					<div id="pres_rp">You have  <span id="pres_rp2">X</span> Prestige Rage Power (Gain is based on Prestige Mass)<br>Which are adding Overpower Power by <span id="pres_rp3"></span></div>
+					<div id="pres_bh">You have <span id="pres_bh2">X</span> of Prestige Black Hole (Gain is based on Prestige Mass and Prestige Black Hole)<br>Which are multiplying Prestige Mass by <span id="pres_bh3"></span></div>
+					<div id="pres_dm">You have <span id="pres_dm2">X</span> Prestige Dark Matter (Gain is based on Prestige Rage Power)<br>Which are weakening 2nd Black Hole Overflow effect by <span id="pres_dm3"></span></div>
                 </div><div id="rank_tab2">
                     Your Ascension base is <span id="as_base"></span> (based on products of Prestige tiers)<br><br>
                     <div id="as_table" class="table_center" style="min-height: 180px;"></div><br>
-					<div id="as_mass">You have  <span id="as_mass2">X</span> Ascension mass (Gain is based on Ascension Base, Ascension Level, Transcension Level<span id="as_mass4"> and Glory</span>)<br>Which are adding Prestige Base Exponent by <span id="as_mass3"></span><div class="formula_line" data-formula-id="ascension_mass"></div></div>
+					<div id="as_mass">You have  <span id="as_mass2">X</span> Ascension mass (Gain is based on Ascension Base, Ascension Level, Transcension Level<span id="as_mass4"> and Glory</span>)<br>Which are adding Prestige Base Exponent by <span id="as_mass3"></span></div>
                </div>
                 <br><br><div id="beyond_ranks"></div><br>
                 <div id="mass_upgs_table"></div><br><br>
@@ -381,8 +370,7 @@
             </div><div id="stab_frame0_1">
                 You have <span id="bhMass2">X</span> of Black Hole<br>
                 <span class="green">Which multiplies mass gain by <span id="bhEffect">X</span></span><br><br>
-                Black Hole mass's gain formula - (x + 1)<sup id="bhMassPower">0.33</sup> * <span id="bhCondenserEffect">X</span>
-                <div class="formula_line" data-formula-id="bh_mass"></div><br>
+                Black Hole mass's gain formula - (x + 1)<sup id="bhMassPower">0.33</sup> * <span id="bhCondenserEffect">X</span><br><br>
                 <div style="width: 100%; margin-bottom: 5px;" class="table_center">
                     <div style="width: 400px">
                         <div class="resources">
@@ -405,8 +393,7 @@
                 </div>
             </div><div id="stab_frame0_2">
                 You have <span id="atomicAmt">X</span> Atomic Power<br>
-                <span class="green">Which provides <span id="atomicEff">X</span> free Tickspeeds</span>
-                <div class="formula_line" data-formula-id="atomic"></div><br>
+                <span class="green">Which provides <span id="atomicEff">X</span> free Tickspeeds</span><br><br>
                 <div style="width: 100%; margin-bottom: 5px;" class="table_center">
                     <div style="width: 400px">
                         <div class="resources">
@@ -425,8 +412,7 @@
                 </div>
             </div><div id="stab_frame0_3">
                 You collapsed <span id="stars_Amt">X</span> stars, which makes mass gain is multiplied based on every type of Ranks<br>
-                <span class="green">Currently: <span id="stars_Eff">X</span></span>
-                <div class="formula_line" data-formula-id="stars"></div><br>
+                <span class="green">Currently: <span id="stars_Eff">X</span></span><br><br>
                 <button id="star_btn" class="btn" onclick="STARS.generators.unl()">X</button><br><br>
                 <div id="stars_table" class="table_center"></div><br><br>
                 <span id="starSoft1" class="red">After <b id="starSoftStart1">X</b> of collapsed stars gain will softcap collapsed stars gain!</span><br>
@@ -434,8 +420,7 @@
 
             </div><div id="stab_frame0_4">
                 You have <span id="bpAmt">0</span> Blueprint Particle<br>
-                <span class="green">Which increases pre-Quantum global speed by <span id="bpEff">1</span>x</span>
-                <div class="formula_line" data-formula-id="bp"></div><br>
+                <span class="green">Which increases pre-Quantum global speed by <span id="bpEff">1</span>x</span><br><br>
                 <div style="width: 100%; margin-bottom: 5px;" class="table_center">
                     <div style="width: 400px">
                         <div class="resources">
@@ -452,8 +437,7 @@
                 </div>
             </div><div id="stab_frame0_5">
                 You have <span id="shardsAmt">0</span> Timeshards<br>
-                <span class="green">Which increases pre-Quantum global speed by ^<span id="shardsEff">1</span> before division</span>
-                <div class="formula_line" data-formula-id="timeshards"></div><br>
+                <span class="green">Which increases pre-Quantum global speed by ^<span id="shardsEff">1</span> before division</span><br><br>
                 <div style="width: 100%; margin-bottom: 5px;" class="table_center">
                     <div style="width: 400px">
                         <div class="resources">
@@ -469,8 +453,7 @@
                 </div>
             </div><div id="stab_frame0_6">
                 You have <span id="stellarAmt">0</span> Stellar Mass<br>
-                <span class="green">Which multiplies Galactic Quarks by <span id="stellarEff">1</span></span>
-                <div class="formula_line" data-formula-id="stellar"></div><br>
+                <span class="green">Which multiplies Galactic Quarks by <span id="stellarEff">1</span></span><br><br>
                 <div style="width: 100%; margin-bottom: 5px;" class="table_center">
                     <div style="width: 400px">
                         <div class="resources">
@@ -580,10 +563,8 @@
                         <span id="elem_eff" class='green'>X</span>
                     </div><br><div id="elements_table"></div>
                 </div><div id="stab_frame4_2">
-                You have <span id="md_particles">X</span> Relativistic particles
-                <div class="formula_line" data-formula-id="md_particles"></div>
-                You have <span id="md_mass">X</span> of dilated mass, which makes Tickspeed <span id="md_eff">X</span> stronger
-                <div class="formula_line" data-formula-id="md_mass"></div><br>
+                You have <span id="md_particles">X</span> Relativistic particles<br>
+                You have <span id="md_mass">X</span> of dilated mass, which makes Tickspeed <span id="md_eff">X</span> stronger<br><br>
                 <button onclick="MASS_DILATION.onactive()" id="md_btn" class="btn full md" tooltip="When dilating mass, will reset for atom. While mass is dilated: all pre-atom resources, atomic power gains get multiplier's exponent raised to 0.8;">Dilate Mass</button><br><br>
                 <div class="table_center">
                     <div id="md_upg_table" class="table_center" style="width: 1000px;"></div>
@@ -593,10 +574,8 @@
 
                 </div>
             </div><div id="stab_frame4_3">
-                You have <span id="bd_energy">X</span> Relativistic Energy
-                <div class="formula_line" data-formula-id="bd_energy"></div>
-                You have <span id="bd_mass">X</span> of Relativistic mass
-                <div class="formula_line" data-formula-id="bd_mass"></div><br>
+                You have <span id="bd_energy">X</span> Relativistic Energy<br>
+                You have <span id="bd_mass">X</span> of Relativistic mass<br><br>
                 <button onclick="MASS_DILATION.break.toggle()" id="bd_btn" class="btn half_full bd" tooltip="When breaking dilation, while in Big Rip, BH Condensers & Cosmic Rays are no longer nerfed by 8th QC modifier, 7th QC modifier is disabled, you can gain Relativistic Energy based on dilated mass. Relativistic Energy gains Relativistic Mass. Fixing Dilation resets your relativistic energy & its mass, also forces a Quantum reset.">Break Dilation</button><br><br>
                 <div class="table_center">
                     <div id="bd_upg_table" class="table_center" style="width: 1000px;"></div>
@@ -643,15 +622,12 @@
                         Your frequency is <span id="enEva1">0</span> Hz<br><br>
                         <button id="evaBtn1" class="btn half_full" onclick="ENTROPY.switch(0)">Evaporate your frequency to gain Enthalpy</button><br><br>
                         You have <span id="enAmt1">0</span> Enthalpy, which increases Entropy gain to <span id="enEff1">0</span>
-                        <div class="formula_line" data-formula-id="en_eth"></div>
                     </div><div style="width: 33.3%; min-width: 300px;">
                         You have <span id="enAmt2">0</span> Entropy<br><span id="enGain"></span>
-                        <div class="formula_line" data-formula-id="en_amt"></div>
                     </div><div style="width: 33.3%; min-width: 300px;">
                         You have <span id="enEva2">0 g</span> of Black Hole<br><br>
                         <button id="evaBtn2" class="btn half_full" onclick="ENTROPY.switch(1)">Evaporate your mass of Black Hole to gain Hawking Radiation</button><br><br>
                         You have <span id="enAmt3">0</span> Hawking Radiation, which increases Entropy cap to <span id="enEff2">0</span>
-                        <div class="formula_line" data-formula-id="en_hr"></div>
                     </div>
                 </div><br>
                 <div id="en_table" class="table_center"></div>
@@ -826,16 +802,13 @@
                         <div style="width: 33.3%; min-width: 300px;">
                             You have <b id="darkRay"></b> Dark Ray.
                             <div id="drEff" class="sky"></div>
-                            <div class="formula_line" data-formula-id="darkRay"></div>
                         </div><div style="width: 33.3%; min-width: 300px;">
                             You have <b id="darkShadow"></b> Dark Shadow.
                             <div id="dsEff" class="sky"></div>
-                            <div class="formula_line" data-formula-id="darkShadow"></div>
                         </div><div style="width: 33.3%; min-width: 300px;">
                             <div id="ab_div">
                                 You have <b id="abyssalBlot"></b> Abyssal Blot.
                                 <div id="abEff" class="sky"></div>
-                                <div class="formula_line" data-formula-id="abyssalBlot"></div>
                             </div>
                         </div>
                     </div>
@@ -844,8 +817,7 @@
                     While in Dark Run, You are trapped in QC with modifiers [30,30,30,30,30,30,30,30], and Galactic Challenge Difficulty 8.<br>
 					You will gain Glyphic Mass based on  your mass in Dark Run.<br>
 					<button class="btn" onclick="DARK_RUN.enter();">Enter/Exit Dark Run</button><br>
-					You have <span id="dr_points"></span> Glyphic Mass.
-                    <div class="formula_line" data-formula-id="dr_points"></div>
+					You have <span id="dr_points"></span> Glyphic Mass.<br>
                 <div class="table_center">
                     <div id="dr_upg_table" class="table_center" style="width: 1000px;"></div>
                 </div>
@@ -879,7 +851,6 @@
                             <span id="matters0_amount" class="red"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters0_gain" class="red"></span>
-                            <div class="formula_line" data-formula-id="matter_0"></div>
                         </div><div style="width: 40%; min-width: 300px;">
                             Multiply Exotic Matter gain by <span id="matters0_eff"></span>
                         </div>
@@ -890,7 +861,6 @@
                             <span id="matters1_amount" style="color:#ff009d;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters1_gain" style="color:#ff009d;"></span>
-                            <div class="formula_line" data-formula-id="matter_1"></div>
                         </div><div style="width: 40%; min-width: 300px;" id="matters1_eff1a">
                             Meta-Supernova is <span id="matters1_eff"></span> weaker
                         </div><div style="width: 40%; min-width: 300px;" id="matters1_eff2a">
@@ -903,7 +873,6 @@
                             <span id="matters2_amount" class="magenta"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters2_gain" class="magenta"></span>
-                            <div class="formula_line" data-formula-id="matter_2"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Add <span id="matters2_eff"></span> to base Eternal Mass gain Exponent
                         </div>
@@ -914,7 +883,6 @@
                             <span id="matters3_amount" style="color:#a0f;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters3_gain" style="color:#a0f;"></span>
-                            <div class="formula_line" data-formula-id="matter_3"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Multiply Galactic Quarks gain by <span id="matters3_eff"></span>
                         </div>
@@ -925,7 +893,6 @@
                             <span id="matters4_amount" style="color:#70f;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters4_gain" style="color:#70f;"></span>
-                            <div class="formula_line" data-formula-id="matter_4"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Add <span id="matters4_eff"></span> to Prestige Base Exponent
                         </div>
@@ -936,7 +903,6 @@
                             <span id="matters5_amount" style="color:#06f;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters5_gain" style="color:#06f;"></span>
-                            <div class="formula_line" data-formula-id="matter_5"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Exotic Boost 'Atom Boost' is <span id="matters5_eff"></span>x stronger
                         </div>
@@ -947,7 +913,6 @@
                             <span id="matters6_amount" style="color:#0ff;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters6_gain" style="color:#0ff;"></span>
-                            <div class="formula_line" data-formula-id="matter_6"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Exotic Boost 'Supernova Boost' is <span id="matters6_eff"></span>x stronger
                         </div>
@@ -958,7 +923,6 @@
                             <span id="matters7_amount" style="color:#0f0;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters7_gain" style="color:#0f0;"></span>
-                            <div class="formula_line" data-formula-id="matter_7"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Quantum Foam gain ^<span id="matters7_eff"></span>
                         </div>
@@ -969,7 +933,6 @@
                             <span id="matters8_amount" style="color:#bf0;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters8_gain" style="color:#bf0;"></span>
-                            <div class="formula_line" data-formula-id="matter_8"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Add <span id="matters8_eff"></span> to Ascension Base Exponent
                         </div>
@@ -980,7 +943,6 @@
                             <span id="matters9_amount" style="color:#ff0;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters9_gain" style="color:#ff0;"></span>
-                            <div class="formula_line" data-formula-id="matter_9"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Exotic Boost 'Dark Matter Boost' is <span id="matters9_eff"></span>x stronger
                         </div>
@@ -991,7 +953,6 @@
                             <span id="matters10_amount" style="color:#f80;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters10_gain" style="color:#f80;"></span>
-                            <div class="formula_line" data-formula-id="matter_10"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Add <span id="matters10_eff"></span> to base Infinity Mass gain Exponent
                         </div>
@@ -1002,7 +963,6 @@
                             <span id="matters11_amount" style="color:#fff;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters11_gain" style="color:#fff;"></span>
-                            <div class="formula_line" data-formula-id="matter_11"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Multiply Abyssal Blot gain by <span id="matters11_eff"></span>
                         </div>
@@ -1013,7 +973,6 @@
                             <span id="matters12_amount" style="color:#888;"></span>
                         </div><div style="width: 20%; min-width: 300px;">
                             <span id="matters12_gain" style="color:#888;"></span>
-                            <div class="formula_line" data-formula-id="matter_12"></div>
                         </div><div style="width: 40%; min-width: 300px;">
 								Multiply Dark Ray gain by <span id="matters12_eff"></span>
                         </div>
@@ -1025,10 +984,10 @@
                     </div>
                 </div>
             <div id="stab_frame7_6">
-                <span id="ax0_span">You have <span id="ax0">0</span> X Axions, which multiply Exotic Matter gain by <span id="ax0b">0</span>.<div class="formula_line" data-formula-id="ax_0"></div></span>
-                <span id="ax1_span">You have <span id="ax1">0</span> Y Axions, which multiply Dark Ray gain by <span id="ax1b">0</span>.<div class="formula_line" data-formula-id="ax_1"></div></span>
-                <span id="ax2_span">You have <span id="ax2">0</span> Z Axions, which multiply Stardust gain by <span id="ax2b">0</span>.<div class="formula_line" data-formula-id="ax_2"></div></span>
-                <span id="ax3_span">You have <span id="ax3">0</span> W Axions, which multiply Glyphic Mass gain by <span id="ax3b">0</span>.<div class="formula_line" data-formula-id="ax_3"></div></span>
+                <span id="ax0_span">You have <span id="ax0">0</span> X Axions, which multiply Exotic Matter gain by <span id="ax0b">0</span>.</span><br>
+                <span id="ax1_span">You have <span id="ax1">0</span> Y Axions, which multiply Dark Ray gain by <span id="ax1b">0</span>.</span><br>
+                <span id="ax2_span">You have <span id="ax2">0</span> Z Axions, which multiply Stardust gain by <span id="ax2b">0</span>.</span><br>
+                <span id="ax3_span">You have <span id="ax3">0</span> W Axions, which multiply Glyphic Mass gain by <span id="ax3b">0</span>.</span><br>
                 <div style="width: 100%; margin-bottom: 5px;" class="table_center">
                     <div style="width: 400px">
                         <div class="resources">

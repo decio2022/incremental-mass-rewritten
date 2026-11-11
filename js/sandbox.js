@@ -10,7 +10,6 @@ const SANDBOX_STATE = {
     draftValues: {},
     draftCaps: {},
     feedback: {},
-    formulaCache: {},
     lastValCache: {},
     lastGainCache: {},
     lastCapBtnCache: {},
@@ -1410,10 +1409,30 @@ function buildSandboxCurrencies() {
         { id: "fss", name: "Final Star Shards", cat: "Exotic & Matters", unit: "num", unl: () => hasElement(486), get: () => player.exotic.fss, set: v => { player.exotic.fss = v; }, gain: () => sbSafe(() => MATTERS.fssBase().gte(MATTERS.fssReq()) ? E(1) : E(0)), formula: () => new FormulaBuilder("FSS Base Req", `${sbFormat(sbSafe(() => MATTERS.fssBase(), 0))} / ${sbFormat(sbSafe(() => MATTERS.fssReq(), 40))}`).done(" on FSS reset") },
     ];
 
-    // Add 7 Radiation Wavelength Distances
+    // Add 5 Star Generators after Stars
+    const starIdx = list.findIndex(c => c.id === "stars") + 1;
+    for (let i = 0; i < 5; i++) {
+        list.splice(starIdx + i, 0, {
+            id: "star_gen_" + i,
+            name: "Star Generator #" + (i + 1),
+            cat: "Atom",
+            unit: "num",
+            unl: () => STARS.unlocked() && player.stars.unls > i,
+            get: () => player.stars.generators[i],
+            set: v => {
+                player.stars.generators[i] = v;
+                if (v.gt(0) && player.stars.unls <= i) player.stars.unls = i + 1;
+            },
+            gain: () => sbSafe(() => tmp.stars.generators_gain[i].mul(tmp.preQUGlobalSpeed)),
+            formula: () => sbBuildStarGenFormula(i),
+        });
+    }
+
+    // Add 7 Radiation Wavelength Distances after rad_hz
     const radNames = ["Radio", "Microwave", "Infrared", "Visible", "Ultraviolet", "X-ray", "Gamma-ray"];
+    const radIdx = list.findIndex(c => c.id === "rad_hz") + 1;
     for (let x = 0; x < 7; x++) {
-        list.splice(36 + x, 0, {
+        list.splice(radIdx + x, 0, {
             id: "rad_" + x,
             name: radNames[x] + " Distance",
             cat: "Supernova",
@@ -1767,12 +1786,6 @@ const SANDBOX = {
         this.updateHeaderSummary();
     },
     getFormula(id) {
-        if (id && id.startsWith("star_gen_")) {
-            const idx = Number(id.slice(9));
-            if (Number.isInteger(idx) && idx >= 0 && idx < 5) {
-                try { return sbBuildStarGenFormula(idx); } catch (e) { return { expr: "N/A", full: "Formula unavailable" }; }
-            }
-        }
         const c = SANDBOX_CURRENCY_MAP[id];
         if (!c || !c.formula) return { expr: "N/A", full: "Formula unavailable" };
         try {
@@ -1791,36 +1804,6 @@ const SANDBOX = {
             if (q && !c.name.toLowerCase().includes(q) && !c.id.toLowerCase().includes(q) && !c.cat.toLowerCase().includes(q)) return false;
             return true;
         });
-    },
-    updateFormulasHTML() {
-        const isShown = el => {
-            let p = el;
-            while (p && p !== document.body) {
-                if (p.style && p.style.display === "none") return false;
-                p = p.parentElement;
-            }
-            return true;
-        };
-        const els = document.querySelectorAll("[data-formula-id]");
-        for (let i = 0; i < els.length; i++) {
-            const el = els[i];
-            if (!isShown(el)) continue;
-            const id = el.getAttribute("data-formula-id");
-            const isTop = el.classList.contains("res_formula");
-            const f = this.getFormula(id);
-            const text = (isTop ? "= " : "Formula: ") + f.expr;
-            const title = f.full;
-            const cacheKey = (isTop ? "T:" : "B:") + id + ":" + i;
-            const prev = SANDBOX_STATE.formulaCache[cacheKey];
-            if (!prev || prev.text !== text) {
-                el.textContent = text;
-                SANDBOX_STATE.formulaCache[cacheKey] = { text, title: prev ? prev.title : "" };
-            }
-            if (!prev || prev.title !== title) {
-                el.title = title;
-                SANDBOX_STATE.formulaCache[cacheKey].title = title;
-            }
-        }
     },
     updateRowFeedback(id) {
         const el = document.getElementById("sb_fb_" + id);
@@ -1973,7 +1956,7 @@ const SANDBOX = {
                 <div class="sb_gain">Gain: <span id="sb_gain_${c.id}"></span></div>
             </div>
             <div class="sb_formula_box">
-                <div class="sb_formula_expr" id="sb_fexpr_${c.id}"></div>
+                <div class="sb_formula_expr"><b>Formula:</b> <span id="sb_fexpr_${c.id}"></span></div>
                 <div class="sb_formula_full" id="sb_ffull_${c.id}"></div>
             </div>
             ${editControls}

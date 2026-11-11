@@ -654,5 +654,4 @@ function updateHTML() {
 			updateOptionsHTML()
 		}
 	}
-	if (typeof SANDBOX !== "undefined") SANDBOX.updateFormulasHTML()
 }

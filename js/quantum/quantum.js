@@ -407,7 +407,6 @@ function setupQuantumHTML() {
                 <h2>${n[1]}</h2><br><br>
                 You have <span id="${id}_amt">0</span> ${n[0]} Chroma, which<br>
                 <span id="${id}_eff"></span>
-                <div class="formula_line" data-formula-id="${id}"></div>
             </div>
         </div>
         `

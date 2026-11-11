@@ -84,13 +84,6 @@ function sEsc(str) {
         .replace(/"/g, "&quot;");
 }
 
-function sFormulaLine(id) {
-    if (typeof SANDBOX === "undefined") return "";
-    const f = SANDBOX.getFormula(id);
-    if (!f || !f.expr || f.inactive) return "";
-    return `<span class="stats_formula" title="${sEsc(f.full || f.expr)}">Formula: ${sEsc(f.expr)}</span>`;
-}
-
 function sRow(label, value, opts = {}) {
     let locked = opts.locked === true;
     if (locked && !STATS_STATE.showLocked) return null;
@@ -255,15 +248,15 @@ function buildSection0Main() {
 
     // 1. Core Resources & Speeds
     let coreRows = [
-        sRow("Mass", `${sMass(player.mass)} <span class="stats_subnote">${sGain(player.mass, sSafe(() => tmp.massGain, E(0)).mul(gs), true)}</span>${sFormulaLine("mass")}`),
+        sRow("Mass", `${sMass(player.mass)} <span class="stats_subnote">${sGain(player.mass, sSafe(() => tmp.massGain, E(0)).mul(gs), true)}</span>`),
         sRow("Raw Mass Gain (before Speed)", sMass(sSafe(() => tmp.massGain, E(0))) + "/sec"),
-        sRow("Pre-Quantum Global Speed", `${sMult(gs)}${sFormulaLine("pre_qu_gs")}`),
-        sRow("Rage Power", `${sFormat(player.rp.points, 0)} <span class="stats_subnote">${player.mainUpg.bh.includes(6) || player.mainUpg.atom.includes(6) ? sGain(player.rp.points, sSafe(() => tmp.rp.gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.rp.gain, E(0)), 0) + " on reset)"}</span>${sFormulaLine("rp")}`, { locked: !player.rp.unl }),
-        sRow("Dark Matter", `${sFormat(player.bh.dm, 0)} <span class="stats_subnote">${player.mainUpg.atom.includes(6) ? sGain(player.bh.dm, sSafe(() => tmp.bh.dm_gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.bh.dm_gain, E(0)), 0) + " on reset)"}</span>${sFormulaLine("dm")}`, { locked: !FORMS.bh.see() }),
-        sRow("Black Hole Mass", `${sMass(player.bh.mass)} <span class="stats_subnote">${sGain(player.bh.mass, player.bh.unl ? sSafe(() => tmp.bh.mass_gain, E(0)).mul(gs) : E(0), true)}</span>${sFormulaLine("bh_mass")}`, { locked: !player.bh.unl }),
-        sRow("Atoms", `${sFormat(player.atom.points, 0)} <span class="stats_subnote">${hasElement(24) ? sGain(player.atom.points, sSafe(() => tmp.atom.gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.atom.gain, E(0)), 0) + " on reset)"}</span>${sFormulaLine("atom")}`, { locked: !player.atom.unl }),
-        sRow("Quarks", `${sFormat(player.atom.quarks, 0)} <span class="stats_subnote">${hasElement(14) ? sGain(player.atom.quarks, sSafe(() => tmp.atom.quarkGain.mul(tmp.atom.quarkGainSec).mul(gs), E(0))) : "(+" + sFormat(sSafe(() => tmp.atom.quarkGain, E(0)), 0) + " on atom reset)"}</span>${sFormulaLine("quarks")}`, { locked: !player.atom.unl }),
-        sRow("Collapsed Stars", `${sFormat(player.stars.points, 2)} <span class="stats_subnote">${sGain(player.stars.points, sSafe(() => tmp.stars.gain, E(0)).mul(gs))}</span>${sFormulaLine("stars")}`, { locked: !STARS.unlocked() }),
+        sRow("Pre-Quantum Global Speed", sMult(gs)),
+        sRow("Rage Power", `${sFormat(player.rp.points, 0)} <span class="stats_subnote">${player.mainUpg.bh.includes(6) || player.mainUpg.atom.includes(6) ? sGain(player.rp.points, sSafe(() => tmp.rp.gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.rp.gain, E(0)), 0) + " on reset)"}</span>`, { locked: !player.rp.unl }),
+        sRow("Dark Matter", `${sFormat(player.bh.dm, 0)} <span class="stats_subnote">${player.mainUpg.atom.includes(6) ? sGain(player.bh.dm, sSafe(() => tmp.bh.dm_gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.bh.dm_gain, E(0)), 0) + " on reset)"}</span>`, { locked: !FORMS.bh.see() }),
+        sRow("Black Hole Mass", `${sMass(player.bh.mass)} <span class="stats_subnote">${sGain(player.bh.mass, player.bh.unl ? sSafe(() => tmp.bh.mass_gain, E(0)).mul(gs) : E(0), true)}</span>`, { locked: !player.bh.unl }),
+        sRow("Atoms", `${sFormat(player.atom.points, 0)} <span class="stats_subnote">${hasElement(24) ? sGain(player.atom.points, sSafe(() => tmp.atom.gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.atom.gain, E(0)), 0) + " on reset)"}</span>`, { locked: !player.atom.unl }),
+        sRow("Quarks", `${sFormat(player.atom.quarks, 0)} <span class="stats_subnote">${hasElement(14) ? sGain(player.atom.quarks, sSafe(() => tmp.atom.quarkGain.mul(tmp.atom.quarkGainSec).mul(gs), E(0))) : "(+" + sFormat(sSafe(() => tmp.atom.quarkGain, E(0)), 0) + " on atom reset)"}</span>`, { locked: !player.atom.unl }),
+        sRow("Collapsed Stars", `${sFormat(player.stars.points, 2)} <span class="stats_subnote">${sGain(player.stars.points, sSafe(() => tmp.stars.gain, E(0)).mul(gs))}</span>`, { locked: !STARS.unlocked() }),
     ];
     cards.push(sCard("Core Resources & Speeds", coreRows));
 
@@ -347,10 +340,10 @@ function buildSection0Main() {
             { locked: !presUnl || !unl }
         ));
     }
-    presRows.push(sRow("Prestige Mass", `${sMass(player.prestigeMass)} <span class="stats_subnote">${sGain(player.prestigeMass, sSafe(() => tmp.prestigeMassGain, E(0)), true)} | Tetr scaling ${sRed(sSafe(() => prestigeMassEffect(), E(1)))} weaker</span>${sFormulaLine("prestige_mass")}`, { locked: player.prestiges[1].lt(10) }));
-    presRows.push(sRow("Prestige Rage Power", `${sFormat(player.prestigeRP, 0)} <span class="stats_subnote">${sGain(player.prestigeRP, sSafe(() => tmp.prestigeRPGain, E(0)))} | +${sFormat(sSafe(() => prestigeRPEffect(), E(0)))} Overpower Power</span>${sFormulaLine("prestige_rp")}`, { locked: player.prestiges[2].lt(165) }));
-    presRows.push(sRow("Prestige Black Hole", `${sMass(player.prestigeBH)} <span class="stats_subnote">${sGain(player.prestigeBH, sSafe(() => tmp.prestigeBHGain, E(0)), true)} | ${sFormat(sSafe(() => prestigeBHEffect(), E(1)))}x Prestige Mass</span>${sFormulaLine("prestige_bh")}`, { locked: player.prestiges[3].lt(34) }));
-    presRows.push(sRow("Prestige Dark Matter", `${sFormat(player.prestigeDM, 0)} <span class="stats_subnote">${sGain(player.prestigeDM, sSafe(() => tmp.prestigeDMGain, E(0)))} | 2nd BH Overflow ${sRed(sSafe(() => prestigeDMEffect(), E(1)))} weaker</span>${sFormulaLine("prestige_dm")}`, { locked: player.prestiges[3].lt(37) }));
+    presRows.push(sRow("Prestige Mass", `${sMass(player.prestigeMass)} <span class="stats_subnote">${sGain(player.prestigeMass, sSafe(() => tmp.prestigeMassGain, E(0)), true)} | Tetr scaling ${sRed(sSafe(() => prestigeMassEffect(), E(1)))} weaker</span>`, { locked: player.prestiges[1].lt(10) }));
+    presRows.push(sRow("Prestige Rage Power", `${sFormat(player.prestigeRP, 0)} <span class="stats_subnote">${sGain(player.prestigeRP, sSafe(() => tmp.prestigeRPGain, E(0)))} | +${sFormat(sSafe(() => prestigeRPEffect(), E(0)))} Overpower Power</span>`, { locked: player.prestiges[2].lt(165) }));
+    presRows.push(sRow("Prestige Black Hole", `${sMass(player.prestigeBH)} <span class="stats_subnote">${sGain(player.prestigeBH, sSafe(() => tmp.prestigeBHGain, E(0)), true)} | ${sFormat(sSafe(() => prestigeBHEffect(), E(1)))}x Prestige Mass</span>`, { locked: player.prestiges[3].lt(34) }));
+    presRows.push(sRow("Prestige Dark Matter", `${sFormat(player.prestigeDM, 0)} <span class="stats_subnote">${sGain(player.prestigeDM, sSafe(() => tmp.prestigeDMGain, E(0)))} | 2nd BH Overflow ${sRed(sSafe(() => prestigeDMEffect(), E(1)))} weaker</span>`, { locked: player.prestiges[3].lt(37) }));
     cards.push(sCard("Prestiges & Prestige Resources", presRows, { locked: !presUnl }));
 
     // 5. Ascensions & Ascension Mass
@@ -370,7 +363,7 @@ function buildSection0Main() {
             { locked: !asUnl || !unl }
         ));
     }
-    asRows.push(sRow("Ascension Mass", `${sMass(player.ascensionMass)} <span class="stats_subnote">${sGain(player.ascensionMass, sSafe(() => tmp.ascensionMassGain, E(0)), true)} | +${sFormat(sSafe(() => ascensionMassEffect(), E(0)))} Prestige Base Exp</span>${sFormulaLine("ascension_mass")}`, { locked: player.ascensions[1].lt(3) }));
+    asRows.push(sRow("Ascension Mass", `${sMass(player.ascensionMass)} <span class="stats_subnote">${sGain(player.ascensionMass, sSafe(() => tmp.ascensionMassGain, E(0)), true)} | +${sFormat(sSafe(() => ascensionMassEffect(), E(0)))} Prestige Base Exp</span>`, { locked: player.ascensions[1].lt(3) }));
     cards.push(sCard("Ascensions & Ascension Mass", asRows, { locked: !asUnl }));
 
     // 6. Mass Upgrades, Tickspeed, Accelerator & Prestige/Ascension Buyables
@@ -430,7 +423,7 @@ function buildSection0Main() {
     let bhOverStart = sSafe(() => tmp.bhOverflowStart, E("e1e34"));
     let bhOverActive = sSafe(() => bh.mass_gain, E(0)).gte(bhOverStart);
     let bhRows = [
-        sRow("Black Hole Mass", `${sMass(player.bh.mass)} <span class="stats_subnote">${sGain(player.bh.mass, player.bh.unl ? sSafe(() => bh.mass_gain, E(0)).mul(gs) : E(0), true)}</span>${sFormulaLine("bh_mass")}`),
+        sRow("Black Hole Mass", `${sMass(player.bh.mass)} <span class="stats_subnote">${sGain(player.bh.mass, player.bh.unl ? sSafe(() => bh.mass_gain, E(0)).mul(gs) : E(0), true)}</span>`),
         sRow("Black Hole Mass Effect", `${sFormat(bh.effect)}x to Mass gain`),
         sRow("BH Formula Power / f", `Power: ^${sFormat(bh.massPowerGain)} | f: ${sFormat(bh.f)}<span class="stats_subnote">f Softcap: ${hasUpgrade("bh", 17) ? "Removed" : sFormat(bh.fSoftStart) + " (^" + sFormat(bh.fSoftPower) + ")"}</span>`),
         sRow("BH Gain Softcap", `Start: ${sMass(bh.massSoftGain)} | Power: ^${sFormat(bh.massSoftPower)}`),
@@ -444,7 +437,7 @@ function buildSection0Main() {
     // 8. Atomic Generator
     let atomOverActive = sSafe(() => tmp.atom.atomicGain, E(0)).gte("ee3000") && !hasUpgrade("atom", 24);
     let atomicRows = [
-        sRow("Atomic Power", `${sFormat(player.atom.atomic)} <span class="stats_subnote">${sGain(player.atom.atomic, player.atom.unl ? sSafe(() => tmp.atom.atomicGain, E(0)).mul(gs) : E(0))}</span>${sFormulaLine("atomic")}`),
+        sRow("Atomic Power", `${sFormat(player.atom.atomic)} <span class="stats_subnote">${sGain(player.atom.atomic, player.atom.unl ? sSafe(() => tmp.atom.atomicGain, E(0)).mul(gs) : E(0))}</span>`),
         sRow("Atomic Effect", `+${sFormat(sSafe(() => tmp.atom.atomicEff, E(0)), 0)} Free Tickspeeds${sSafe(() => tmp.atom.atomicEff, E(0)).gte(5e4) ? " " + sBadge("Softcapped", "active") : ""}`),
         sRow("Atomic Overflow", `${hasUpgrade("atom", 24) ? "Removed (atom24)" : atomOverActive && sIsValidDec(tmp.atomicOverflow) ? "^" + sFormat(tmp.atomicOverflow) : "Inactive (Starts e1e3000)"}`),
         sRow(`Cosmic Rays${getScalingName("gamma_ray") ? " (" + getScalingName("gamma_ray").trim() + ")" : ""}`,
@@ -460,7 +453,7 @@ function buildSection0Main() {
     if (player.ranks.hex.gte(36)) starEffStr += `, ^${sFormat(st.effectPower)}`;
     if (hasElement(530)) starEffStr += `, exp ^${sFormat(st.effectExpPower, 5)}`;
     let starRows = [
-        sRow("Collapsed Stars", `${sFormat(player.stars.points, 2)} / ${sFormat(sSafe(() => tmp.supernova.maxlimit, E(1e90)), 2)} <span class="stats_subnote">${sGain(player.stars.points, sSafe(() => st.gain, E(0)).mul(gs))}</span>${sFormulaLine("stars")}`),
+        sRow("Collapsed Stars", `${sFormat(player.stars.points, 2)} / ${sFormat(sSafe(() => tmp.supernova.maxlimit, E(1e90)), 2)} <span class="stats_subnote">${sGain(player.stars.points, sSafe(() => st.gain, E(0)).mul(gs))}</span>`),
         sRow("Stars Effect", starEffStr),
         sRow("Star Softcap & Overflow", `Softcap: ${sFormat(st.softGain)} (^${sFormat(st.softPower)})<span class="stats_subnote">Overflow: ${hasUpgrade("exotic", 1) ? "Removed (exotic1)" : starOverActive && sIsValidDec(tmp.starOverflow) ? "^" + sFormat(tmp.starOverflow) : "Inactive (Starts ee43)"}</span>`),
         sRow("Star Generators Unlocked", `${player.stars.unls} / 5 (Next Req: ${player.stars.unls < 5 ? sFormat(st.generator_req) + " Quarks" : "All Unlocked"})`),
@@ -468,7 +461,7 @@ function buildSection0Main() {
     ];
     for (let x = 0; x < 5; x++) {
         starRows.push(sRow(`Star Generator #${x + 1}`,
-            `${sFormat(player.stars.generators[x], 2)} <span class="stats_subnote">${sGain(player.stars.generators[x], sSafe(() => st.generators_gain[x], E(0)).mul(gs))}</span>${sFormulaLine("star_gen_" + x)}`,
+            `${sFormat(player.stars.generators[x], 2)} <span class="stats_subnote">${sGain(player.stars.generators[x], sSafe(() => st.generators_gain[x], E(0)).mul(gs))}</span>`,
             { locked: player.stars.unls <= x }
         ));
     }
@@ -476,7 +469,7 @@ function buildSection0Main() {
 
     // 10. Indescribable Matter (Blueprint Particles & Cosmic Strings)
     let imRows = [
-        sRow("Blueprint Particles", `${sFormat(player.qu.bp, 1)} <span class="stats_subnote">${sGain(player.qu.bp, sSafe(() => tmp.qu.bpGain, E(0)))}</span>${sFormulaLine("bp")}`),
+        sRow("Blueprint Particles", `${sFormat(player.qu.bp, 1)} <span class="stats_subnote">${sGain(player.qu.bp, sSafe(() => tmp.qu.bpGain, E(0)))}</span>`),
         sRow("BP Effect (to Global Speed)", `${sFormat(sSafe(() => tmp.qu.bpEff, E(1)))}x`),
         sRow(`Cosmic Strings${getScalingName("cosmic_str") ? " (" + getScalingName("cosmic_str").trim() + ")" : ""}`,
             `Lvl <b>${sFormat(player.qu.cosmic_str, 0)}</b> | Cost: ${sFormat(sSafe(() => tmp.qu.cosmic_str_cost, E(2)), 0)} QF<span class="stats_subnote">Power: ${sFormat(sSafe(() => tmp.qu.cosmic_str_eff.pow, E(2)))}x | Effect: ${sFormat(sSafe(() => tmp.qu.cosmic_str_eff.eff, E(1)))}x | Auto: ${hasElement(131) ? (player.qu.auto_cs ? "ON" : "OFF") : "Locked"}</span>`
@@ -489,11 +482,11 @@ function buildSection0Main() {
     let etUnl = hasUpgrade("inf", 14) || player.et.times.gt(0);
     let shardEff = tmp.et && tmp.et.shard_gen_eff ? tmp.et.shard_gen_eff : { pow: E(2), eff: E(1) };
     let etRows = [
-        sRow("Infinity Mass", `${sMass(player.inf.points)} <span class="stats_subnote">${hasUpgrade("inf", 11) ? sGain(player.inf.points, sSafe(() => tmp.inf.gain, E(0)), true) : "(+" + sMass(sSafe(() => tmp.inf.gain, E(0))) + " on reset)"}</span>${sFormulaLine("inf")}`, { locked: !infUnl }),
-        sRow("Infinity Times", `${sFormat(player.inf.times, 0)} <span class="stats_subnote">${hasUpgrade("inf", 11) ? sGain(player.inf.times, sSafe(() => tmp.inf.gainTimes, E(0))) : "(+" + sFormat(sSafe(() => tmp.inf.gainTimes, E(0)), 0) + " on reset)"}</span>${sFormulaLine("inf_times")}`, { locked: !infUnl }),
-        sRow("Eternal Mass", `${sMass(player.et.points)} <span class="stats_subnote">${hasElement(195) ? sGain(player.et.points, sSafe(() => tmp.et.gain, E(0)), true) : "(+" + sMass(sSafe(() => tmp.et.gain, E(0))) + " on reset)"}</span>${sFormulaLine("et")}`, { locked: !etUnl }),
-        sRow("Eternity Times", `${sFormat(player.et.times, 0)} <span class="stats_subnote">${hasElement(195) ? sGain(player.et.times, sSafe(() => tmp.et.gainTimes, E(0))) : "(+" + sFormat(sSafe(() => tmp.et.gainTimes, E(0)), 0) + " on reset)"}</span>${sFormulaLine("et_times")}`, { locked: !etUnl }),
-        sRow("Timeshards", `${sFormat(player.et.shards, 0)} <span class="stats_subnote">${sGain(player.et.shards, sSafe(() => tmp.et.shardsGain, E(0)))}</span>${sFormulaLine("timeshards")}`, { locked: player.et.times.lte(0) }),
+        sRow("Infinity Mass", `${sMass(player.inf.points)} <span class="stats_subnote">${hasUpgrade("inf", 11) ? sGain(player.inf.points, sSafe(() => tmp.inf.gain, E(0)), true) : "(+" + sMass(sSafe(() => tmp.inf.gain, E(0))) + " on reset)"}</span>`, { locked: !infUnl }),
+        sRow("Infinity Times", `${sFormat(player.inf.times, 0)} <span class="stats_subnote">${hasUpgrade("inf", 11) ? sGain(player.inf.times, sSafe(() => tmp.inf.gainTimes, E(0))) : "(+" + sFormat(sSafe(() => tmp.inf.gainTimes, E(0)), 0) + " on reset)"}</span>`, { locked: !infUnl }),
+        sRow("Eternal Mass", `${sMass(player.et.points)} <span class="stats_subnote">${hasElement(195) ? sGain(player.et.points, sSafe(() => tmp.et.gain, E(0)), true) : "(+" + sMass(sSafe(() => tmp.et.gain, E(0))) + " on reset)"}</span>`, { locked: !etUnl }),
+        sRow("Eternity Times", `${sFormat(player.et.times, 0)} <span class="stats_subnote">${hasElement(195) ? sGain(player.et.times, sSafe(() => tmp.et.gainTimes, E(0))) : "(+" + sFormat(sSafe(() => tmp.et.gainTimes, E(0)), 0) + " on reset)"}</span>`, { locked: !etUnl }),
+        sRow("Timeshards", `${sFormat(player.et.shards, 0)} <span class="stats_subnote">${sGain(player.et.shards, sSafe(() => tmp.et.shardsGain, E(0)))}</span>`, { locked: player.et.times.lte(0) }),
         sRow("Timeshards Effect", `^${sFormat(sSafe(() => calcShardsEffect(), E(1)))} to Pre-QU Global Speed`, { locked: player.et.times.lte(0) }),
         sRow(`Shard Generators${getScalingName("shard_gen") ? " (" + getScalingName("shard_gen").trim() + ")" : ""}`,
             `Lvl <b>${sFormat(player.et.shard_gen, 0)}</b> | Cost: ${sMass(sSafe(() => tmp.et.shard_gen_cost, E(0.002)))} EM<span class="stats_subnote">Power: ${sFormat(shardEff.pow)}x | Effect: ${sFormat(shardEff.eff)}x</span>`,
@@ -509,8 +502,8 @@ function buildSection0Main() {
     let stlGain = tmp.stellar && tmp.stellar.gain !== undefined ? tmp.stellar.gain : SUPERNOVA_CLUSTER.stellarGain();
     let stlEff = tmp.stellar && tmp.stellar.eff !== undefined ? tmp.stellar.eff : SUPERNOVA_CLUSTER.stellarEff();
     let stlRows = [
-        sRow("Stardust", `${sFormat(player.stardust)} <span class="stats_subnote">${sGain(player.stardust, sSafe(() => SUPERNOVA_CLUSTER.stardustGain(), E(0)))} | Super SG starts +${sFormat(sSafe(() => SUPERNOVA_CLUSTER.stardustEff(), E(0)))} later</span>${sFormulaLine("stardust")}`, { locked: player.superCluster.lt(14) }),
-        sRow("Stellar Mass", `${sMass(player.stellar)} <span class="stats_subnote">${sGain(player.stellar, stlGain, true)}</span>${sFormulaLine("stellar")}`),
+        sRow("Stardust", `${sFormat(player.stardust)} <span class="stats_subnote">${sGain(player.stardust, sSafe(() => SUPERNOVA_CLUSTER.stardustGain(), E(0)))} | Super SG starts +${sFormat(sSafe(() => SUPERNOVA_CLUSTER.stardustEff(), E(0)))} later</span>`, { locked: player.superCluster.lt(14) }),
+        sRow("Stellar Mass", `${sMass(player.stellar)} <span class="stats_subnote">${sGain(player.stellar, stlGain, true)}</span>`),
         sRow("Stellar Effect", `${sFormat(stlEff)}x to Galactic Quarks`),
         sRow("Stellar Generators", `Lvl <b>${sFormat(player.stellar_gen, 0)}</b> | Cost: ${sFormat(stlGenCost, 0)} Stardust<span class="stats_subnote">Power: ${sFormat(stlGenEff.pow)}x | Effect: ${sFormat(stlGenEff.eff)}x</span>`),
     ];
@@ -786,8 +779,8 @@ function buildSection4Atom() {
 
     // 1. Atoms & Quarks
     let atomRows = [
-        sRow("Atoms", `${sFormat(player.atom.points, 0)} <span class="stats_subnote">${hasElement(24) ? sGain(player.atom.points, sSafe(() => tmp.atom.gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.atom.gain, E(0)), 0) + " on reset)"}</span>${sFormulaLine("atom")}`),
-        sRow("Unassigned Quarks", `${sFormat(player.atom.quarks, 0)} <span class="stats_subnote">${hasElement(14) ? sGain(player.atom.quarks, sSafe(() => tmp.atom.quarkGain.mul(tmp.atom.quarkGainSec).mul(gs), E(0))) : "(+" + sFormat(sSafe(() => tmp.atom.quarkGain, E(0)), 0) + " on reset)"}</span>${sFormulaLine("quarks")}`),
+        sRow("Atoms", `${sFormat(player.atom.points, 0)} <span class="stats_subnote">${hasElement(24) ? sGain(player.atom.points, sSafe(() => tmp.atom.gain, E(0)).mul(gs)) : "(+" + sFormat(sSafe(() => tmp.atom.gain, E(0)), 0) + " on reset)"}</span>`),
+        sRow("Unassigned Quarks", `${sFormat(player.atom.quarks, 0)} <span class="stats_subnote">${hasElement(14) ? sGain(player.atom.quarks, sSafe(() => tmp.atom.quarkGain.mul(tmp.atom.quarkGainSec).mul(gs), E(0))) : "(+" + sFormat(sSafe(() => tmp.atom.quarkGain, E(0)), 0) + " on reset)"}</span>`),
         sRow("Passive Quark Rate", `${sFormat(E(tmp.atom ? tmp.atom.quarkGainSec : 0.05).mul(100))}% of quark gain/sec`),
         sRow("Assign Ratio / Dist Ratio", `${RATIO_ID[player.atom.ratio]} | [${player.atom.dRatio.join(" : ")}]`),
     ];
@@ -795,13 +788,11 @@ function buildSection4Atom() {
 
     // 2. Quark Particles
     let pRows = [];
-    const partPowIds = ["proton_pow", "neutron_pow", "electron_pow"];
-    const partIds = ["proton", "neutron", "electron"];
     for (let x = 0; x < ATOM.particles.names.length; x++) {
         let p = tmp.atom && tmp.atom.particles ? tmp.atom.particles[x] : null;
         let desc = p ? ATOM.particles.desc[x](p.powerEffect) : "-";
         pRows.push(sRow(ATOM.particles.names[x],
-            `Count: <b>${sFormat(player.atom.particles[x], 0)}</b> | Power: <b>${sFormat(player.atom.powers[x])}</b><span class="stats_subnote">${p ? sGain(player.atom.powers[x], p.powerGain.mul(gs)) : ""}<br>${desc}</span>${sFormulaLine(partIds[x])}${sFormulaLine(partPowIds[x])}`
+            `Count: <b>${sFormat(player.atom.particles[x], 0)}</b> | Power: <b>${sFormat(player.atom.powers[x])}</b><span class="stats_subnote">${p ? sGain(player.atom.powers[x], p.powerGain.mul(gs)) : ""}<br>${desc}</span>`
         ));
     }
     cards.push(sCard("Quark Particles", pRows, { locked: !player.atom.unl }));
@@ -809,12 +800,11 @@ function buildSection4Atom() {
     // 3. Galactic Particles
     let gpUnl = hasElement(251) || player.superGal.gte(10);
     let gpRows = [
-        sRow("Unassigned Galactic Quarks", `${sFormat(player.galQk, 0)} <span class="stats_subnote">${sGain(player.galQk, sSafe(() => SUPERNOVA_GALAXY.galQkGain(), E(0)))}</span>${sFormulaLine("galQk")}`),
+        sRow("Unassigned Galactic Quarks", `${sFormat(player.galQk, 0)} <span class="stats_subnote">${sGain(player.galQk, sSafe(() => SUPERNOVA_GALAXY.galQkGain(), E(0)))}</span>`),
     ];
-    const gpartIds = ["g_proton", "g_neutron", "g_electron"];
     for (let x = 0; x < ATOM.particles.names.length; x++) {
         gpRows.push(sRow(`Galactic ${ATOM.particles.names[x]}`,
-            `Count: <b>${sFormat(player.galParticles[x], 0)}</b><span class="stats_subnote">Raises ${ATOM.particles.names[x]} Power & gain by ^${sFormat(sSafe(() => galParticleEffect(x), E(1)))}</span>${sFormulaLine(gpartIds[x])}`
+            `Count: <b>${sFormat(player.galParticles[x], 0)}</b><span class="stats_subnote">Raises ${ATOM.particles.names[x]} Power & gain by ^${sFormat(sSafe(() => galParticleEffect(x), E(1)))}</span>`
         ));
     }
     cards.push(sCard("Galactic Quarks & Particles", gpRows, { locked: !gpUnl }));
@@ -849,9 +839,9 @@ function buildSection4Atom() {
     let mdRows = [
         sRow("Mass Dilation Status", player.md.active ? sBadge("Active", "active") : sBadge("Inactive", "locked")),
         sRow("Dilation Penalty", `^${sFormat(sSafe(() => tmp.md.pen, E(0.8)))}`),
-        sRow("Relativistic Particles", `${sFormat(player.md.particles, 0)} <span class="stats_subnote">${player.md.active ? "(+" + sFormat(sSafe(() => tmp.md.rp_gain, E(0)), 0) + " on cancel)" : hasTree("qol3") ? sGain(player.md.particles, sSafe(() => tmp.md.passive_rp_gain, E(0)).mul(gs)) : "(inactive)"}</span>${sFormulaLine("md_particles")}`),
+        sRow("Relativistic Particles", `${sFormat(player.md.particles, 0)} <span class="stats_subnote">${player.md.active ? "(+" + sFormat(sSafe(() => tmp.md.rp_gain, E(0)), 0) + " on cancel)" : hasTree("qol3") ? sGain(player.md.particles, sSafe(() => tmp.md.passive_rp_gain, E(0)).mul(gs)) : "(inactive)"}</span>`),
         sRow("RP Gain Formula Params", `Exp: ${sFormat(sSafe(() => tmp.md.rp_exp_gain, E(2)))} | Mult: ${sFormat(sSafe(() => tmp.md.rp_mult_gain, E(1)))} | Next RP at: ${sMass(sSafe(() => tmp.md.mass_req, EINF))}`),
-        sRow("Dilated Mass", `${sMass(player.md.mass)} <span class="stats_subnote">${sGain(player.md.mass, sSafe(() => tmp.md.mass_gain, E(0)).mul(gs), true)}</span>${sFormulaLine("md_mass")}`),
+        sRow("Dilated Mass", `${sMass(player.md.mass)} <span class="stats_subnote">${sGain(player.md.mass, sSafe(() => tmp.md.mass_gain, E(0)).mul(gs), true)}</span>`),
         sRow("DM Effect (to Tickspeed)", tmp.md.bd3 ? `^${sFormat(sSafe(() => tmp.md.mass_eff, E(1)))}` : `${sFormat(sSafe(() => tmp.md.mass_eff, E(1)))}x`),
         sRow("DM Softcap & Overflow", `Softcap: ${hasElement(158) ? "Disabled (E158)" : sMass(mlt(1e12))}<span class="stats_subnote">Overflow: ${dmOverActive ? "^" + sFormat(tmp.dmOverflow) : "Inactive (Starts e5e28)"}</span>`),
     ];
@@ -872,8 +862,8 @@ function buildSection4Atom() {
     let bd = player.md.break;
     let bdRows = [
         sRow("Break Dilation Status", bd.active ? sBadge("Broken", "active") : sBadge("Fixed", "locked")),
-        sRow("Relativistic Energy", `${sFormat(bd.energy, 1)} <span class="stats_subnote">${sGain(bd.energy, sSafe(() => tmp.bd.energyGain, E(0)))}</span>${sFormulaLine("bd_energy")}`),
-        sRow("Relativistic Mass", `${sMass(bd.mass)} <span class="stats_subnote">${sGain(bd.mass, sSafe(() => tmp.bd.massGain, E(0)), true)}</span>${sFormulaLine("bd_mass")}`),
+        sRow("Relativistic Energy", `${sFormat(bd.energy, 1)} <span class="stats_subnote">${sGain(bd.energy, sSafe(() => tmp.bd.energyGain, E(0)))}</span>`),
+        sRow("Relativistic Mass", `${sMass(bd.mass)} <span class="stats_subnote">${sGain(bd.mass, sSafe(() => tmp.bd.massGain, E(0)), true)}</span>`),
     ];
     for (let x = 0; x < MASS_DILATION.break.upgs.ids.length; x++) {
         let u = MASS_DILATION.break.upgs.ids[x];
@@ -901,7 +891,7 @@ function buildSection5Supernova() {
     let snRows = [
         sRow(`Supernovas${getScalingName("supernova") ? " (" + getScalingName("supernova").trim() + ")" : ""}`,
             `<b>${sFormat(player.supernova.times, 0)}</b> | Bulk: ${sFormat(sSafe(() => tmp.supernova.bulk, E(0)), 0)}<span class="stats_subnote">Next at ${sFormat(sSafe(() => tmp.supernova.maxlimit, E(1e90)), 2)} Stars</span>`),
-        sRow("Neutron Stars", `${sFormat(player.supernova.stars, 2)} <span class="stats_subnote">${sGain(player.supernova.stars, sSafe(() => tmp.supernova.star_gain, E(0)).mul(gs))}</span>${sFormulaLine("neutron_star")}`),
+        sRow("Neutron Stars", `${sFormat(player.supernova.stars, 2)} <span class="stats_subnote">${sGain(player.supernova.stars, sSafe(() => tmp.supernova.star_gain, E(0)).mul(gs))}</span>`),
         sRow("Post-10 Unlocked", player.supernova.post_10 ? "Yes" : "No"),
         sRow("Total Neutron Tree Upgrades", `<b>${totalBought}</b> / ${totalTree}`),
     ];
@@ -939,7 +929,7 @@ function buildSection5Supernova() {
         else if (id === "hb" && eff) effDesc = `Graviton effect ^${sFormat(eff[0])}`;
         else if (id === "photon") effDesc = "Fuels Photon Upgrades";
         else if (id === "gluon") effDesc = "Fuels Gluon Upgrades";
-        bosonRows.push(sRow(bosonLabels[id] || id, `${sFormat(amt)} <span class="stats_subnote">${sGain(amt, gain.mul(gs))}<br>${effDesc}</span>${sFormulaLine(id)}`));
+        bosonRows.push(sRow(bosonLabels[id] || id, `${sFormat(amt)} <span class="stats_subnote">${sGain(amt, gain.mul(gs))}<br>${effDesc}</span>`));
     }
     for (let x = 0; x < BOSONS.upgs.ids.length; x++) {
         let id = BOSONS.upgs.ids[x];
@@ -1006,7 +996,7 @@ function buildSection5Supernova() {
     // 5. Radiation
     let radUnl = !!tmp.radiation.unl;
     let radRows = [
-        sRow("Frequency", `${sFormat(player.supernova.radiation.hz, 1)} Hz <span class="stats_subnote">${sGain(player.supernova.radiation.hz, sSafe(() => tmp.radiation.hz_gain, E(0)).mul(gs))} | Effect: ${sFormat(sSafe(() => tmp.radiation.hz_effect, E(1)))}x Fermion gain</span>${sFormulaLine("rad_hz")}`),
+        sRow("Frequency", `${sFormat(player.supernova.radiation.hz, 1)} Hz <span class="stats_subnote">${sGain(player.supernova.radiation.hz, sSafe(() => tmp.radiation.hz_gain, E(0)).mul(gs))} | Effect: ${sFormat(sSafe(() => tmp.radiation.hz_effect, E(1)))}x Fermion gain</span>`),
         sRow("Radiation Boost FP", `${sFormat(sSafe(() => tmp.radiation.bs.fp, E(1)))}x`),
     ];
     for (let x = 0; x < RAD_LEN; x++) {
@@ -1025,7 +1015,7 @@ function buildSection5Supernova() {
             boostLines.push(`${RADIATION.boosts[idx].title} [${sFormat(lvl, 0)}${bon.gt(0) ? " + " + sFormat(bon) : ""}]: ${RADIATION.boosts[idx].desc(eff)}`);
         }
         radRows.push(sRow(`${RADIATION.names[x]} Wave`,
-            `${sFormat(ds, 1)} m | ${sFormat(dEff)}x | Amp ${sFormat(amp, 0)} / Vel ${sFormat(vel, 0)}<span class="stats_subnote">${sGain(ds, dGain.mul(gs))}<br>${boostLines.join("<br>")}</span>${sFormulaLine("rad_" + x)}`,
+            `${sFormat(ds, 1)} m | ${sFormat(dEff)}x | Amp ${sFormat(amp, 0)} / Vel ${sFormat(vel, 0)}<span class="stats_subnote">${sGain(ds, dGain.mul(gs))}<br>${boostLines.join("<br>")}</span>`,
             { locked: !wUnl }
         ));
     }
@@ -1052,7 +1042,7 @@ function buildSection5Supernova() {
     ];
     for (let i = 0; i < 6; i++) {
         sgRows.push(sRow(`Galactic ${galNames[i]}`,
-            `${sFormat(player.galPow[i])} | Effect: <b>^${sFormat(sSafe(() => galEffFns[i](), E(1)))}</b><span class="stats_subnote">${sGain(player.galPow[i], sSafe(() => galGainFns[i](), E(0)))}</span>${sFormulaLine("galPow" + i)}`,
+            `${sFormat(player.galPow[i])} | Effect: <b>^${sFormat(sSafe(() => galEffFns[i](), E(1)))}</b><span class="stats_subnote">${sGain(player.galPow[i], sSafe(() => galGainFns[i](), E(0)))}</span>`,
             { locked: player.superGal.lt(galReqSG[i]) }
         ));
     }
@@ -1061,7 +1051,7 @@ function buildSection5Supernova() {
         { locked: !scUnl }
     ));
     sgRows.push(sRow("Galactic Mass",
-        `${sMass(player.galPow[6])} | Effect: <b>${sFormat(sSafe(() => SUPERNOVA_GALAXY.galPow6_eff(), E(1)))}x</b><span class="stats_subnote">${sGain(player.galPow[6], sSafe(() => SUPERNOVA_GALAXY.galPow6_gain(), E(0)), true)}</span>${sFormulaLine("galPow6")}`,
+        `${sMass(player.galPow[6])} | Effect: <b>${sFormat(sSafe(() => SUPERNOVA_GALAXY.galPow6_eff(), E(1)))}x</b><span class="stats_subnote">${sGain(player.galPow[6], sSafe(() => SUPERNOVA_GALAXY.galPow6_gain(), E(0)), true)}</span>`,
         { locked: player.superCluster.lt(9) }
     ));
     sgRows.push(sRow("Cluster Passive Effects",
@@ -1083,8 +1073,8 @@ function buildSection6Quantum() {
 
     // 1. Quantum Core, Milestones & Auto-Quantum
     let qRows = [
-        sRow("Quantum Foam", `${sFormat(player.qu.points, 0)} <span class="stats_subnote">${hasUpgrade("br", 8) ? sGain(player.qu.points, qGain.div(hasTree("qu_qol11") ? 1 : 10)) : "(+" + sFormat(qGain, 0) + " on reset)"}</span>${sFormulaLine("qu")}`),
-        sRow("Quantizes", `${sFormat(player.qu.times, 0)} <span class="stats_subnote">${hasTree("qu_qol11") ? sGain(player.qu.times, qTimesGain) : "(+" + sFormat(qTimesGain, 0) + " on reset)"}</span>${sFormulaLine("qu_times")}`),
+        sRow("Quantum Foam", `${sFormat(player.qu.points, 0)} <span class="stats_subnote">${hasUpgrade("br", 8) ? sGain(player.qu.points, qGain.div(hasTree("qu_qol11") ? 1 : 10)) : "(+" + sFormat(qGain, 0) + " on reset)"}</span>`),
+        sRow("Quantizes", `${sFormat(player.qu.times, 0)} <span class="stats_subnote">${hasTree("qu_qol11") ? sGain(player.qu.times, qTimesGain) : "(+" + sFormat(qTimesGain, 0) + " on reset)"}</span>`),
         sRow("Quantum Theories Remaining", `${sFormat(tmp.qu.theories || 0, 0)} (${player.qu.chr_get.length} / ${CHROMA_LEN} Chromas picked)`),
         sRow("Quantum Milestones Reached", `<b>${qMilCount} / ${QUANTUM.mils.length}</b>`),
         sRow("Auto-Quantum",
@@ -1103,7 +1093,7 @@ function buildSection6Quantum() {
         let gain = sSafe(() => tmp.qu.chroma_gain[x], E(0));
         let eff = tmp.qu.chroma_eff[x] !== undefined ? tmp.qu.chroma_eff[x] : CHROMA.eff[x](amt);
         chrRows.push(sRow(`${n[0]} Chroma (${n[1]})`,
-            `${sFormat(amt, 1)} <span class="stats_subnote">${sGain(amt, gain)}<br>${CHROMA.effDesc[x](eff)}</span>${sFormulaLine("chroma_" + x)}`,
+            `${sFormat(amt, 1)} <span class="stats_subnote">${sGain(amt, gain)}<br>${CHROMA.effDesc[x](eff)}</span>`,
             { locked: !picked && !quUnl(), badge: picked ? sBadge("Active", "unlocked") : sBadge("Unpicked", "locked") }
         ));
     }
@@ -1141,9 +1131,9 @@ function buildSection6Quantum() {
     // 4. Entropy
     let enUnl = player.qu.en.unl;
     let enRows = [
-        sRow("Entropy", `${sFormat(player.qu.en.amt, 1)} / ${sFormat(sSafe(() => tmp.en.cap, E(0)), 1)} <span class="stats_subnote">${sGain(player.qu.en.amt, sSafe(() => tmp.en.gain.amt, E(0)))}</span>${sFormulaLine("en_amt")}`),
-        sRow("Enthalpy", `Best: <b>${sFormat(player.qu.en.eth[2])}</b>${player.qu.en.eth[0] ? " (Evaporating: " + sFormat(player.qu.en.eth[1]) + ")" : ""}<span class="stats_subnote">Rate: ${sFormat(sSafe(() => tmp.en.gain.eth, E(1)))}/s | Entropy gain: ${sFormat(sSafe(() => tmp.en.eff.eth, E(0)), 1)}x</span>${sFormulaLine("en_eth")}`),
-        sRow("Hawking Radiation", `Best: <b>${sFormat(player.qu.en.hr[2])}</b>${player.qu.en.hr[0] ? " (Evaporating: " + sFormat(player.qu.en.hr[1]) + ")" : ""}<span class="stats_subnote">Rate: ${sFormat(sSafe(() => tmp.en.gain.hr, E(1)))}/s | Entropy cap: ${sFormat(sSafe(() => tmp.en.eff.hr, E(0)), 1)}x</span>${sFormulaLine("en_hr")}`),
+        sRow("Entropy", `${sFormat(player.qu.en.amt, 1)} / ${sFormat(sSafe(() => tmp.en.cap, E(0)), 1)} <span class="stats_subnote">${sGain(player.qu.en.amt, sSafe(() => tmp.en.gain.amt, E(0)))}</span>`),
+        sRow("Enthalpy", `Best: <b>${sFormat(player.qu.en.eth[2])}</b>${player.qu.en.eth[0] ? " (Evaporating: " + sFormat(player.qu.en.eth[1]) + ")" : ""}<span class="stats_subnote">Rate: ${sFormat(sSafe(() => tmp.en.gain.eth, E(1)))}/s | Entropy gain: ${sFormat(sSafe(() => tmp.en.eff.eth, E(0)), 1)}x</span>`),
+        sRow("Hawking Radiation", `Best: <b>${sFormat(player.qu.en.hr[2])}</b>${player.qu.en.hr[0] ? " (Evaporating: " + sFormat(player.qu.en.hr[1]) + ")" : ""}<span class="stats_subnote">Rate: ${sFormat(sSafe(() => tmp.en.gain.hr, E(1)))}/s | Entropy cap: ${sFormat(sSafe(() => tmp.en.eff.hr, E(0)), 1)}x</span>`),
     ];
     for (let x = 0; x < ENTROPY.rewards.length; x++) {
         let rc = ENTROPY.rewards[x];
@@ -1160,7 +1150,7 @@ function buildSection6Quantum() {
     let brRows = [
         sRow("Big Rip Status", player.qu.rip.active ? sBadge("Big Ripped", "active") : sBadge("Normal Dimension", "locked")),
         sRow("First Big Rip Reached", player.qu.rip.first ? "Yes" : "No"),
-        sRow("Death Shards", `${sFormat(player.qu.rip.amt, 0)} <span class="stats_subnote">${hasUpgrade("br", 8) && (player.qu.rip.active || hasTree("qu_qol12")) ? sGain(player.qu.rip.amt, ripGain.div(10)) : "(+" + sFormat(ripGain, 0) + ")"}</span>${sFormulaLine("rip")}`),
+        sRow("Death Shards", `${sFormat(player.qu.rip.amt, 0)} <span class="stats_subnote">${hasUpgrade("br", 8) && (player.qu.rip.active || hasTree("qu_qol12")) ? sGain(player.qu.rip.amt, ripGain.div(10)) : "(+" + sFormat(ripGain, 0) + ")"}</span>`),
     ];
     cards.push(sCard("Big Rip", brRows, { locked: !brUnl }));
 
@@ -1175,8 +1165,8 @@ function buildSection7Exotic() {
 
     // 1. Exotic Core & Milestones
     let exRows = [
-        sRow("Exotic Matter", `${sFormat(player.exotic.points, 0)} <span class="stats_subnote">${hasChargedElement(24) ? sGain(player.exotic.points, sSafe(() => tmp.ex.gain, E(0))) : "(+" + sFormat(sSafe(() => tmp.ex.gain, E(0)), 0) + " on reset)"}</span>${sFormulaLine("exotic")}`),
-        sRow("Exotic Resets", `${sFormat(player.exotic.times, 0)} <span class="stats_subnote">${player.exotic.dark_run.upgs[4].gte(1) ? sGain(player.exotic.times, sSafe(() => tmp.ex.gainTimes, E(1))) : "(+" + sFormat(sSafe(() => tmp.ex.gainTimes, E(1)), 0) + " on reset)"}</span>${sFormulaLine("exotic_times")}`),
+        sRow("Exotic Matter", `${sFormat(player.exotic.points, 0)} <span class="stats_subnote">${hasChargedElement(24) ? sGain(player.exotic.points, sSafe(() => tmp.ex.gain, E(0))) : "(+" + sFormat(sSafe(() => tmp.ex.gain, E(0)), 0) + " on reset)"}</span>`),
+        sRow("Exotic Resets", `${sFormat(player.exotic.times, 0)} <span class="stats_subnote">${player.exotic.dark_run.upgs[4].gte(1) ? sGain(player.exotic.times, sSafe(() => tmp.ex.gainTimes, E(1))) : "(+" + sFormat(sSafe(() => tmp.ex.gainTimes, E(1)), 0) + " on reset)"}</span>`),
         sRow("Exotic Milestones Reached", `<b>${exMils} / ${EXOTIC.mils.length}</b>`),
     ];
     cards.push(sCard("Exotic Core & Milestones", exRows, { locked: !exUnl }));
@@ -1239,9 +1229,9 @@ function buildSection7Exotic() {
     if (hasElement(512) && abEff.me) abEffects.push(`Matter Exp: +${sFormat(abEff.me, 3)}`);
 
     let dkRows = [
-        sRow("Dark Ray", `${sFormat(player.exotic.dr, 0)} (Gain: +${sFormat(sSafe(() => EXOTIC.drGain(), E(0)), 0)})<span class="stats_subnote">${drEffects.join(" | ")}</span>${sFormulaLine("dark_ray")}`),
-        sRow("Dark Shadow", `${sFormat(player.exotic.ds, 0)} <span class="stats_subnote">${sGain(player.exotic.ds, sSafe(() => EXOTIC.dsGain(), E(0)))}<br>${dsEffects.join(" | ")}</span>${sFormulaLine("dark_shadow")}`),
-        sRow("Abyssal Blot", `${sFormat(player.exotic.ab, 0)} <span class="stats_subnote">${sGain(player.exotic.ab, sSafe(() => EXOTIC.abGain(), E(0)))}<br>${abEffects.join(" | ")}</span>${sFormulaLine("abyssal_blot")}`, { locked: !hasElement(414) }),
+        sRow("Dark Ray", `${sFormat(player.exotic.dr, 0)} (Gain: +${sFormat(sSafe(() => EXOTIC.drGain(), E(0)), 0)})<span class="stats_subnote">${drEffects.join(" | ")}</span>`),
+        sRow("Dark Shadow", `${sFormat(player.exotic.ds, 0)} <span class="stats_subnote">${sGain(player.exotic.ds, sSafe(() => EXOTIC.dsGain(), E(0)))}<br>${dsEffects.join(" | ")}</span>`),
+        sRow("Abyssal Blot", `${sFormat(player.exotic.ab, 0)} <span class="stats_subnote">${sGain(player.exotic.ab, sSafe(() => EXOTIC.abGain(), E(0)))}<br>${abEffects.join(" | ")}</span>`, { locked: !hasElement(414) }),
     ];
     cards.push(sCard("Darkness", dkRows, { locked: !dkUnl }));
 
@@ -1249,7 +1239,7 @@ function buildSection7Exotic() {
     let druUnl = hasElement(450);
     let druRows = [
         sRow("Dark Run Status", player.exotic.dark_run.active ? sBadge("Active", "active") : sBadge("Inactive", "locked")),
-        sRow("Glyphic Mass", `${sMass(player.exotic.dark_run.points)} <span class="stats_subnote">${sGain(player.exotic.dark_run.points, sSafe(() => DARK_RUN.gain(), E(0)), true)}</span>${sFormulaLine("dr_points")}`),
+        sRow("Glyphic Mass", `${sMass(player.exotic.dark_run.points)} <span class="stats_subnote">${sGain(player.exotic.dark_run.points, sSafe(() => DARK_RUN.gain(), E(0)), true)}</span>`),
     ];
     for (let x = 0; x < DARK_RUN.upgs.ids.length; x++) {
         let u = DARK_RUN.upgs.ids[x];
@@ -1287,7 +1277,7 @@ function buildSection7Exotic() {
         else if (i === 10) effStr = `Infinity Mass Exp +${sFormat(eff)}`;
         else if (i === 11) effStr = `Abyssal Blot ${sFormat(eff)}x`;
         else if (i === 12) effStr = `Dark Ray ${sFormat(eff)}x`;
-        matRows.push(sRow(matNames[i], `${sFormat(amt)} <span class="stats_subnote">${sGain(amt, gain)} | ${effStr}</span>${sFormulaLine("matter_" + i)}`));
+        matRows.push(sRow(matNames[i], `${sFormat(amt)} <span class="stats_subnote">${sGain(amt, gain)} | ${effStr}</span>`));
     }
     matRows.push(sRow("Final Star Shards (FSS)",
         `<b>${sFormat(player.exotic.fss, 0)}</b> (Base: ${sFormat(sSafe(() => MATTERS.fssBase(), E(0)))} / Req: ${sFormat(sSafe(() => MATTERS.fssReq(), E(40)))})<span class="stats_subnote">Effect: ${sFormat(sSafe(() => MATTERS.fssEff(), E(1)))}x Axion Generators Power</span>`,
