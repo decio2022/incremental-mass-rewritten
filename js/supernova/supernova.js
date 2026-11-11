@@ -72,6 +72,10 @@ const SUPERNOVA = {
 		x = x.mul(SUPERNOVA_GALAXY.effects.nsMult())
         if (hasTree("sn6")) x = x.pow(tmp.supernova.tree_eff.sn6)
 		x = x.pow(SUPERNOVA_GALAXY.effects.ns())
+		if (typeof SUPERNOVA_NEBULA !== "undefined") x = x.mul(SUPERNOVA_NEBULA.effects.stars())
+		if (typeof nebElementMult === "function") x = x.mul(nebElementMult("stars"))
+		if (hasTree("neb7")) x = x.mul(treeEff("neb7"))
+		if (hasTree("neb8")) x = x.mul(treeEff("neb8"))
 	
 		
 			if(hasUpgrade('exotic',20) && x.gte(10))x = expMult(x,tmp.ex.exb_eff[4])
@@ -160,7 +164,7 @@ function updateSupernovaTemp() {
             let req = t.req?t.req():true
             if (tmp.qu.mil_reached[1] && NO_REQ_QU.includes(id)) req = true
             if (player.superGal.gte(2)) req = true
-            let can = (t.ax?EXOTIC.axsRem():t.qf?player.qu.points:player.supernova.stars).gte(t.cost) && !hasTree(id) && req
+            let can = (t.ax?EXOTIC.axsRem():t.qf?player.qu.points:t.neb?(player.nebula?player.nebula.dust:E(0)):player.supernova.stars).gte(t.cost) && !hasTree(id) && req
             if (branch != "") for (let x = 0; x < branch.length; x++) if (!hasTree(branch[x])) {
                 unl = false
                 can = false

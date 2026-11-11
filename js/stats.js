@@ -17,7 +17,8 @@ const STATS_SECTIONS = [
     { id: 6, tab: 6, title: "Quantum", desc: "Quantum Foam, Chroma, Milestones, Auto-Quantum, Primordium, Entropy & Big Rip" },
     { id: 7, tab: 7, title: "Exotic", desc: "Exotic Matter, Milestones, RC Boosters, Exotic Boosts, Darkness, Dark Run, Matters & Axions" },
     { id: 8, tab: 10, title: "Options & Misc", desc: "Session Time, Offline Progress, Display Preferences, Confirmations & Automators" },
-    { id: 9, tab: 11, title: "Genesis", desc: "Tetration Depth, Genesis Motes, Upgrades, Milestones & Trials (post-endgame)" },
+    { id: 9, tab: 11, title: "Genesis", desc: "Tetration Depth, Genesis Motes, Upgrades, Milestones, Trials & Relics (post-endgame)" },
+    { id: 10, tab: 12, title: "Nebula", desc: "Nebula Dust, Collapses, Upgrades & Milestones (post-endgame reset)" },
 ];
 
 function sSafe(fn, fallback = E(0)) {
@@ -871,9 +872,9 @@ function buildSection4Atom() {
     let elemUnl = player.chal.comps[7].gte(16) || player.supernova.times.gte(1) || quUnl();
     let totalElems = tmp.elements.upg_length || (ELEMENTS.upgs.length - 1);
     let tierCounts = [0, 0, 0, 0];
-    let tierTotals = [0, 0, 0, 0];
+    let tierTotals = [0, 0, 0, 0, 0, 0];
     for (let id = 1; id <= totalElems; id++) {
-        let t = id <= 118 ? 0 : id <= 218 ? 1 : id <= 362 ? 2 : 3;
+        let t = id <= 118 ? 0 : id <= 218 ? 1 : id <= 362 ? 2 : id <= 558 ? 3 : id <= 598 ? 4 : 5;
         if (ELEMENTS.upgs[id] && ELEMENTS.upgs[id].cost !== EINF) tierTotals[t]++;
         if (hasElement(id)) tierCounts[t]++;
     }
@@ -886,6 +887,7 @@ function buildSection4Atom() {
         sRow("Tier 2 Elements (119–218)", `${tierCounts[1]} / ${tierTotals[1]}`, { locked: (tmp.elements.unl_length || 0) <= 118 }),
         sRow("Tier 3 Elements (219–362)", `${tierCounts[2]} / ${tierTotals[2]}`, { locked: (tmp.elements.unl_length || 0) <= 218 }),
         sRow("Tier 4 Elements (363–558)", `${tierCounts[3]} / ${tierTotals[3]}`, { locked: (tmp.elements.unl_length || 0) <= 362 }),
+        sRow("Tier 5 Nebula Elements (559–598)", `${tierCounts[4]} / ${tierTotals[4]}`, { locked: (tmp.elements.unl_length || 0) <= 558 }),
         sRow("Charged Elements", `<b>${player.atom.chargedElements.length}</b> / ${chargeMax}`, { locked: !hasElement(380) }),
         sRow("Blocked in Big Rip", tmp.elements.cannot && tmp.elements.cannot.length ? tmp.elements.cannot.join(", ") : "None"),
     ];
@@ -1472,6 +1474,7 @@ const STATS_BUILDERS = [
     buildSection7Exotic,
     buildSection8Options,
     buildSection9Genesis,
+    buildSection10Nebula,
 ];
 
 function updateAllStatsHTML(force = false) {
@@ -1480,7 +1483,7 @@ function updateAllStatsHTML(force = false) {
     let summaryEl = document.getElementById("all_stats_summary");
     let sbEl = document.getElementById("all_stats_sandbox");
 
-    if (sub === 11) {
+    if (sub === 12) {
         if (ctrlEl) ctrlEl.style.display = "none";
         if (summaryEl) summaryEl.style.display = "none";
         for (let i = 0; i < STATS_SECTIONS.length; i++) {

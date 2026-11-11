@@ -1482,7 +1482,7 @@ const UPGS = {
                 }
             },
             auto_unl() { return false },
-            lens: 25,
+            lens: 32,
             1: {
                 desc: `Multiply your Eternity times gain by (200+Exotic reset times). Remove Mass and Star Overflow.`,
                 cost: E(1),
@@ -1618,6 +1618,41 @@ const UPGS = {
                 unl() { return hasUpgrade('exotic',19) },
                 desc: "Unlock the final Exotic Boost type, Exotic Boost Importing and Exotic Boost Exporting.",
                 cost: E(1e30),
+            },
+            26: {
+                unl() { return hasUpgrade('exotic',25) },
+                desc: "Multiply Nebula Dust gain by 2.",
+                cost: E(1e33),
+            },
+            27: {
+                unl() { return hasUpgrade('exotic',25) },
+                desc: "Multiply Genesis Tetration Speed by 1.5.",
+                cost: E(1e36),
+            },
+            28: {
+                unl() { return hasUpgrade('exotic',25) },
+                desc: "Multiply Stardust gain by 2.",
+                cost: E(1e40),
+            },
+            29: {
+                unl() { return hasUpgrade('exotic',25) },
+                desc: "Multiply Galactic Quark gain by 2.",
+                cost: E(1e44),
+            },
+            30: {
+                unl() { return player.exotic.times.gte(150) },
+                desc: "Multiply Nebula Harmony by 1.25.",
+                cost: E(1e48),
+            },
+            31: {
+                unl() { return player.exotic.times.gte(150) },
+                desc: "Multiply Genesis Mote gain by 2.",
+                cost: E(1e52),
+            },
+            32: {
+                unl() { return player.exotic.times.gte(300) },
+                desc: "Multiply Exotic Matter gain by 5 and Nebula Dust gain by 2.",
+                cost: E(1e60),
             },
         },
     },

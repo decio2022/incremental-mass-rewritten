@@ -41,6 +41,10 @@ const EXOTIC = {
 		if(hasChargedElement(120))x = x.mul(tmp.elements.ceffect[120]);
 		if(hasElement(486))x = x.mul(MATTERS.eff(0));
 		if(hasElement(534))x = x.mul(player.exotic.ax[0].add(1));
+		if(typeof SUPERNOVA_NEBULA !== "undefined")x = x.mul(SUPERNOVA_NEBULA.effects.exotic());
+		if(typeof nebElementMult === "function")x = x.mul(nebElementMult("exotic"));
+		if(hasTree('neb3'))x = x.mul(treeEff('neb3'));
+		if(hasUpgrade('exotic',32))x = x.mul(5);
         return x.floor()
     },
     gainTimes() {
@@ -57,6 +61,9 @@ const EXOTIC = {
         [E(5), `Keep Galactic Shards on Exotic resets.`],
         [E(10), `You start with 15 Supernova Galaxies, and keep C20 completions on Exotic resets.`],
         [E(50), `Automatically Gain Supernova Galaxies, Supernova Galaxies don't reset anything.`],
+        [E(60), `Multiply Nebula Dust gain by 2. Stellar Mass and Stardust are kept on Nebula resets.`],
+        [E(150), `Multiply Genesis Tetration Speed by 2 and Nebula Harmony by 1.5.`],
+        [E(300), `Multiply every Nebula effect by 3. Unlock Exotic Upgrade 32.`],
     ],
     enter() {
         if (EXOTIC.gain().gte(1)) {

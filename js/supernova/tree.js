@@ -6,6 +6,7 @@ const TREE_TAB = [
     {title: "Quantum", unl() { return quUnl() } },
     {title: "Quantum+", unl() { return hasChargedElement(118) } },
     {title: "Axionic", unl() { return hasElement(556) } },
+    {title: "Nebula", unl() { return player.nebula && player.nebula.times.gte(1) } },
 ]
 
 const TREE_IDS = [
@@ -84,6 +85,22 @@ const TREE_IDS = [
     ],
 ]
 
+// The Nebula branch is appended as an 8th column so the original grid stays
+// untouched. One entry per visual column of the tab.
+const TREE_NEB_COLUMNS = [
+    ['neb1'],
+    ['neb2'],
+    ['neb3', 'neb4'],
+    ['neb5', 'neb6'],
+    ['neb7'],
+    ['neb8'],
+    ['neb9', 'neb10'],
+    ['neb11'],
+    ['neb12'],
+    [],
+]
+for (let i = 0; i < TREE_IDS.length; i++) TREE_IDS[i][7] = TREE_NEB_COLUMNS[i] || []
+
 var tree_canvas,tree_ctx,tree_update=true
 
 const NO_REQ_QU = ['qol1','qol2','qol3','qol4','qol5',
@@ -95,6 +112,7 @@ const NO_REQ_QU = ['qol1','qol2','qol3','qol4','qol5',
 
 const TREE_UPGS = {
     buy(x, auto=false) {
+		if(this.ids[x].neb && auto) return;
 		if(this.ids[x].ax){
 			if(auto)return;
 			if(hasTree(x))return;
@@ -107,6 +125,7 @@ const TREE_UPGS = {
 		
         if ((tmp.supernova.tree_choosed == x || auto) && tmp.supernova.tree_afford[x]) {
             if (this.ids[x].qf) player.qu.points = player.qu.points.sub(this.ids[x].cost).max(0)
+            else if (this.ids[x].neb) player.nebula.dust = player.nebula.dust.sub(this.ids[x].cost).max(0)
             else player.supernova.stars = player.supernova.stars.sub(this.ids[x].cost).max(0)
             player.supernova.tree.push(x)
         }
@@ -2007,6 +2026,115 @@ const TREE_UPGS = {
             desc: `Unlock 6 final upgrades in the Quantum+ tab of Neutron Tree.`,
             cost: E(200000),
         },
+        // ---- Nebula branch (costs Nebula Dust) -----------------------------
+        neb1: {
+            neb: true,
+            img: "ax39",
+            unl() { return player.nebula && player.nebula.times.gte(1) },
+            desc: `Nebula Dust accelerates the tetration layers. ×1.5 Genesis Tetration Speed.`,
+            cost: E(25),
+            effect() { return E(1.5) },
+            effDesc(x) { return format(x) + "x Tetration Speed" },
+        },
+        neb2: {
+            neb: true,
+            img: "ax34",
+            branch: ["neb1"],
+            desc: `Dust condenses as it falls. ×1.5 Nebula Dust gain.`,
+            cost: E(60),
+            effect() { return E(1.5) },
+            effDesc(x) { return format(x) + "x Nebula Dust" },
+        },
+        neb3: {
+            neb: true,
+            img: "ax32",
+            branch: ["neb2"],
+            desc: `Nebular winds carry Exotic Matter. ×2 Exotic Matter gain.`,
+            cost: E(150),
+            effect() { return E(2) },
+            effDesc(x) { return format(x) + "x Exotic Matter" },
+        },
+        neb4: {
+            neb: true,
+            img: "ax23",
+            branch: ["neb2"],
+            desc: `Galaxies spin faster inside the cloud. ×2 Galactic Quark gain.`,
+            cost: E(200),
+            effect() { return E(2) },
+            effDesc(x) { return format(x) + "x Galactic Quarks" },
+        },
+        neb5: {
+            neb: true,
+            img: "ax20",
+            branch: ["neb3"],
+            desc: `Dust settles into stardust. ×2 Stardust gain.`,
+            cost: E(400),
+            effect() { return E(2) },
+            effDesc(x) { return format(x) + "x Stardust" },
+        },
+        neb6: {
+            neb: true,
+            img: "ax24",
+            branch: ["neb4"],
+            desc: `Motes drift through the cloud. ×2 Genesis Mote gain.`,
+            cost: E(400),
+            effect() { return E(2) },
+            effDesc(x) { return format(x) + "x Genesis Motes" },
+        },
+        neb7: {
+            neb: true,
+            img: "ax31",
+            branch: ["neb5"],
+            desc: `Neutron stars ignite in the dust. ×1.5 Neutron Star gain.`,
+            cost: E(800),
+            effect() { return E(1.5) },
+            effDesc(x) { return format(x) + "x Neutron Stars" },
+        },
+        neb8: {
+            neb: true,
+            img: "ax35",
+            branch: ["neb6"],
+            desc: `The cloud begins to sing. ×1.5 Nebula Harmony.`,
+            cost: E(1500),
+            effect() { return E(1.5) },
+            effDesc(x) { return format(x) + "x Harmony" },
+        },
+        neb9: {
+            neb: true,
+            img: "ax38",
+            branch: ["neb7"],
+            desc: `Reforging inside the cloud is cheaper. ×2 Genesis Sparks.`,
+            cost: E(3000),
+            effect() { return E(2) },
+            effDesc(x) { return format(x) + "x Genesis Sparks" },
+        },
+        neb10: {
+            neb: true,
+            img: "ax41",
+            branch: ["neb8"],
+            desc: `Collapsed layers stick together. +5% Genesis depth retention.`,
+            cost: E(3000),
+            effect() { return 0.05 },
+            effDesc(x) { return "+" + format(x * 100) + "% retention" },
+        },
+        neb11: {
+            neb: true,
+            img: "ax36",
+            branch: ["neb9", "neb10"],
+            desc: `The whole cloud leans inward. ×3 Nebula Dust gain.`,
+            cost: E(8000),
+            effect() { return E(3) },
+            effDesc(x) { return format(x) + "x Nebula Dust" },
+        },
+        neb12: {
+            neb: true,
+            img: "ax42",
+            branch: ["neb11"],
+            desc: `Perfect resonance. ×2 to every Nebula effect.`,
+            cost: E(25000),
+            effect() { return E(2) },
+            effDesc(x) { return format(x) + "x all Nebula effects" },
+        },
     },
 }
 
@@ -2034,7 +2162,7 @@ function setupTreeHTML() {
             for (let k = 0; k < TREE_IDS[i][j].length; k++) {
                 let id = TREE_IDS[i][j][k]
                 let option = id == "" ? `style="visibility: hidden"` : ``
-                let img = TREE_UPGS.ids[id]?`<img src="images/tree/${id}.png">`:""
+                let img = TREE_UPGS.ids[id]?`<img src="images/tree/${TREE_UPGS.ids[id].img ? TREE_UPGS.ids[id].img : id}.png">`:""
                 table += `<button id="treeUpg_${id}" class="btn_tree" onclick="TREE_UPGS.buy('${id}'); tmp.supernova.tree_choosed = '${id}'" ${option}>${img}</button>`
             }
             table += `</div>`
@@ -2144,7 +2272,7 @@ function updateTreeHTML() {
         tmp.supernova.tree_choosed == "" ? `<div style="font-size: 12px; font-weight: bold;"><span class="gray">(click any tree upgrade to show)</span></div>`
         : `<div style="font-size: 12px; font-weight: bold;"><span class="gray">(click again to buy if affordable)</span>${req}</div>
         <span class="sky"><b>[${tmp.supernova.tree_choosed}]</b> ${t_ch.desc}</span><br>
-        <span>Cost: ${t_ch.ax?formatSpace(t_ch.cost):format(t_ch.cost,2)} ${t_ch.ax?'Axionic Space':t_ch.qf?'Quantum foam':'Neutron star'}</span><br>
+        <span>Cost: ${t_ch.ax?formatSpace(t_ch.cost):format(t_ch.cost,2)} ${t_ch.ax?'Axionic Space':t_ch.qf?'Quantum foam':t_ch.neb?'Nebula Dust':'Neutron star'}</span><br>
         <span class="green">${t_ch.effDesc?"Currently: "+t_ch.effDesc(tmp.supernova.tree_eff[tmp.supernova.tree_choosed]):""}</span>
         `
     )
@@ -2169,4 +2297,8 @@ function updateTreeHTML() {
         tmp.el.treeResName.setTxt("Axionic Space")
         tmp.el.resetAxionicTree.setDisplay(true)
 	}else tmp.el.resetAxionicTree.setDisplay(false)
+    if (tmp.tree_tab == 7){
+        tmp.el.neutronStar.setTxt(format(player.nebula.dust))
+        tmp.el.treeResName.setTxt("Nebula Dust")
+    }
 }

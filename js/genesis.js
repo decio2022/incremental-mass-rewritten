@@ -19,9 +19,12 @@ const GENESIS_MIN_COLLAPSE = 0.005;   // depth needed for a Collapse
 const GENESIS_BASE_RATE = E("1e-5");  // depth per second before upgrades
 const GENESIS_MOTE_BASE_EXP = 12;     // motes = 10^(depth * exponent)
 
-const GENESIS_UPG_COUNT = 12;
-const GENESIS_MILESTONE_COUNT = 8;
-const GENESIS_TRIAL_COUNT = 6;
+const GENESIS_UPG_COUNT = 20;
+const GENESIS_MILESTONE_COUNT = 13;
+const GENESIS_TRIAL_COUNT = 10;
+const GENESIS_RELIC_COUNT = 8;
+const GENESIS_RELIC_MIN = 0.25;      // run depth needed to Reforge
+const GENESIS_SPARK_BASE = 20;       // sparks = 20 * runDepth^2 * bonuses
 
 // ---------------------------------------------------------------------------
 // Upgrades (bought with Genesis Motes)
@@ -131,6 +134,78 @@ const GEN_UPGS = [
         eff() { return E(10) },
         effDesc() { return "×10 Tetration Speed" },
     },
+    {
+        name: "Mote Prism",
+        desc: "Splits every Mote into a brighter spectrum.",
+        unl() { return GENESIS.milestoneReached(8) },
+        max: 10,
+        cost(n) { return E(1e7).mul(E(4).pow(n)) },
+        eff(n) { return E(1.3).pow(n) },
+        effDesc(x) { return format(x) + " Motes" },
+    },
+    {
+        name: "Depth Crystal",
+        desc: "Crystallises part of your depth so it survives a Collapse.",
+        unl() { return GENESIS.milestoneReached(8) },
+        max: 5,
+        cost(n) { return E(5e7).mul(E(6).pow(n)) },
+        eff(n) { return n * 0.015 },
+        effDesc(x) { return "+" + format(x * 100) + "% depth retention" },
+    },
+    {
+        name: "Spark Conduit",
+        desc: "Channels Reforges into more Genesis Sparks.",
+        unl() { return GENESIS.milestoneReached(9) },
+        max: 8,
+        cost(n) { return E(2e8).mul(E(5).pow(n)) },
+        eff(n) { return E(1.5).pow(n) },
+        effDesc(x) { return format(x) + " Sparks" },
+    },
+    {
+        name: "Chrono Engine",
+        desc: "Time means nothing to a broken mass cap.",
+        unl() { return GENESIS.milestoneReached(10) },
+        max: 10,
+        cost(n) { return E(1e9).mul(E(5).pow(n)) },
+        eff(n) { return E(1.5).pow(n) },
+        effDesc(x) { return format(x) + " Tetration Speed" },
+    },
+    {
+        name: "Dust Bridge",
+        desc: "Tetration leaks into the Nebula, thickening its Dust.",
+        unl() { return GENESIS.milestoneReached(10) },
+        max: 8,
+        cost(n) { return E(1e11).mul(E(6).pow(n)) },
+        eff(n) { return E(1.25).pow(n) },
+        effDesc(x) { return format(x) + " Nebula Dust" },
+    },
+    {
+        name: "Nebula Lens",
+        desc: "Focuses the Nebula's Harmony through the tetration layers.",
+        unl() { return GENESIS.milestoneReached(11) },
+        max: 8,
+        cost(n) { return E(1e12).mul(E(6).pow(n)) },
+        eff(n) { return E(1.3).pow(n) },
+        effDesc(x) { return format(x) + " Nebula Harmony" },
+    },
+    {
+        name: "Perpetual Engine",
+        desc: "The engine keeps running while you are away.",
+        unl() { return GENESIS.milestoneReached(11) },
+        max: 3,
+        cost(n) { return E(1e14).mul(E(10).pow(n)) },
+        eff(n) { return E(2).pow(n) },
+        effDesc(x) { return format(x) + " Tetration Speed" },
+    },
+    {
+        name: "Genesis Ascendant",
+        desc: "You are no longer climbing the layers. You are the layers.",
+        unl() { return GENESIS.milestoneReached(12) },
+        max: 1,
+        cost() { return E(1e18) },
+        eff() { return E(50) },
+        effDesc() { return "×50 Tetration Speed" },
+    },
 ];
 
 // ---------------------------------------------------------------------------
@@ -146,6 +221,11 @@ const GEN_MILESTONES = [
     { depth: 0.50, motes: "1e6", name: "Singularity", reward: "Unlocks Singularity Drive, ×1.15 Tetration Speed", mult: E(1.15) },
     { depth: 0.75, motes: "1e9", name: "Tetration Apex", reward: "×2 Tetration Speed", mult: E(2) },
     { depth: 1.00, motes: 0, name: "Genesis Complete", reward: "eeee100 g reached, ×3 Tetration Speed, unlocks Genesis Mastery", mult: E(3) },
+    { depth: 1.00, motes: "1e12", name: "Mote Cascade", reward: "×1.5 Tetration Speed, unlocks Mote Prism and Depth Crystal", mult: E(1.5) },
+    { depth: 1.00, motes: "1e13", collapses: 25, name: "Endless Collapse", reward: "×1.5 Mote gain, unlocks Spark Conduit", mult: E(1) },
+    { depth: 1.00, motes: "1e20", name: "Chrono Fracture", reward: "×2 Tetration Speed, unlocks Chrono Engine and Dust Bridge", mult: E(2) },
+    { depth: 1.00, motes: "1e26", trials: 4, name: "Trial Master", reward: "×2 Mote gain, unlocks Nebula Lens and Perpetual Engine", mult: E(1) },
+    { depth: 1.00, motes: "1e32", reforges: 1, name: "Spark of Creation", reward: "×3 Tetration Speed, unlocks Genesis Ascendant", mult: E(3) },
 ];
 
 function genMilestoneMoteReq(i) {
@@ -160,7 +240,22 @@ function genMilestoneMoteMet(i) {
 function genMilestoneReqText(i) {
     let m = GEN_MILESTONES[i];
     let req = genMilestoneMoteReq(i);
-    return "Depth " + format(m.depth) + (req.gt(0) ? " & " + format(req) + " Motes earned" : "");
+    let out = "Depth " + format(m.depth);
+    if (req.gt(0)) out += " & " + format(req) + " Motes earned";
+    if (m.collapses) out += " & " + format(m.collapses, 0) + " Collapses";
+    if (m.trials) out += " & " + format(m.trials, 0) + " Trials";
+    if (m.reforges) out += " & " + format(m.reforges, 0) + " Reforges";
+    return out;
+}
+
+function genMilestoneMet(i) {
+    let m = GEN_MILESTONES[i];
+    if (player.gen.bestDepth.lt(m.depth)) return false;
+    if (!genMilestoneMoteMet(i)) return false;
+    if (m.collapses && (player.gen.collapses || 0) < m.collapses) return false;
+    if (m.trials && GENESIS.trialCount() < m.trials) return false;
+    if (m.reforges && (player.gen.reforges || 0) < m.reforges) return false;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -192,6 +287,86 @@ const GEN_TRIALS = [
         name: "Final Trial", req: 0.90, pen: { rate: 0.05, motes: 0.5 }, rew: { rate: 2, motes: 3 },
         desc: "Tetration Speed is divided by 20 and Mote gain halved.", reward: "×3 Motes & ×2 Tetration Speed",
     },
+    {
+        name: "Trial of Dust", req: 0.35, pen: { motes: 0.1 }, rew: { motes: 2.5, sparks: 1.5 },
+        desc: "Mote gain is divided by 10.", reward: "×2.5 Motes & ×1.5 Sparks",
+    },
+    {
+        name: "Trial of Sparks", req: 0.60, pen: { rate: 0.2 }, rew: { rate: 2, sparks: 2 },
+        desc: "Tetration Speed is divided by 5.", reward: "×2 Tetration Speed & ×2 Sparks",
+    },
+    {
+        name: "Trial of Chains", req: 0.45, pen: { rate: 0.1, locked: true, motes: 0.5 }, rew: { motes: 3, sparks: 1.5 },
+        desc: "Upgrades are locked and Tetration Speed is divided by 10.", reward: "×3 Motes & ×1.5 Sparks",
+    },
+    {
+        name: "Final Trial II", req: 0.95, pen: { rate: 0.02, motes: 0.25 }, rew: { rate: 2.5, motes: 4, sparks: 3 },
+        desc: "Tetration Speed is divided by 50 and Mote gain quartered.", reward: "×4 Motes, ×2.5 Tetration Speed & ×3 Sparks",
+    },
+];
+
+// ---------------------------------------------------------------------------
+// Relics (bought with Genesis Sparks from Reforges)
+// ---------------------------------------------------------------------------
+
+const GEN_RELICS = [
+    null,
+    {
+        name: "Spark Lens",
+        desc: "Forged from the first Reforge. Multiplies tetration speed.",
+        max: 5, base: 3, mult: 2.1,
+        eff(n) { return E(1.5).pow(n) },
+        effDesc(x) { return format(x) + " Tetration Speed" },
+    },
+    {
+        name: "Mote Prism",
+        desc: "Bends Motes into a brighter beam.",
+        max: 5, base: 4, mult: 2.1,
+        eff(n) { return E(1.5).pow(n) },
+        effDesc(x) { return format(x) + " Motes" },
+    },
+    {
+        name: "Dust Anchor",
+        desc: "Dust from the Nebula clings to the relic.",
+        max: 5, base: 6, mult: 2.1,
+        eff(n) { return E(1).add(n) },
+        effDesc(x) { return format(x) + " Nebula Dust" },
+    },
+    {
+        name: "Harmony Bell",
+        desc: "Rings with the Nebula's Harmony.",
+        max: 5, base: 8, mult: 2.1,
+        eff(n) { return E(1).add(E(n).mul(0.25)) },
+        effDesc(x) { return format(x) + " Nebula Harmony" },
+    },
+    {
+        name: "Collapse Anchor",
+        desc: "You keep a little more depth with every Collapse.",
+        max: 5, base: 10, mult: 2.1,
+        eff(n) { return n * 0.015 },
+        effDesc(x) { return "+" + format(x * 100) + "% depth retention" },
+    },
+    {
+        name: "Layer Compass",
+        desc: "The layers know where you want to go.",
+        max: 5, base: 14, mult: 2.1,
+        eff(n) { return E(1.3).pow(n) },
+        effDesc(x) { return format(x) + " Tetration Speed" },
+    },
+    {
+        name: "Trial Sigil",
+        desc: "Every completed Trial feeds the Sigil.",
+        max: 5, base: 20, mult: 2.1,
+        eff(n) { return E(1).add(E(n).mul(0.2)) },
+        effDesc(x) { return format(x) + " Motes" },
+    },
+    {
+        name: "Origin Core",
+        desc: "The seed of the Endgame. Multiplies everything Genesis makes.",
+        max: 5, base: 30, mult: 2.2,
+        eff(n) { return E(2).pow(n) },
+        effDesc(x) { return format(x) + " to all Genesis gains" },
+    },
 ];
 
 const GEN_AUTO_DEPTHS = [-1, 0.02, 0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1];
@@ -210,6 +385,35 @@ const GENESIS = {
     trialDone(i) { return !!player.gen.trials[i] },
     milestoneReached(i) { return !!player.gen.milestones[i] },
     trialLocked() { return player.gen.activeTrial >= 0 && !!GEN_TRIALS[player.gen.activeTrial].pen.locked },
+    trialCount() { let n = 0; for (let i = 0; i < GEN_TRIALS.length; i++) if (this.trialDone(i)) n++; return n; },
+    relicLvl(i) { return player.gen.relics[i] || 0 },
+    relicMaxed(i) { return this.relicLvl(i) >= GEN_RELICS[i].max },
+    relicCost(i) { return E(GEN_RELICS[i].base).mul(E(GEN_RELICS[i].mult).pow(this.relicLvl(i))).floor().max(1) },
+    relicEff(i) { return GEN_RELICS[i].eff(this.relicLvl(i)) },
+    reforgeCount() { return player.gen.reforges || 0 },
+    relicEffect(kind) {
+        let x = E(1);
+        if (kind === "rate") {
+            x = x.mul(this.relicEff(1)).mul(this.relicEff(6)).mul(this.relicEff(8));
+        } else if (kind === "motes") {
+            x = x.mul(this.relicEff(2)).mul(this.relicEff(7)).mul(this.relicEff(8));
+        } else if (kind === "dust") {
+            x = x.mul(this.relicEff(3));
+        } else if (kind === "harmony") {
+            x = x.mul(this.relicEff(4)).mul(this.harmonyUpgMult());
+        }
+        return x;
+    },
+    nebulaRate() {
+        if (typeof SUPERNOVA_NEBULA === "undefined") return E(1);
+        return SUPERNOVA_NEBULA.effects.genRate();
+    },
+    nebulaMotes() {
+        if (typeof SUPERNOVA_NEBULA === "undefined") return E(1);
+        return SUPERNOVA_NEBULA.effects.genMotes();
+    },
+    dustUpgMult() { return E(1.25).pow(this.upgLvl(17)) },
+    harmonyUpgMult() { return E(1.3).pow(this.upgLvl(18)) },
 
     depth() { return player.gen.depth },
     depthNum() { return player.gen.depth.toNumber() },
@@ -222,7 +426,10 @@ const GENESIS = {
     },
 
     retention() {
-        return Math.min(0.75, 0.25 + this.upgLvl(4) * 0.05);
+        let cap = Math.min(0.97, 0.75 + this.relicLvl(5) * 0.02);
+        let val = 0.25 + this.upgLvl(4) * 0.05 + this.upgLvl(14) * 0.015 + this.relicLvl(5) * 0.015;
+        if (typeof hasTree === "function" && hasTree("neb10")) val += 0.05;
+        return Math.min(cap, val);
     },
 
     moteExponent() {
@@ -263,10 +470,81 @@ const GENESIS = {
         x = x.mul(E(1.8).pow(this.upgLvl(9)));                                    // Singularity
         x = x.mul(E(1).add(E(this.upgLvl(7)).mul(0.05)).pow(Math.min(500, player.gen.collapses || 0))); // Memory
         x = x.mul(E(10).pow(this.upgLvl(12)));                                    // Mastery
+        x = x.mul(E(1.5).pow(this.upgLvl(16)));                                   // Chrono Engine
+        x = x.mul(E(2).pow(this.upgLvl(19)));                                     // Perpetual Engine
+        x = x.mul(E(50).pow(this.upgLvl(20)));                                    // Genesis Ascendant
         x = x.mul(this.milestoneMult());
         x = x.mul(this.trialRateMult());
         x = x.mul(this.activePenalty("rate"));
+        x = x.mul(this.nebulaRate());
+        x = x.mul(this.relicEffect("rate"));
+        if (typeof nebElementMult === "function") x = x.mul(nebElementMult("genrate"));
+        if (typeof hasTree === "function" && hasTree("neb1")) x = x.mul(treeEff("neb1"));
+        if (hasUpgrade("exotic", 27)) x = x.mul(1.5);
+        if (player.exotic.times.gte(150)) x = x.mul(2);
         return x;
+    },
+
+    trialSparkMult() {
+        let x = E(1);
+        for (let i = 0; i < GEN_TRIALS.length; i++) if (this.trialDone(i) && GEN_TRIALS[i].rew.sparks) x = x.mul(GEN_TRIALS[i].rew.sparks);
+        return x;
+    },
+
+    sparkGain() {
+        let b = E(player.gen.runBest || 0);
+        if (b.lt(GENESIS_RELIC_MIN)) return E(0);
+        let x = b.pow(2).mul(GENESIS_SPARK_BASE);
+        x = x.mul(E(1).add(E(player.gen.collapses || 0).mul(0.06)));
+        x = x.mul(E(1).add(E(this.trialCount()).mul(0.1)));
+        x = x.mul(this.trialSparkMult());
+        x = x.mul(E(1.5).pow(this.upgLvl(15)));
+        if (typeof hasTree === "function" && hasTree("neb9")) x = x.mul(treeEff("neb9"));
+        return x.floor().max(1);
+    },
+
+    canReforge() {
+        return !!player.gen.unl && E(player.gen.runBest || 0).gte(GENESIS_RELIC_MIN);
+    },
+
+    reforge() {
+        if (!player.gen.unl) return false;
+        let gain = this.sparkGain();
+        if (gain.lte(0)) {
+            if (typeof addNotify === "function") addNotify("Reach depth " + format(GENESIS_RELIC_MIN) + " in this run to Reforge", 4);
+            return false;
+        }
+        player.gen.sparks = player.gen.sparks.add(gain);
+        player.gen.totalSparks = player.gen.totalSparks.add(gain);
+        player.gen.lastSparks = gain;
+        player.gen.reforges = (player.gen.reforges || 0) + 1;
+        player.gen.depth = E(0);
+        player.gen.runBest = E(0);
+        player.gen.motes = E(0);
+        player.gen.upgs = [];
+        player.gen.collapses = 0;
+        if (player.gen.activeTrial >= 0) player.gen.activeTrial = -1;
+        if (!this.inRestrictedMode()) player.mass = this.massForDepth(0);
+        this.cleanMotes();
+        this.checkMilestones();
+        this.refreshTemp();
+        this.markDirty();
+        save();
+        if (typeof addNotify === "function") addNotify("Reforged: +" + format(gain) + " Genesis Sparks", 5);
+        return true;
+    },
+
+    buyRelic(i, max = false) {
+        let def = GEN_RELICS[i];
+        if (!def || !player.gen.unl) return;
+        let bought = 0;
+        while (!this.relicMaxed(i) && player.gen.sparks.gte(this.relicCost(i))) {
+            player.gen.sparks = player.gen.sparks.sub(this.relicCost(i));
+            player.gen.relics[i] = this.relicLvl(i) + 1;
+            bought++;
+            if (!max) break;
+        }
+        if (bought > 0) this.afterBuy();
     },
 
     moteGain(d) {
@@ -274,8 +552,14 @@ const GENESIS = {
         if (depth.lte(0)) return E(0);
         let x = E(10).pow(depth.mul(this.moteExponent()));
         x = x.mul(E(1.15).pow(this.upgLvl(5)));   // Mote Resonance
+        x = x.mul(E(1.3).pow(this.upgLvl(13)));   // Mote Prism
         x = x.mul(this.trialMoteMult());
         x = x.mul(this.activePenalty("motes"));
+        x = x.mul(this.nebulaMotes());
+        x = x.mul(this.relicEffect("motes"));
+        if (typeof nebElementMult === "function") x = x.mul(nebElementMult("genmotes"));
+        if (typeof hasTree === "function" && hasTree("neb6")) x = x.mul(treeEff("neb6"));
+        if (hasUpgrade("exotic", 31)) x = x.mul(2);
         return x.floor().max(1);
     },
 
@@ -316,7 +600,7 @@ const GENESIS = {
     checkMilestones() {
         for (let i = 0; i < GEN_MILESTONES.length; i++) {
             if (this.milestoneReached(i)) continue;
-            if (player.gen.bestDepth.gte(GEN_MILESTONES[i].depth) && genMilestoneMoteMet(i)) {
+            if (genMilestoneMet(i)) {
                 player.gen.milestones[i] = true;
                 this.markDirty();
                 addNotify("Genesis Milestone: " + GEN_MILESTONES[i].name, 5);
@@ -359,6 +643,7 @@ const GENESIS = {
             player.gen.depth = player.gen.depth.add(rate.mul(dt)).min(GENESIS_DEPTH_CAP);
         }
         if (player.gen.depth.gt(0) && player.gen.depth.gt(player.gen.bestDepth)) player.gen.bestDepth = player.gen.depth.clone();
+        if (player.gen.depth.gt(0) && player.gen.depth.gt(player.gen.runBest || E(0))) player.gen.runBest = player.gen.depth.clone();
 
         this.applyMassFloor();
         this.checkMilestones();
@@ -381,6 +666,10 @@ const GENESIS = {
         tmp.gen.massFloor = this.massForDepth(player.gen.depth);
         tmp.gen.retention = this.retention();
         tmp.gen.canCollapse = player.gen.unl && player.gen.activeTrial < 0 && player.gen.depth.gte(GENESIS_MIN_COLLAPSE);
+        tmp.gen.sparks = player.gen.sparks;
+        tmp.gen.sparkGain = this.sparkGain();
+        tmp.gen.canReforge = this.canReforge();
+        tmp.gen.relics = this.relicLvl;
     },
 
     // ---- actions -----------------------------------------------------------
@@ -553,6 +842,18 @@ const GENESIS = {
         if (Number(g.autoDepth) > 0) g.autoDepth = Math.max(GENESIS_MIN_COLLAPSE, Math.min(GENESIS_DEPTH_CAP, Number(g.autoDepth)));
         g.autoBuy = !!g.autoBuy;
         g.autoCollapse = !!g.autoCollapse;
+        if (!Array.isArray(g.relics)) g.relics = [];
+        for (let i = 1; i < GEN_RELICS.length; i++) {
+            let lvl = Number(g.relics[i]);
+            if (!Number.isFinite(lvl) || lvl < 0) lvl = 0;
+            g.relics[i] = Math.min(Math.floor(lvl), GEN_RELICS[i].max);
+        }
+        g.reforges = Number.isFinite(Number(g.reforges)) ? Math.max(0, Math.floor(Number(g.reforges))) : 0;
+        ["sparks", "totalSparks", "lastSparks", "runBest"].forEach(k => {
+            if (!(g[k] instanceof Decimal)) g[k] = E(g[k] === undefined || g[k] === null ? 0 : g[k]);
+            if (Number.isNaN(g[k].mag) || Number.isNaN(g[k].layer) || g[k].lt(0)) g[k] = E(0);
+        });
+        if (g.runBest.gt(GENESIS_DEPTH_CAP)) g.runBest = E(GENESIS_DEPTH_CAP);
         ["depth", "bestDepth", "motes", "totalMotes", "lastGain"].forEach(k => {
             if (!(g[k] instanceof Decimal)) g[k] = E(g[k] === undefined || g[k] === null ? 0 : g[k]);
             if (Number.isNaN(g[k].mag) || Number.isNaN(g[k].layer) || g[k].lt(0)) g[k] = E(0);
@@ -572,8 +873,9 @@ const GENESIS = {
             <div id="stab_frame11_1" class="gen_sub"></div>
             <div id="stab_frame11_2" class="gen_sub"></div>
             <div id="stab_frame11_3" class="gen_sub"></div>
+            <div id="stab_frame11_4" class="gen_sub"></div>
         </div>`;
-        this.dirty = { main: true, upgs: true, miles: true, trials: true };
+        this.dirty = { main: true, upgs: true, miles: true, trials: true, relics: true };
         let main = document.getElementById("stab_frame11_0");
         let upgs = document.getElementById("stab_frame11_1");
         let miles = document.getElementById("stab_frame11_2");
@@ -582,10 +884,12 @@ const GENESIS = {
         if (upgs) upgs.innerHTML = this.buildUpgrades();
         if (miles) miles.innerHTML = this.buildMilestones();
         if (trials) trials.innerHTML = this.buildTrials();
+        let relics = document.getElementById("stab_frame11_4");
+        if (relics) relics.innerHTML = this.buildRelics();
     },
 
     markDirty() {
-        this.dirty = { main: true, upgs: true, miles: true, trials: true };
+        this.dirty = { main: true, upgs: true, miles: true, trials: true, relics: true };
     },
 
     buildMain() {
@@ -607,6 +911,8 @@ const GENESIS = {
             ${kpi("Motes on Collapse", "gen_gain")}
             ${kpi("Collapses", "gen_collapses")}
             ${kpi("Total Motes Earned", "gen_totalmotes")}
+            ${kpi("Genesis Sparks", "gen_sparks")}
+            ${kpi("Sparks on Reforge", "gen_sparkgain")}
         </div>
         <div class="gen_progress_wrap">
             <div class="gen_progress_label"><span id="gen_progress_label">Depth 0 / 1</span><span id="gen_goal_label">Goal: eeee100 g</span></div>
@@ -615,6 +921,8 @@ const GENESIS = {
         <div class="gen_actions">
             <button class="btn gen_big_btn" id="gen_collapse_btn" onclick="genCollapse()">Genesis Collapse</button>
             <div class="gen_collapse_note" id="gen_collapse_note">Reach depth ${format(GENESIS_MIN_COLLAPSE)} to collapse.</div>
+            <button class="btn gen_big_btn gen_reforge_btn" id="gen_reforge_btn" onclick="genReforge()">Reforge</button>
+            <div class="gen_collapse_note" id="gen_reforge_note">Reforging turns this run's depth into Genesis Sparks for Relics.</div>
         </div>
         <div class="gen_grid">
             <div class="gen_card">
@@ -716,6 +1024,41 @@ const GENESIS = {
         </div>`;
     },
 
+    buildRelics() {
+        if (!this.milestoneReached(0)) {
+            return `<div class="gen_section"><div class="gen_empty">Relics unlock with the <b>First Collapse</b> milestone. Reforge a deep run to forge Genesis Sparks.</div></div>`;
+        }
+        let cards = "";
+        for (let i = 1; i < GEN_RELICS.length; i++) {
+            let def = GEN_RELICS[i];
+            let lvl = this.relicLvl(i);
+            let maxed = lvl >= def.max;
+            cards += `<div class="gen_card gen_upg">
+                <div class="gen_card_title"><span>${def.name}</span><span class="gen_tag">${maxed ? "MAX" : "Lv " + lvl + " / " + def.max}</span></div>
+                <div class="gen_note gen_note_left">${def.desc}</div>
+                <div class="gen_row"><span>Effect</span><span id="gen_relic_eff_${i}">--</span></div>
+                <div class="gen_row"><span>Cost</span><span id="gen_relic_cost_${i}">--</span></div>
+                <div class="gen_btn_row">
+                    <button class="btn stats_btn_sm" id="gen_relic_buy1_${i}" onclick="genBuyRelic(${i}, false)">Buy</button>
+                    <button class="btn stats_btn_sm" id="gen_relic_buymax_${i}" onclick="genBuyRelic(${i}, true)">Buy Max</button>
+                </div>
+            </div>`;
+        }
+        return `<div class="gen_section">
+            <div class="gen_section_head"><span>Genesis Relics</span><span class="gen_tag" id="gen_sparks_hdr">--</span></div>
+            <div class="gen_card" style="margin-bottom:10px;">
+                <div class="gen_card_title"><span>Reforge</span><span class="gen_tag" id="gen_reforge_tag">--</span></div>
+                <div class="gen_note gen_note_left">Reforging resets your depth, Motes, upgrades and Collapses for this run, and converts the run's best depth into <b>Genesis Sparks</b>. Milestones, Trials, Relics and the completed endgame are kept.</div>
+                <div class="gen_row"><span>Run best depth</span><span id="gen_runbest">--</span></div>
+                <div class="gen_row"><span>Sparks gained</span><span id="gen_reforge_gain">--</span></div>
+                <div class="gen_btn_row">
+                    <button class="btn stats_btn_sm" id="gen_reforge2_btn" onclick="genReforge()">Reforge</button>
+                </div>
+            </div>
+            <div class="gen_grid">${cards}</div>
+        </div>`;
+    },
+
     // ---- per-frame live update --------------------------------------------
     updateHTML() {
         if (!player.gen || !player.gen.unl) return;
@@ -730,6 +1073,7 @@ const GENESIS = {
             if (d.upgs) { let el = doc.getElementById("stab_frame11_1"); if (el) el.innerHTML = this.buildUpgrades(); }
             if (d.miles) { let el = doc.getElementById("stab_frame11_2"); if (el) el.innerHTML = this.buildMilestones(); }
             if (d.trials) { let el = doc.getElementById("stab_frame11_3"); if (el) el.innerHTML = this.buildTrials(); }
+            if (d.relics) { let el = doc.getElementById("stab_frame11_4"); if (el) el.innerHTML = this.buildRelics(); }
             this.dirty = null;
         }
 
@@ -752,6 +1096,8 @@ const GENESIS = {
         txt("gen_mote_exp", format(this.moteExponent(), 0));
         txt("gen_mile_mult", format(this.milestoneMult()) + "x");
         txt("gen_trial_now", player.gen.activeTrial >= 0 ? GEN_TRIALS[player.gen.activeTrial].name : "None");
+        txt("gen_sparks", format(player.gen.sparks));
+        txt("gen_sparkgain", format(this.sparkGain()));
 
         let bar = doc.getElementById("gen_bar_fill");
         if (bar) bar.style.width = (this.progress() * 100).toFixed(3) + "%";
@@ -774,6 +1120,37 @@ const GENESIS = {
                     ? "Collapsing grants " + format(gain) + " Genesis Motes and keeps " + format(this.retention() * 100) + "% of your depth."
                     : "Reach depth " + format(GENESIS_MIN_COLLAPSE) + " to collapse (throughput: " + format(rate, 5) + " depth/s).";
             if (player.gen.autoCollapse && depth.gte(GENESIS_DEPTH_CAP)) cnote.textContent = "Automation paused at the top layer (eeee100 g). Collapse manually to keep farming Motes.";
+        }
+
+        let rbtn = doc.getElementById("gen_reforge_btn");
+        if (rbtn) {
+            rbtn.disabled = !this.canReforge();
+            rbtn.className = "btn gen_big_btn gen_reforge_btn" + (this.canReforge() ? "" : " gen_disabled");
+        }
+        txt("gen_reforge_note", this.canReforge()
+            ? "Reforging now grants " + format(this.sparkGain()) + " Genesis Sparks and resets this run."
+            : "Reach depth " + format(GENESIS_RELIC_MIN) + " in this run to Reforge. Milestones, Trials and Relics are kept.");
+
+        // relics tab live values
+        if (player.gen && player.gen.unl) {
+            txt("gen_sparks_hdr", format(player.gen.sparks) + " Sparks");
+            txt("gen_runbest", format(player.gen.runBest || 0, 4) + " / " + format(GENESIS_DEPTH_CAP));
+            txt("gen_reforge_gain", format(this.sparkGain()) + " Sparks");
+            txt("gen_reforge_tag", this.canReforge() ? "Ready" : "Depth " + format(GENESIS_RELIC_MIN));
+            let rb = doc.getElementById("gen_reforge2_btn");
+            if (rb) rb.disabled = !this.canReforge();
+            for (let i = 1; i < GEN_RELICS.length; i++) {
+                let def = GEN_RELICS[i];
+                let lvl = this.relicLvl(i);
+                let maxed = lvl >= def.max;
+                txt("gen_relic_eff_" + i, maxed ? def.effDesc(def.eff(def.max)) : def.effDesc(def.eff(lvl)));
+                txt("gen_relic_cost_" + i, maxed ? "-" : format(this.relicCost(i)) + " Sparks");
+                let can = !maxed && player.gen.sparks.gte(this.relicCost(i));
+                let b1 = doc.getElementById("gen_relic_buy1_" + i);
+                let bm = doc.getElementById("gen_relic_buymax_" + i);
+                if (b1) b1.disabled = !can;
+                if (bm) bm.disabled = !can;
+            }
         }
 
         let ab = doc.getElementById("gen_autobuy_btn");
@@ -817,6 +1194,8 @@ function genAbandonTrial() { GENESIS.abandonTrial(); }
 function genToggleAutoBuy() { GENESIS.toggleAutoBuy(); }
 function genToggleAutoCollapse() { GENESIS.toggleAutoCollapse(); }
 function genSetAutoDepth(v) { GENESIS.setAutoDepth(Number(v)); }
+function genReforge() { GENESIS.reforge(); GENESIS.markDirty(); GENESIS.updateHTML(); }
+function genBuyRelic(i, max) { GENESIS.buyRelic(i, !!max); GENESIS.markDirty(); GENESIS.updateHTML(); }
 
 // ---------------------------------------------------------------------------
 // Stats-tab section
@@ -837,6 +1216,10 @@ function buildSection9Genesis() {
         sRow("Milestone Multiplier", format(GENESIS.milestoneMult()) + "x"),
         sRow("Trial Multiplier", format(GENESIS.trialRateMult()) + "x speed / " + format(GENESIS.trialMoteMult()) + "x motes"),
         sRow("Active Trial", g.activeTrial >= 0 ? GEN_TRIALS[g.activeTrial].name : "None"),
+        sRow("Genesis Sparks", format(g.sparks) + ` <span class="stats_subnote">+${format(GENESIS.sparkGain())} on Reforge</span>`),
+        sRow("Reforges", format(g.reforges || 0, 0)),
+        sRow("Run Best Depth", format(g.runBest || 0, 4) + " / " + format(GENESIS_DEPTH_CAP)),
+        sRow("Total Sparks Earned", format(g.totalSparks || 0)),
         sRow("Genesis Status", g.complete ? "COMPLETE (eeee100 g)" : "In progress"),
     ];
     let cards = [sCard("Genesis Overview", rows)];
@@ -853,6 +1236,13 @@ function buildSection9Genesis() {
 
     let mRows = GEN_MILESTONES.map((m, i) => sRow(m.name, `${genMilestoneReqText(i)} — ${m.reward}`, { badge: GENESIS.milestoneReached(i) ? sBadge("DONE", "unlocked") : sBadge("LOCKED", "locked") }));
     cards.push(sCard("Genesis Milestones", mRows));
+
+    let rRows = [];
+    for (let i = 1; i < GEN_RELICS.length; i++) {
+        let def = GEN_RELICS[i];
+        rRows.push(sRow(def.name, `Lv ${GENESIS.relicLvl(i)} / ${def.max} <span class="stats_subnote">${GENESIS.relicMaxed(i) ? "Maxed" : format(GENESIS.relicCost(i)) + " Sparks"}</span> — ${def.effDesc(def.eff(GENESIS.relicLvl(i)))}`));
+    }
+    cards.push(sCard("Genesis Relics", rRows));
 
     let tRows = GEN_TRIALS.map((t, i) => sRow(t.name, `${t.desc} <span class="stats_subnote">Reward: ${t.reward}</span>`, { badge: GENESIS.trialDone(i) ? sBadge("DONE", "unlocked") : player.gen.activeTrial === i ? sBadge("ACTIVE", "active") : sBadge("LOCKED", "locked") }));
     cards.push(sCard("Genesis Trials", tRows));

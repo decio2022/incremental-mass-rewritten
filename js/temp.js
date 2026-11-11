@@ -148,7 +148,7 @@ function resetTemp() {
                 if (id != "") {
                     tmp.supernova.tree_had2[j].push(id)
                     tmp.supernova.tree_had.push(id)
-                    if (!TREE_UPGS.ids[id].qf) tmp.supernova.auto_tree.push(id)
+                    if (!TREE_UPGS.ids[id].qf && !TREE_UPGS.ids[id].neb) tmp.supernova.auto_tree.push(id)
                 }
             }
         }
@@ -249,6 +249,7 @@ function updateBlackHoleTemp() {
 
 function updateTemp() {
 	
+    if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.updateTemp()
     tmp.offlineActive = player.offline.time > 1
     tmp.offlineMult = tmp.offlineActive?player.offline.time+1:1
 

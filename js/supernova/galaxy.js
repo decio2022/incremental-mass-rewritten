@@ -315,6 +315,10 @@ const SUPERNOVA_GALAXY = {
 		ret = ret.mul(SUPERNOVA_GALAXY.galPow6_eff())
 		if(hasElement(486))ret = ret.mul(MATTERS.eff(3));
 		if(player.superCluster.gte(21))ret = ret.mul(tmp.stellar.eff);
+		if(typeof SUPERNOVA_NEBULA !== "undefined")ret = ret.mul(SUPERNOVA_NEBULA.effects.galQk());
+		if(typeof nebElementMult === "function")ret = ret.mul(nebElementMult("galqk"));
+		if(hasTree('neb4'))ret = ret.mul(treeEff('neb4'));
+		if(hasUpgrade('exotic',29))ret = ret.mul(2);
 		return ret;
 	},
 }
@@ -520,6 +524,10 @@ const SUPERNOVA_CLUSTER = {
 		if(hasAscension(2,10))ret = ret.mul(ascensionEff(2,10));
 		if(hasElement(554))ret = ret.mul(player.exotic.ax[2].add(1));
 		if (player.ranks.enne.gte(300)) ret = ret.mul(RANKS.effect.enne[300]())
+		if(typeof SUPERNOVA_NEBULA !== "undefined")ret = ret.mul(SUPERNOVA_NEBULA.effects.stardust());
+		if(typeof nebElementMult === "function")ret = ret.mul(nebElementMult("stardust"));
+		if(hasTree('neb5'))ret = ret.mul(treeEff('neb5'));
+		if(hasUpgrade('exotic',28))ret = ret.mul(2);
 		return ret;
 	},
 	stardustEff(){

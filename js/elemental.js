@@ -1,7 +1,7 @@
 const ELEMENTS = {
     map: [`x_________________xvxx___________xxxxxxvxx___________xxxxxxvxxx_xxxxxxxxxxxxxxxvxxx_xxxxxxxxxxxxxxxvxxx1xxxxxxxxxxxxxxxvxxx2xxxxxxxxxxxxxxxv_v___3xxxxxxxxxxxxxx_v___4xxxxxxxxxxxxxx_`],
     la: [null,'*','**','*','**'],
-    exp: [0,118,218,362,558,814,1138],
+    exp: [0,118,218,362,558,598,1138],
     names: [
         null,
         'H','He','Li','Be','B','C','N','O','F','Ne',
@@ -32,17 +32,25 @@ const ELEMENTS = {
         'Mendelevium','Nobelium','Lawrencium','Ruthefordium','Dubnium','Seaborgium','Bohrium','Hassium','Meitnerium','Darmstadium',
         'Roeritgenium','Copernicium','Nihonium','Flerovium','Moscovium','Livermorium','Tennessine','Oganesson'
     ],
+    costMult() {
+        if (typeof SUPERNOVA_NEBULA === "undefined") return E(1);
+        let m = SUPERNOVA_NEBULA.effects.elemCost();
+        return m.gt(0) ? m : E(1);
+    },
+    costOf(x) { return E(this.upgs[x].cost).mul(this.costMult()) },
     canBuy(x) { 
-		if(this.upgs[x].qk)return player.atom.quarks.gte(this.upgs[x].cost) && !hasElement(x)
-		if(this.upgs[x].exotic)return player.exotic.points.gte(this.upgs[x].cost) && !hasElement(x)
-		if(this.upgs[x].ds)return player.exotic.ds.gte(this.upgs[x].cost) && !hasElement(x)
-		if(this.upgs[x].galQk)return player.galQk.gte(this.upgs[x].cost) && !hasElement(x)
-		if(this.upgs[x].et)return player.et.points.gte(this.upgs[x].cost) && !hasElement(x)
-		if(x>118) return player.inf.points.gte(this.upgs[x].cost) && !hasElement(x)
-		return player.atom.quarks.gte(this.upgs[x].cost) && !hasElement(x) && (player.qu.rip.active ? true : x <= 86) && !tmp.elements.cannot.includes(x)
+		if(this.upgs[x].neb)return player.nebula.dust.gte(this.costOf(x)) && !hasElement(x)
+		if(this.upgs[x].qk)return player.atom.quarks.gte(this.costOf(x)) && !hasElement(x)
+		if(this.upgs[x].exotic)return player.exotic.points.gte(this.costOf(x)) && !hasElement(x)
+		if(this.upgs[x].ds)return player.exotic.ds.gte(this.costOf(x)) && !hasElement(x)
+		if(this.upgs[x].galQk)return player.galQk.gte(this.costOf(x)) && !hasElement(x)
+		if(this.upgs[x].et)return player.et.points.gte(this.costOf(x)) && !hasElement(x)
+		if(x>118) return player.inf.points.gte(this.costOf(x)) && !hasElement(x)
+		return player.atom.quarks.gte(this.costOf(x)) && !hasElement(x) && (player.qu.rip.active ? true : x <= 86) && !tmp.elements.cannot.includes(x)
 	},
     canCharge(x) {
 		if(!this.upgs[x].ccost)return false;
+		if(this.upgs[x].neb)return player.nebula.dust.gte(this.upgs[x].ccost) && !hasChargedElement(x)
 		if(x>118){
 			if(this.upgs[x].et)return player.et.points.gte(this.upgs[x].ccost) && !hasChargedElement(x) && hasElement(483)
 			return player.inf.points.gte(this.upgs[x].ccost) && !hasChargedElement(x) && hasElement(483)
@@ -51,19 +59,21 @@ const ELEMENTS = {
 	},
     buyUpg(x,y) {
         if (this.canBuy(x)) {
-			if(x>118){
-				if(this.upgs[x].qk)player.atom.quarks = player.atom.quarks.sub(this.upgs[x].cost)
-				else if(this.upgs[x].exotic)player.exotic.points = player.exotic.points.sub(this.upgs[x].cost)
-				else if(this.upgs[x].ds)player.exotic.ds = player.exotic.ds.sub(this.upgs[x].cost)
-				else if(this.upgs[x].galQk)player.galQk = player.galQk.sub(this.upgs[x].cost)
-				else if(this.upgs[x].et)player.et.points = player.et.points.sub(this.upgs[x].cost)
-				else player.inf.points = player.inf.points.sub(this.upgs[x].cost)
+			if(this.upgs[x].neb)player.nebula.dust = player.nebula.dust.sub(this.costOf(x))
+			else if(x>118){
+				if(this.upgs[x].qk)player.atom.quarks = player.atom.quarks.sub(this.costOf(x))
+				else if(this.upgs[x].exotic)player.exotic.points = player.exotic.points.sub(this.costOf(x))
+				else if(this.upgs[x].ds)player.exotic.ds = player.exotic.ds.sub(this.costOf(x))
+				else if(this.upgs[x].galQk)player.galQk = player.galQk.sub(this.costOf(x))
+				else if(this.upgs[x].et)player.et.points = player.et.points.sub(this.costOf(x))
+				else player.inf.points = player.inf.points.sub(this.costOf(x))
 			}else{
-				player.atom.quarks = player.atom.quarks.sub(this.upgs[x].cost)
+				player.atom.quarks = player.atom.quarks.sub(this.costOf(x))
 			}
             player.atom.elements.push(x)
         }
         if (this.canCharge(x) && !y) {
+            if (this.upgs[x].neb) player.nebula.dust = player.nebula.dust.sub(this.upgs[x].ccost)
             player.atom.chargedElements.push(x)
         }
     },
@@ -3768,6 +3778,7 @@ const ELEMENTS = {
     },
     */
     getUnlLength() {
+		if((player.nebula && player.nebula.times && player.nebula.times.gte && player.nebula.times.gte(1)) || (typeof hasElement === "function" && hasElement(596)))return 598;
 		if(hasElement(545))return 558;
 		if(hasElement(542))return 545;
 		if(hasElement(534))return 542;
@@ -3813,7 +3824,7 @@ const ELEMENTS = {
     },
 }
 
-const MAX_ELEM_TIERS = 4
+const MAX_ELEM_TIERS = 5
 
 function getElementId(x) {
     let log = Math.floor(Math.log10(x))
@@ -3867,6 +3878,81 @@ for (let x = 2; x <= MAX_ELEM_TIERS; x++) {
     ELEMENTS.map.push(m)
 }
 
+// ---------------------------------------------------------------------------
+// Element Tier 5 — Nebula Elements (559 - 598)
+// ---------------------------------------------------------------------------
+// Bought with Nebula Dust. Each one multiplies one of the post-endgame
+// resources; every eighth element can also be charged for a much bigger
+// version of the same effect.
+
+const NEB_ELEMENT_KINDS = ["dust", "genrate", "genmotes", "exotic", "stardust", "galqk", "stars", "harmony"];
+
+const NEB_ELEMENT_KIND_TEXT = {
+    dust: "Nebula Dust gain",
+    genrate: "Genesis Tetration Speed",
+    genmotes: "Genesis Mote gain",
+    exotic: "Exotic Matter gain",
+    stardust: "Stardust gain",
+    galqk: "Galactic Quark gain",
+    stars: "Neutron Star gain",
+    harmony: "Nebula Harmony",
+};
+
+const NEB_ELEMENT_KIND = {};
+
+function nebElementMult(kind) {
+    let x = E(1);
+    for (let i = 559; i <= 598; i++) {
+        if (NEB_ELEMENT_KIND[i] !== kind) continue;
+        if (typeof hasElement !== "function" || !hasElement(i)) continue;
+        if (tmp.elements && tmp.elements.effect && tmp.elements.effect[i]) x = x.mul(tmp.elements.effect[i]);
+        if (typeof hasChargedElement === "function" && hasChargedElement(i) && tmp.elements && tmp.elements.ceffect && tmp.elements.ceffect[i]) x = x.mul(tmp.elements.ceffect[i]);
+    }
+    return x;
+}
+
+const NEB_ELEMENT_NAMES = [
+    ["Neb", "Nebulium"], ["Vd", "Voidium"], ["Sf", "Starfallium"], ["Du", "Dustium"],
+    ["Qt", "Quantumite"], ["Ae", "Aetherium"], ["Ch", "Chronite"], ["Vt", "Voidsteel"],
+    ["Pz", "Prismite"], ["Nc", "Novacite"], ["Lm", "Luminite"], ["Wr", "Wraithium"],
+    ["Sq", "Singularite"], ["Ec", "Echoite"], ["Fx", "Fluxium"], ["Rs", "Riftstone"],
+    ["Gl", "Glimmerite"], ["Ob", "Obsidite"], ["Cel", "Ceruleite"], ["Hl", "Helionite"],
+    ["Pha", "Phasium"], ["Ty", "Tachyite"], ["Nu", "Nullium"], ["Aur", "Auralite"],
+    ["Cy", "Cryonite"], ["Py", "Pyrite"], ["Um", "Umbrate"], ["So", "Solarium"],
+    ["Aes", "Aetherstone"], ["Xl", "Xenolite"], ["Or", "Orichalcum"], ["Vb", "Vantablackium"],
+    ["Cst", "Chronosteel"], ["Rd", "Radiantite"], ["Nt", "Netherium"], ["Gs", "Genesisite"],
+    ["Nl", "Nebulite"], ["Ap", "Aphelion"], ["El", "Eclipsite"], ["Tr", "Transcendium"],
+];
+
+(function buildNebulaElements() {
+    for (let i = 0; i < 40; i++) {
+        let id = 559 + i;
+        let kind = NEB_ELEMENT_KINDS[i % NEB_ELEMENT_KINDS.length];
+        let tier = Math.floor(i / NEB_ELEMENT_KINDS.length);      // 0 - 4
+        let pow = 1.25 + tier * 0.25;                             // 1.25x .. 2.25x
+        let charge = (i % NEB_ELEMENT_KINDS.length) === NEB_ELEMENT_KINDS.length - 1;
+        let cost = E(10).mul(E(1.3).pow(i)).floor();
+        let text = NEB_ELEMENT_KIND_TEXT[kind];
+        let def = {
+            neb: true,
+            cost: cost,
+            desc: `Multiplies ${text} by ${pow.toFixed(2)}x.`,
+            effect() { return E(pow) },
+            effDesc(x) { return format(x) + "x " + text },
+        };
+        if (charge) {
+            def.ccost = cost.mul(8).floor();
+            def.cdesc = `Multiplies ${text} by ${(Math.round(Math.pow(pow, 3) * 100) / 100).toFixed(2)}x.`;
+            def.ceffect = function () { return E(pow).pow(3) };
+            def.ceffDesc = function (x) { return format(x) + "x " + text };
+        }
+        ELEMENTS.upgs[id] = def;
+        NEB_ELEMENT_KIND[id] = kind;
+        ELEMENTS.names[id] = NEB_ELEMENT_NAMES[i][0];
+        ELEMENTS.fullNames[id] = NEB_ELEMENT_NAMES[i][1];
+    }
+})();
+
 function hasElement(x) { return player.atom.elements.includes(x) }
 function hasChargedElement(x) { return player.atom.chargedElements.includes(x) }
 
@@ -3878,6 +3964,16 @@ function setupElementsHTML() {
     for (let k = 1; k <= MAX_ELEM_TIERS; k++) {
         let n = 0, p = (k+3)**2*2, xs = ELEMENTS.exp[k-1], xe = ELEMENTS.exp[k]
         table += `<div id='elemTier${k}_div'><div class='table_center'>`
+        if (k >= 5) {
+            // Nebula tier: a plain 10-wide grid, no periodic-table index juggling
+            for (let num2 = xs + 1; num2 <= xe; num2++) {
+                if ((num2 - xs - 1) % 10 == 0 && num2 != xs + 1) table += '</div><div class="table_center">'
+                table += ELEMENTS.upgs[num2] === undefined ? `<div style="width: 50px; height: 50px"></div>`
+                    : `<button class="elements neb" id="elementID_${num2}" onclick="ELEMENTS.buyUpg(${num2}); ssf[0]('${ELEMENTS.names[num2]}')" onmouseover="tmp.elements.choosed = ${num2}" onmouseleave="tmp.elements.choosed = 0"><div style="font-size: 12px;">${num2}</div>${ELEMENTS.names[num2]}</button>`
+            }
+            table += "</div></div>"
+            continue
+        }
         for (let i = 0; i < ELEMENTS.map[k-1].length; i++) {
             let m = ELEMENTS.map[k-1][i]
             if (m=='v') table += '</div><div class="table_center">'
@@ -3921,6 +4017,7 @@ function updateElementsHTML() {
 	if (tElem.unl_length<=118)player.atom.elemTier=Math.min(player.atom.elemTier,1)
 	if (tElem.unl_length<=218)player.atom.elemTier=Math.min(player.atom.elemTier,2)
 	if (tElem.unl_length<=362)player.atom.elemTier=Math.min(player.atom.elemTier,3)
+	if (tElem.unl_length<=558)player.atom.elemTier=Math.min(player.atom.elemTier,4)
     tmp.el.elemTierDiv.setDisplay(hasUpgrade("atom",16) || player.superGal.gte(1))
     tmp.el.elemTier.setHTML("Element Tier "+player.atom.elemTier)
 
@@ -3929,8 +4026,8 @@ function updateElementsHTML() {
     if (ch) {
         tmp.el.elem_desc.setHTML(("<b>["+ELEMENTS.fullNames[ch]+"]</b> "+ELEMENTS.upgs[ch].desc+(hasChargedElement(ch)?"<b> [CHARGED]</b>":""))+((hasElement(380) && (hasElement(483) || ch<=118) && ELEMENTS.upgs[ch].ccost) ? "<span class=yellow><br>Charged Effect: "+ELEMENTS.upgs[ch].cdesc+"</span>" : ""))
 		if(ELEMENTS.upgs[ch].desc instanceof Function)tmp.el.elem_desc.setHTML("<b>["+ELEMENTS.fullNames[ch]+"]</b> "+ELEMENTS.upgs[ch].desc())
-        tmp.el.elem_cost.setTxt(format(ELEMENTS.upgs[ch].cost,0)+" Quarks"+(ch>86&&ch<=118?" in Big Rip":"")+(player.qu.rip.active&&tElem.cannot.includes(ch)?" [CANNOT AFFORD in Big Rip]":"") + ((hasElement(380) && ELEMENTS.upgs[ch].ccost) ? ", Charge Cost: "+format(ELEMENTS.upgs[ch].ccost,0)+" Quarks" : ""))
-        if(ch > 118)tmp.el.elem_cost.setTxt((ELEMENTS.upgs[ch].galQk||ELEMENTS.upgs[ch].exotic||ELEMENTS.upgs[ch].qk||ELEMENTS.upgs[ch].ds?format:formatMass)(ELEMENTS.upgs[ch].cost,0)+(ELEMENTS.upgs[ch].qk?" Quarks":ELEMENTS.upgs[ch].ds?" Dark Shadow":ELEMENTS.upgs[ch].exotic?" Exotic Matter":ELEMENTS.upgs[ch].galQk?" Galactic Quarks":ELEMENTS.upgs[ch].et?" Eternal Mass":" Infinity Mass") + ((hasElement(483) && ELEMENTS.upgs[ch].ccost) ? ", Charge Cost: "+formatMass(ELEMENTS.upgs[ch].ccost,0)+(ELEMENTS.upgs[ch].et?" Eternal Mass":" Infinity Mass") : ""))
+        tmp.el.elem_cost.setTxt(format(ELEMENTS.costOf(ch),0)+" Quarks"+(ch>86&&ch<=118?" in Big Rip":"")+(player.qu.rip.active&&tElem.cannot.includes(ch)?" [CANNOT AFFORD in Big Rip]":"") + ((hasElement(380) && ELEMENTS.upgs[ch].ccost) ? ", Charge Cost: "+format(ELEMENTS.upgs[ch].ccost,0)+" Quarks" : ""))
+        if(ch > 118 || ELEMENTS.upgs[ch].neb)tmp.el.elem_cost.setTxt((ELEMENTS.upgs[ch].neb||ELEMENTS.upgs[ch].galQk||ELEMENTS.upgs[ch].exotic||ELEMENTS.upgs[ch].qk||ELEMENTS.upgs[ch].ds?format:formatMass)(ELEMENTS.costOf(ch),0)+(ELEMENTS.upgs[ch].neb?" Nebula Dust":ELEMENTS.upgs[ch].qk?" Quarks":ELEMENTS.upgs[ch].ds?" Dark Shadow":ELEMENTS.upgs[ch].exotic?" Exotic Matter":ELEMENTS.upgs[ch].galQk?" Galactic Quarks":ELEMENTS.upgs[ch].et?" Eternal Mass":" Infinity Mass") + ((hasElement(483) || ELEMENTS.upgs[ch].neb) && ELEMENTS.upgs[ch].ccost ? ", Charge Cost: "+(ELEMENTS.upgs[ch].neb?format:formatMass)(ELEMENTS.upgs[ch].ccost,0)+(ELEMENTS.upgs[ch].neb?" Nebula Dust":ELEMENTS.upgs[ch].et?" Eternal Mass":" Infinity Mass") : ""))
 		tmp.el.elem_eff.setHTML((ELEMENTS.upgs[ch].effDesc?"Currently: "+ELEMENTS.upgs[ch].effDesc(tElem.effect[ch]):"")+(hasElement(380) && ELEMENTS.upgs[ch].ceffDesc?"<span class=yellow><br>Current Charged Effect: "+ELEMENTS.upgs[ch].ceffDesc(tElem.ceffect[ch])+"</span>":""))
     }
 
@@ -3951,7 +4048,7 @@ function updateElementsHTML() {
                     let unl2 = x <= tElem.unl_length
                     upg.setVisible(unl2)
                     if (unl2) {
-                        upg.setClasses({elements: true, locked: !ELEMENTS.canBuy(x), bought: hasElement(x), br: (x > 86 && x <= 118), ext: (x > 118), et: ELEMENTS.upgs[x].et, gqk: ELEMENTS.upgs[x].galQk, ds: ELEMENTS.upgs[x].ds, ex: ELEMENTS.upgs[x].exotic, qk: ELEMENTS.upgs[x].qk, ch: hasChargedElement(x), cancharge: ELEMENTS.canCharge(x)})
+                        upg.setClasses({elements: true, locked: !ELEMENTS.canBuy(x), bought: hasElement(x), br: (x > 86 && x <= 118), ext: (x > 118), et: ELEMENTS.upgs[x].et, neb: ELEMENTS.upgs[x].neb, gqk: ELEMENTS.upgs[x].galQk, ds: ELEMENTS.upgs[x].ds, ex: ELEMENTS.upgs[x].exotic, qk: ELEMENTS.upgs[x].qk, ch: hasChargedElement(x), cancharge: ELEMENTS.canCharge(x)})
                     }
                 }
             }

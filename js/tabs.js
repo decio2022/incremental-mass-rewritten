@@ -23,6 +23,7 @@ const TABS = {
         { id: "Guide", style: "guide" },
         { id: "Options" },
         { id: "Genesis", unl() { return player.gen && player.gen.unl }, style: "genesis" },
+        { id: "Nebula", unl() { return player.nebula && player.nebula.unl }, style: "nebula" },
     ],
     2: {
         0: [
@@ -90,6 +91,7 @@ const TABS = {
             { id: "Exotic", style: "red" },
             { id: "Options" },
             { id: "Genesis", unl() { return player.gen && player.gen.unl }, style: "genesis" },
+            { id: "Nebula", unl() { return player.nebula && player.nebula.unl }, style: "nebula" },
             { id: "Sandbox", style: "sandbox" },
         ],
         9: [
@@ -104,12 +106,19 @@ const TABS = {
             { id: "Inf & Eternity" },
             { id: "Exotic & Axions", style: "red" },
             { id: "Genesis", style: "genesis" },
+            { id: "Nebula", unl() { return player.nebula && player.nebula.unl }, style: "nebula" },
+        ],
+        11: [
+            { id: "Overview" },
+            { id: "Upgrades" },
+            { id: "Milestones" },
+            { id: "Trials" },
+            { id: "Relics" },
+        ],
+        12: [
+            { id: "Overview" },
+            { id: "Upgrades" },
+            { id: "Milestones" },
         ],
     },
-    11: [
-        { id: "Overview" },
-        { id: "Upgrades" },
-        { id: "Milestones" },
-        { id: "Trials" },
-    ],
 }

@@ -229,6 +229,7 @@ function setupHTML() {
 	setupAllStatsHTML()
 	setupGuideHTML()
 	if (typeof GENESIS !== "undefined") GENESIS.setupHTML()
+	if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.setupHTML()
 
     tmp.el = {}
 	let all = document.getElementsByTagName("*")
@@ -660,6 +661,9 @@ function updateHTML() {
 		}
 		if (tmp.tab == 11 && typeof GENESIS !== "undefined") {
 			GENESIS.updateHTML()
+		}
+		if (tmp.tab == 12 && typeof SUPERNOVA_NEBULA !== "undefined") {
+			SUPERNOVA_NEBULA.updateHTML()
 		}
 	}
 }

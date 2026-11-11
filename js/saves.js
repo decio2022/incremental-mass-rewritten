@@ -186,6 +186,7 @@ function calc(dt, dt_offline) {
         player.supernova.fermions.unl = true
         addPopup(POPUP_GROUPS.fermions)
     }
+    if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.calc(dt, dt_offline)
     if (typeof GENESIS !== "undefined") GENESIS.calc(dt, dt_offline)
     if (typeof SANDBOX !== "undefined") SANDBOX.afterCalc(sbSnap)
 }
@@ -396,13 +397,31 @@ function getPlayerData() {
             totalMotes: E(0),
             lastGain: E(0),
             collapses: 0,
-            upgs: [0,0,0,0,0,0,0,0,0,0,0,0,0],
-            milestones: [false,false,false,false,false,false,false,false],
-            trials: [false,false,false,false,false,false],
+            upgs: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            milestones: [false,false,false,false,false,false,false,false,false,false,false,false,false],
+            trials: [false,false,false,false,false,false,false,false,false,false],
             activeTrial: -1,
             autoBuy: false,
             autoCollapse: false,
             autoDepth: -1,
+            sparks: E(0),
+            totalSparks: E(0),
+            lastSparks: E(0),
+            reforges: 0,
+            runBest: E(0),
+            relics: [0,0,0,0,0,0,0,0,0],
+        },
+        // Supernova Nebula (post-endgame reset above Supernova Cluster)
+        nebula: {
+            unl: false,
+            times: E(0),
+            dust: E(0),
+            total: E(0),
+            best: E(0),
+            upgs: [],
+            milestones: [],
+            autoBuy: false,
+            autoCollapse: false,
         },
     }
     for (let x = 0; x < EXOTIC_BOOST_LENGTH; x++) s.exotic.boosts.push(E(0))
@@ -465,6 +484,7 @@ function loadPlayer(load) {
         player.supernova.fermions.tiers[i][x] = player.supernova.fermions.tiers[i][x].min(typeof f.maxTier == "function" ? f.maxTier() : f.maxTier||1/0)
     }
     if (typeof GENESIS !== "undefined") GENESIS.sanitize()
+    if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.sanitize()
     let tsp = sanitizeTimeSpeed(player.timeSpeed)
     player.timeSpeed = tsp === null ? 1 : tsp
     let off_time = (Date.now() - player.offline.current)/1000

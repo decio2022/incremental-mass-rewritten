@@ -319,6 +319,20 @@ button {
 	background-color: #b78cff;
 }
 
+.btn_tab.nebula {
+	color: #2fb8cc;
+	border-color: #2fb8cc;
+}
+
+.btn_tab.nebula:not(.choosed):hover {
+	background-color: #06323a;
+}
+
+.btn_tab.nebula.choosed {
+	color: black;
+	background-color: #2fb8cc;
+}
+
 .btn_tab.sandbox {
 	color: #ffaa33;
 	border-color: #ffaa33;
@@ -566,6 +580,26 @@ button {
 
 .btn.locked,
 .img_btn.locked,
+/* Nebula elements (tier 5) */
+.elements.neb {
+	border-color: #2fb8cc;
+}
+
+.elements.locked.neb {
+	border-color: #1d5b66;
+}
+
+.elements.bought.ext.neb,
+.elements.bought.neb {
+	background-color: #093a42;
+	border-color: #2fb8cc;
+	color: #b6f4ff;
+}
+
+.elements.bought.cancharge.neb {
+	box-shadow: 0 0 6px #2fb8cc;
+}
+
 .elements.locked {
 	background-color: #171717;
 	cursor: default;
@@ -1881,3 +1915,42 @@ h2 {
 	cursor: default;
 }
 
+
+/* Supernova Nebula (post-endgame reset) */
+
+.neb_hero {
+	border-color: #2fb8cc;
+	background: linear-gradient(180deg, #06232a, #0d1016);
+}
+
+.neb_hero .gen_hero_title {
+	color: #9be9f5;
+	text-shadow: 0 0 12px #2fb8cc;
+}
+
+.neb_hero .gen_hero_sub {
+	color: #b7e7ef;
+}
+
+.neb_big_btn {
+	border-color: #2fb8cc;
+	color: #c8f6ff;
+}
+
+.neb_big_btn:hover {
+	background-color: #06323a;
+}
+
+.gen_reforge_btn {
+	margin-top: 10px;
+	border-color: #55d6a0;
+	color: #bff7dc;
+}
+
+.gen_reforge_btn:hover {
+	background-color: #0a2f22;
+}
+
+.neb_container .gen_bar_fill {
+	background: linear-gradient(90deg, #2fb8cc, #9be9f5);
+}
