@@ -16,7 +16,7 @@ const STATS_SECTIONS = [
     { id: 5, tab: 5, title: "Supernova", desc: "Supernova, Neutron Tree, Bosons, Fermions, Radiation, Galaxy, G-Fermions & Cluster" },
     { id: 6, tab: 6, title: "Quantum", desc: "Quantum Foam, Chroma, Milestones, Auto-Quantum, Primordium, Entropy & Big Rip" },
     { id: 7, tab: 7, title: "Exotic", desc: "Exotic Matter, Milestones, RC Boosters, Exotic Boosts, Darkness, Dark Run, Matters & Axions" },
-    { id: 8, tab: 9, title: "Options & Misc", desc: "Session Time, Offline Progress, Display Preferences, Confirmations & Automators" },
+    { id: 8, tab: 10, title: "Options & Misc", desc: "Session Time, Offline Progress, Display Preferences, Confirmations & Automators" },
 ];
 
 function sSafe(fn, fallback = E(0)) {
@@ -120,7 +120,7 @@ function sCard(title, rows, opts = {}) {
 }
 
 function isStatsTabUnlocked(tabIdx) {
-    if (tabIdx === 9 || tabIdx === 0 || tabIdx === 1 || tabIdx === 8) return true;
+    if (tabIdx === 10 || tabIdx === 9 || tabIdx === 0 || tabIdx === 1 || tabIdx === 8) return true;
     let t = TABS[1][tabIdx];
     return t ? (t.unl ? !!t.unl() : true) : false;
 }

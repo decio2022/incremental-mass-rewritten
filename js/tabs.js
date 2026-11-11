@@ -20,6 +20,7 @@ const TABS = {
         { id: "Quantum", unl() { return quUnl() }, style: "qu" },
         { id: "Exotic", unl() { return player.exotic.times.gte(1) }, style: "red" },
         { id: "Stats" },
+        { id: "Guide", style: "guide" },
         { id: "Options" },
     ],
     2: {
@@ -88,6 +89,18 @@ const TABS = {
             { id: "Exotic", style: "red" },
             { id: "Options" },
             { id: "Sandbox", style: "sandbox" },
+        ],
+        9: [
+            { id: "Roadmap", style: "guide" },
+            { id: "Ranks & Main" },
+            { id: "BH & Upgrades", style: "bh" },
+            { id: "Challenges" },
+            { id: "Atom & MD", style: "atom" },
+            { id: "Stars & SN", style: "sn" },
+            { id: "Galaxy & SC", style: "sn" },
+            { id: "Quantum", style: "qu" },
+            { id: "Inf & Eternity" },
+            { id: "Exotic & Axions", style: "red" },
         ],
     },
 }

@@ -227,6 +227,7 @@ function setupHTML() {
 	confirm_table.setHTML(table)
 
 	setupAllStatsHTML()
+	setupGuideHTML()
 
     tmp.el = {}
 	let all = document.getElementsByTagName("*")
@@ -651,6 +652,9 @@ function updateHTML() {
 			updateAllStatsHTML()
 		}
 		if (tmp.tab == 9) {
+			updateGuideHTML()
+		}
+		if (tmp.tab == 10) {
 			updateOptionsHTML()
 		}
 	}
