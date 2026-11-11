@@ -29,7 +29,7 @@ const SANDBOX_CATEGORIES = [
     { id: "Quantum", label: "Quantum" },
     { id: "Infinity & Eternity", label: "Inf & Et" },
     { id: "Exotic & Matters", label: "Exotic & Matters" },
-    { id: "Nebula", label: "Nebula & Genesis" },
+    { id: "Nebula", label: "Nebula" },
 ];
 
 function sbSafe(fn, fallback = E(0)) {
@@ -1379,7 +1379,8 @@ function buildSandboxCurrencies() {
         { id: "stellar", name: "Stellar Mass", cat: "Galaxy", unit: "mass", unl: () => player.superCluster.gte(21), get: () => player.stellar, set: v => { player.stellar = v; }, gain: () => sbSafe(() => tmp.stellar.gain), formula: sbBuildStellarFormula },
         { id: "nebDust", name: "Nebula Dust", cat: "Nebula", unit: "num", unl: () => player.nebula && player.nebula.unl, get: () => player.nebula.dust, set: v => { player.nebula.dust = v; }, gain: () => sbSafe(() => SUPERNOVA_NEBULA.dustGain()), formula: () => new FormulaBuilder("Next collapse", `${sbFormat(sbSafe(() => SUPERNOVA_NEBULA.dustGain(), E(0)))} Dust`).done(` at ${sbFormat(sbSafe(() => SUPERNOVA_NEBULA.req(), E(14)))} Clusters`) },
         { id: "nebTimes", name: "Nebula Collapses", cat: "Nebula", unit: "num", unl: () => player.nebula && player.nebula.unl, get: () => player.nebula.times, set: v => { player.nebula.times = v; }, gain: () => E(0), formula: () => new FormulaBuilder("Manual", "reset count").done("") },
-        { id: "genSparks", name: "Genesis Sparks", cat: "Nebula", unit: "num", unl: () => !!(player.gen && player.gen.unl), get: () => player.gen.sparks, set: v => { player.gen.sparks = v; }, gain: () => sbSafe(() => GENESIS.sparkGain()), formula: () => new FormulaBuilder("Reforge", `${sbFormat(sbSafe(() => GENESIS.sparkGain(), E(0)))} Sparks`).done(` at run depth ${sbFormat(E(player.gen.runBest || 0))}`) },
+        { id: "nebTotal", name: "Total Nebula Dust", cat: "Nebula", unit: "num", unl: () => player.nebula && player.nebula.unl, get: () => player.nebula.total, set: v => { player.nebula.total = v; }, gain: () => E(0), formula: () => new FormulaBuilder("Lifetime", "all collapses added up").done("") },
+        { id: "nebBest", name: "Best Nebula Collapse", cat: "Nebula", unit: "num", unl: () => player.nebula && player.nebula.unl, get: () => player.nebula.best, set: v => { player.nebula.best = v; }, gain: () => E(0), formula: () => new FormulaBuilder("Record", "largest single collapse").done("") },
 
         // Quantum
         { id: "qu", name: "Quantum Foam", cat: "Quantum", unit: "num", unl: () => quUnl(), get: () => player.qu.points, set: v => { player.qu.points = v; if (v.gt(0)) player.qu.reached = true; }, gain: () => sbSafe(() => tmp.qu.gain), formula: sbBuildQuantumFormula },

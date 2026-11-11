@@ -11,7 +11,7 @@ const GUIDE_CHAPTERS = [
     {
         id: 0,
         title: "Roadmap & Core Mechanics",
-        subtitle: "Complete progression order from 0 g to eeee100 g (including the Genesis post-endgame), plus softcaps, scalings, overflows, and reset etiquette.",
+        subtitle: "Complete progression order from 0 g to eee100 g (including the Supernova Nebula post-endgame reset), plus softcaps, scalings, overflows, and reset etiquette.",
         accent: "guide",
         targetTab: 0,
         targetStab: 0,
@@ -33,8 +33,7 @@ const GUIDE_CHAPTERS = [
                     ["9. Galaxies, GC & Clusters", "Element 218 (1e6 SN) → 100 SG", "Push Supernova Galaxies (SG 1–13+), conquer Galactic Challenges, unlock G-Particles/G-Fermions, climb Clusters.", "Galaxy & SC (6)"],
                     ["10. Exotic, Dark Run & Beyond Ranks", "Element 359 + ee1e12 g", "Reset for Exotic Matter, invest in RCB & Exotic Boosts, master Darkness & Dark Run (QC [30×8] + GC D8), climb Enne/Beyond Ranks.", "Exotic & Axions (9)"],
                     ["11. The Matters, Axions & Endgame", "Element 486 → Element 556 → eee100 g", "Chain all 13 Matters, farm FSS, charge Tier 1–4 Elements, run Axion Generators & Axionic Tree, clear ax42 & C24.", "Exotic & Axions (9)"],
-                    ["12. Genesis (Post-Endgame)", "ax42 + eee100 g", "Break the mass cap: climb Tetration Depth, collapse for Genesis Motes, buy the 20 Genesis upgrades, clear 13 milestones & 10 trials, Reforge for Relics, and reach eeee100 g.", "Genesis (11)"],
-                    ["13. Supernova Nebula", "Genesis unlocked", "Collapse Supernova Clusters into Nebula Dust: buy the 12 Nebula upgrades, clear 10 milestones, unlock Element Tier 5 (elements 559-598), the Nebula tree branch and 7 more Exotic upgrades.", "Nebula (12)"],
+                    ["12. Supernova Nebula (Post-Endgame)", "ax42 + eee100 g", "Collapse Supernova Clusters into Nebula Dust: buy the 12 Nebula upgrades, clear 10 milestones, unlock the 80-element Nebula tier (559-638), the Nebula tree branch and 10 more Exotic upgrades.", "Nebula (11)"],
                 ],
             },
             {
@@ -80,8 +79,7 @@ const GUIDE_CHAPTERS = [
             { id: "m_mat", label: "Unlock The Matters (Element 486)", done: () => hasElement(486), tab: 7, stab: 5 },
             { id: "m_ax", label: "Unlock Axionic Tree (Element 556)", done: () => hasElement(556), tab: 5, stab: 0 },
             { id: "m_end", label: "Reach eee100 g & unlock Final 6 / C24 (Tree ax42)", done: () => hasTree("ax42") && player.mass.gte("eee100"), tab: 3, stab: 0 },
-            { id: "m_genesis", label: "Unlock Genesis (ax42 + eee100 g) — post-endgame", done: () => !!(player.gen && player.gen.unl), tab: 11, stab: 0 },
-            { id: "m_eeee", label: "Genesis Complete — reach eeee100 g", done: () => !!(player.gen && player.gen.complete), tab: 11, stab: 0 },
+            { id: "m_nebula", label: "Unlock the Nebula (ax42 + eee100 g) — post-endgame", done: () => !!(player.nebula && player.nebula.unl), tab: 11, stab: 0 },
         ],
     },
     {
@@ -630,124 +628,10 @@ const GUIDE_CHAPTERS = [
     },
     {
         id: 10,
-        title: "Genesis — The Post-Endgame Expansion",
-        subtitle: "Tetration Depth, Genesis Collapses, Motes, 20 upgrades, 13 milestones, 10 trials, 8 Relics and the eeee100 g endgame.",
-        accent: "genesis",
-        targetTab: 11,
-        targetStab: 0,
-        cards: [
-            {
-                title: "Genesis in one minute",
-                tags: "genesis tetration depth slog collapse motes eeee100 eee100 extension unlock",
-                body: `
-                    <ul class="guide_list">
-                        <li><b>Unlock:</b> buy <code>[ax42]</code> and hold <b>eee100 g</b> of mass. The old mass cap is now your floor and the <b>Genesis</b> tab appears.</li>
-                        <li><b>Tetration Depth</b> measures how far past the old cap you are: <code>depth 0 = eee100 g</code>, <code>depth 0.5 = eee2.1e6 g</code>, <code>depth 1 = eeee100 g</code>. Depth is not bought with mass — it grows on its own at your <b>Tetration Speed</b> (depth per second).</li>
-                        <li><b>Genesis Collapse:</b> converts your current depth into <b>Genesis Motes</b> (<code>10^(depth × exponent)</code>) and drops you back down the layers, keeping <b>25%</b> of your depth (up to 75% with Depth Infusion). Motes buy <b>permanent</b> upgrades, so every collapse makes the next climb faster.</li>
-                        <li><b>Milestones need both depth and Motes earned</b> — for example <b>depth 0.50 &amp; 1e6 Motes earned</b>. That forces the loop: push to a new layer, <b>collapse</b> to claim the payout, then spend it and climb faster.</li>
-                        <li><b>The new endgame is eeee100 g</b> — a full tetration layer above the old eee100 g. Reaching it sets <b>Genesis Complete</b> and unlocks <b>Genesis Mastery</b>.</li>
-                    </ul>
-                `,
-                callout: { kind: "tip", text: "Depth is the only progress that matters in Genesis: the mass number is just depth converted into layers. Watch <b>Tetration Speed</b> in the header, not your mass gain/sec." },
-            },
-            {
-                title: "The 20 Genesis Upgrades (Motes)",
-                tags: "genesis upgrades engine stabilizer flux infusion resonance cascade memory horizon singularity autobuyer automator mastery",
-                type: "table",
-                headers: ["Upgrade", "Max", "Effect", "When to buy"],
-                rows: [
-                    ["<b>Tetration Engine</b>", "45", "×1.13 Tetration Speed per level", "Your bread and butter — always buy as many as Motes allow."],
-                    ["<b>Depth Stabilizer</b>", "10", "+10% Tetration Speed per level", "Cheap and additive; grab early to smooth the curve."],
-                    ["<b>Mote Flux</b>", "12", "+0.5 Mote exponent per level (12 → 18)", "The single biggest economy upgrade: exponentiates every future collapse."],
-                    ["<b>Depth Infusion</b>", "10", "Keep +5% of depth per collapse (25% → 75%)", "Turns collapses into short dips instead of full restarts."],
-                    ["<b>Mote Resonance</b>", "8", "×1.15 Motes per level", "Multiplicative Mote gain — great once Flux is underway."],
-                    ["<b>Cascade Amplifier</b>", "12", "×1.15 Tetration Speed per level", "Unlocks at depth 0.05 (Deeper Layers)."],
-                    ["<b>Genesis Memory</b>", "6", "×(1 + 0.05·level)<sup>Collapses</sup> speed", "Scales with your collapse count — buy after a few dozen collapses."],
-                    ["<b>Event Horizon</b>", "8", "×1.4 Tetration Speed per level", "Unlocks at depth 0.20 (Event Horizon)."],
-                    ["<b>Singularity Drive</b>", "5", "×1.8 Tetration Speed per level", "Unlocks at depth 0.50 (Singularity) — the last big speed jump."],
-                    ["<b>Autobuyer / Collapse Automator</b>", "1", "Automates buying / collapsing", "Unlock at depth 0.10 and 0.35 — the automation is the real QoL."],
-                    ["<b>Genesis Mastery</b>", "1", "×10 Tetration Speed", "Only after Genesis Complete (depth 1)."],
-                    ["<b>Mote Prism</b>", "10", "×1.3 Motes per level", "Unlocks with Mote Cascade (1e12 Motes earned)."],
-                    ["<b>Depth Crystal</b>", "5", "+1.5% depth retention per level", "Pairs with Depth Infusion; the retention cap rises to 95%."],
-                    ["<b>Spark Conduit</b>", "8", "×1.5 Genesis Sparks per level", "Unlocks with Endless Collapse (25 Collapses)."],
-                    ["<b>Chrono Engine</b>", "10", "×1.5 Tetration Speed per level", "Unlocks with Chrono Fracture (1e20 Motes earned)."],
-                    ["<b>Dust Bridge</b>", "8", "×1.25 Nebula Dust per level", "Feeds the Nebula: Dust from tetration."],
-                    ["<b>Nebula Lens / Perpetual Engine</b>", "8 / 3", "×1.3 Nebula Harmony / ×2 Tetration Speed per level", "Unlocks with Trial Master (4 Trials)."],
-                    ["<b>Genesis Ascendant</b>", "1", "×50 Tetration Speed", "Unlocks with Spark of Creation (1 Reforge)."],
-                ],
-            },
-            {
-                title: "Milestones & Trials",
-                tags: "genesis milestones trials rewards permanent silence embers thinning locking deep final",
-                type: "table",
-                headers: ["Depth / Trial", "Requirement", "Reward"],
-                rows: [
-                    ["First Collapse", "depth 0.01", "Unlocks Trials, ×1.10 Tetration Speed"],
-                    ["Deeper Layers", "depth 0.05", "Cascade Amplifier, ×1.15 Tetration Speed"],
-                    ["Automation I", "depth 0.10 + 10 Motes earned", "Genesis Autobuyer, ×1.15 Tetration Speed"],
-                    ["Event Horizon", "depth 0.20 + 200 Motes earned", "Event Horizon upgrade, ×1.15 Tetration Speed"],
-                    ["Automation II", "depth 0.35 + 1e4 Motes earned", "Collapse Automator, ×1.15 Tetration Speed"],
-                    ["Singularity", "depth 0.50 + 1e6 Motes earned", "Singularity Drive, ×1.15 Tetration Speed"],
-                    ["Tetration Apex", "depth 0.75 + 1e9 Motes earned", "×2 Tetration Speed"],
-                    ["Genesis Complete", "depth 1.00 (eeee100 g)", "×3 Tetration Speed, Genesis Mastery"],
-                    ["Mote Cascade", "depth 1.00 + 1e12 Motes earned", "Mote Prism, Depth Crystal"],
-                    ["Endless Collapse", "depth 1.00 + 1e13 Motes + 25 Collapses", "×1.5 Motes, Spark Conduit"],
-                    ["Chrono Fracture", "depth 1.00 + 1e20 Motes earned", "×2 Speed, Chrono Engine, Dust Bridge"],
-                    ["Trial Master", "depth 1.00 + 1e26 Motes + 4 Trials", "×2 Motes, Nebula Lens, Perpetual Engine"],
-                    ["Spark of Creation", "depth 1.00 + 1e32 Motes + 1 Reforge", "×3 Speed, Genesis Ascendant"],
-                    ["Trials (10)", "Reach their depth with a penalty active", "Permanent ×Motes, ×Speed and ×Sparks"],
-                ],
-                callout: { kind: "warn", text: "Starting a Trial resets your depth to 0 and disables collapsing until you finish (or abandon) it. Do Trials when a fresh climb is fast, not right before a big push." },
-            },
-            {
-                title: "Optimal Genesis loop",
-                tags: "genesis loop strategy route autobuy autocollapse depth threshold",
-                body: `
-                    <ol class="guide_list">
-                        <li><b>Climb</b> until progress visibly slows (or until the next milestone is only a little further), then <b>Collapse</b>.</li>
-                        <li><b>Spend all Motes immediately</b> — Motes do nothing while banked. Priority: <b>Mote Flux</b> → <b>Tetration Engine</b> → <b>Depth Infusion</b> → the rest.</li>
-                        <li><b>Chase milestones, not mass.</b> Each one is a multiplier, an upgrade unlock, or automation — and each needs both a depth and a Motes-earned total, so collapse as soon as you reach a new layer.</li>
-                        <li>At depth 0.05+, start the easier <b>Trials</b> on a fresh collapse; their rewards are permanent and stack multiplicatively.</li>
-                        <li>Once the <b>Autobuyer</b> and <b>Collapse Automator</b> are online, set the collapse threshold near <code>80–90%</code> of your best depth and let it idle. Raise the threshold as your speed grows.</li>
-                        <li>Finish with <b>Genesis Complete</b> at <b>eeee100 g</b>, then farm Motes at depth 1 with <b>Genesis Mastery</b>.</li>
-                    </ol>
-                `,
-                callout: { kind: "milestone", text: "Depth 1.00 is exactly <b>eeee100 g</b>. If you can see <code>eeee100</code> in the mass readout, the expansion is finished." },
-            },
-            {
-                title: "Relics & Reforging",
-                tags: "genesis relics reforge sparks spark lens prism anchor harmony bell collapse compass trial sigil origin core",
-                type: "table",
-                headers: ["Relic", "Max", "Effect"],
-                rows: [
-                    ["<b>Spark Lens</b>", "5", "×1.5 Tetration Speed per level"],
-                    ["<b>Mote Prism</b>", "5", "×1.5 Motes per level"],
-                    ["<b>Dust Anchor</b>", "5", "×(1 + level) Nebula Dust"],
-                    ["<b>Harmony Bell</b>", "5", "×(1 + 0.25·level) Nebula Harmony"],
-                    ["<b>Collapse Anchor</b>", "5", "+1.5% depth retention per level (cap 95%)"],
-                    ["<b>Layer Compass</b>", "5", "×1.3 Tetration Speed per level"],
-                    ["<b>Trial Sigil</b>", "5", "×(1 + 0.2·level) Motes"],
-                    ["<b>Origin Core</b>", "5", "×2 to <i>all</i> Genesis gains per level"],
-                ],
-                callout: { kind: "tip", text: "<b>Reforging</b> (Relics sub-tab) converts this run's best depth into <b>Genesis Sparks</b>: <code>20 × runDepth²</code> multiplied by collapses, trials and upgrades. It resets depth, Motes, upgrades and collapses for the run but keeps milestones, trials, Relics and the completed endgame. Reach depth 0.25 to reforge." },
-            },
-        ],
-        milestones: [
-            { id: "m_gen_unl", label: "Unlock Genesis ([ax42] + eee100 g)", done: () => !!(player.gen && player.gen.unl), tab: 11, stab: 0 },
-            { id: "m_gen_c1", label: "Perform 1st Genesis Collapse (depth 0.02)", done: () => !!(player.gen && player.gen.collapses >= 1), tab: 11, stab: 0 },
-            { id: "m_gen_m2", label: "Reach depth 0.20 & unlock Event Horizon", done: () => !!(player.gen && player.gen.milestones[3]), tab: 11, stab: 2 },
-            { id: "m_gen_m5", label: "Reach depth 0.50 & unlock Singularity Drive", done: () => !!(player.gen && player.gen.milestones[5]), tab: 11, stab: 1 },
-            { id: "m_gen_trial", label: "Complete 3 Genesis Trials", done: () => !!(player.gen && player.gen.trials.filter(x => x).length >= 3), tab: 11, stab: 3 },
-            { id: "m_gen_done", label: "Genesis Complete — reach eeee100 g", done: () => !!(player.gen && player.gen.complete), tab: 11, stab: 0 },
-            { id: "m_gen_relic", label: "Reforge once & buy your first Relic", done: () => !!(player.gen && player.gen.reforges >= 1 && player.gen.relics.some(x => x > 0)), tab: 11, stab: 4 },
-        ],
-    },
-    {
-        id: 11,
         title: "Supernova Nebula — The Cluster Reset",
-        subtitle: "Nebula Dust, 12 Nebula upgrades, 10 milestones, Element Tier 5, the Nebula tree branch and the Exotic extension.",
-        accent: "genesis",
-        targetTab: 12,
+        subtitle: "Nebula Dust, 12 Nebula upgrades, 10 milestones, the 80-element Nebula tier, the 16-node Nebula tree branch and the Exotic extension.",
+        accent: "nebula",
+        targetTab: 11,
         targetStab: 0,
         cards: [
             {
@@ -755,9 +639,9 @@ const GUIDE_CHAPTERS = [
                 tags: "nebula dust cluster reset supernova post-endgame unlock harmony",
                 body: `
                     <ul class="guide_list">
-                        <li><b>Unlock:</b> the same moment Genesis unlocks (<code>[ax42]</code> + <b>eee100 g</b>). The <b>Nebula</b> tab appears next to Genesis.</li>
-                        <li><b>Nebula Collapse</b> converts your <b>Supernova Cluster</b> count into <b>Nebula Dust</b>: <code>1.5^(Clusters − 14 + 1)</code> × every Dust multiplier. It resets Clusters, Stardust, Stellar Mass and the Galaxy layer — <b>Elements and Exotic Matter are kept</b>.</li>
-                        <li><b>Dust buys 12 permanently-scaling upgrades</b> that reach into every other layer: Genesis tetration speed and Motes, Exotic Matter, Stardust, Galactic Quarks, Neutron Stars, Element costs, and <b>Harmony</b> (which multiplies all Nebula effects at once).</li>
+                        <li><b>Unlock:</b> buy <code>[ax42]</code> and hold <b>eee100 g</b> mass (the endgame). The <b>Nebula</b> tab appears.</li>
+                        <li><b>Nebula Collapse</b> converts your <b>Supernova Cluster</b> count into <b>Nebula Dust</b>: <code>1.5^collapses × (Clusters − 13)</code> × every Dust multiplier. It resets Clusters, Stardust, Stellar Mass and the Galaxy layer — <b>Elements and Exotic Matter are kept</b>.</li>
+                        <li><b>Dust buys 12 permanently-scaling upgrades</b> that reach into every other layer: Pre-Quantum Global Speed, Entropy, Exotic Matter, Stardust, Galactic Quarks, Neutron Stars, Element costs, and <b>Harmony</b> (which multiplies all Nebula effects at once).</li>
                         <li>The requirement grows by <b>×1.06</b> per collapse, so each Nebula expects a slightly bigger Cluster count — while the reward grows with how far past 14 Clusters you went.</li>
                     </ul>
                 `,
@@ -770,8 +654,8 @@ const GUIDE_CHAPTERS = [
                 headers: ["Upgrade", "Max", "Effect"],
                 rows: [
                     ["<b>Dust Condenser</b>", "10", "×1.5 Nebula Dust per level"],
-                    ["<b>Nebular Flow</b>", "12", "×1.25 Genesis Tetration Speed per level"],
-                    ["<b>Mote Cloud</b>", "12", "×1.2 Genesis Motes per level"],
+                    ["<b>Nebular Flow</b>", "12", "×1.25 Pre-Quantum Global Speed per level"],
+                    ["<b>Entropy Cloud</b>", "12", "×1.2 Entropy gain per level"],
                     ["<b>Exotic Winds</b>", "10", "×1.3 Exotic Matter per level"],
                     ["<b>Stellar Forge</b>", "8", "×2 Stardust per level"],
                     ["<b>Quantum Mist</b>", "10", "×1.5 Galactic Quarks per level"],
@@ -788,19 +672,19 @@ const GUIDE_CHAPTERS = [
                 type: "table",
                 headers: ["Unlock", "Requirement", "What you get"],
                 rows: [
-                    ["<b>Element Tier 5</b>", "first Nebula Collapse", "Elements <b>559–598</b>, bought with Nebula Dust: 40 multipliers across Dust, Genesis, Exotic, Stardust, Quarks, Stars and Harmony. Every 8th one can be charged for 3× the effect."],
-                    ["<b>Neutron Tree: Nebula branch</b>", "first Nebula Collapse", "12 new tree nodes (neb1–neb12) that cost <b>Nebula Dust</b> instead of Neutron Stars."],
-                    ["<b>Exotic Upgrades 26–32</b>", "Exotic Upgrades 19 & 25", "Dust, Genesis speed, Stardust, Quarks, Harmony and Motes multipliers."],
-                    ["<b>Exotic Milestones 8–10</b>", "60 / 150 / 300 Exotic resets", "Dust, Genesis speed, Harmony and ×3 to all Nebula effects."],
+                    ["<b>Element Tier 5</b>", "first Nebula Collapse", "Elements <b>559–638</b>, bought with Nebula Dust: 80 multipliers (10 tiers of 8) across Dust, Pre-Quantum Speed, Entropy, Exotic, Stardust, Quarks, Stars and Harmony. Every 8th one can be charged for 3× the effect."],
+                    ["<b>Neutron Tree: Nebula branch</b>", "first Nebula Collapse", "16 new tree nodes (neb1–neb16) that cost <b>Nebula Dust</b> instead of Neutron Stars."],
+                    ["<b>Exotic Upgrades 26–35</b>", "Exotic Upgrades 19 & 25, then 500 Exotic resets", "Dust, Pre-Quantum Speed, Stardust, Quarks, Harmony, Entropy and Element cost multipliers."],
+                    ["<b>Exotic Milestones 8–11</b>", "60 / 150 / 300 / 500 Exotic resets", "Dust, Pre-Quantum Speed, Harmony, ×3 to all Nebula effects and the last three Exotic upgrades."],
                 ],
-                callout: { kind: "milestone", text: "The Nebula and Genesis feed each other: Dust boosts tetration, Genesis upgrades boost Dust, and Relics boost both. Alternate between them." },
+                callout: { kind: "milestone", text: "Dust is spent on multipliers for <i>everything</i> that sits under the cluster layer — Galaxy, Stardust, Exotic Matter, Quarks, Entropy and the Pre-Quantum speed that drives the next climb." },
             },
         ],
         milestones: [
-            { id: "m_neb_unl", label: "Unlock the Nebula (ax42 + eee100 g)", done: () => !!(player.nebula && player.nebula.unl), tab: 12, stab: 0 },
-            { id: "m_neb_1", label: "First Nebula Collapse", done: () => !!(player.nebula && player.nebula.times.gte(1)), tab: 12, stab: 0 },
+            { id: "m_neb_unl", label: "Unlock the Nebula (ax42 + eee100 g)", done: () => !!(player.nebula && player.nebula.unl), tab: 11, stab: 0 },
+            { id: "m_neb_1", label: "First Nebula Collapse", done: () => !!(player.nebula && player.nebula.times.gte(1)), tab: 11, stab: 0 },
             { id: "m_neb_el", label: "Buy your first Element Tier 5 element", done: () => hasElement(559), tab: 4, stab: 1 },
-            { id: "m_neb_m3", label: "Reach 3 Nebula Milestones", done: () => !!(player.nebula && player.nebula.milestones.filter(x => x).length >= 3), tab: 12, stab: 2 },
+            { id: "m_neb_m3", label: "Reach 3 Nebula Milestones", done: () => !!(player.nebula && player.nebula.milestones.filter(x => x).length >= 3), tab: 11, stab: 2 },
             { id: "m_neb_tree", label: "Buy the [neb12] tree node", done: () => hasTree("neb12"), tab: 5, stab: 0 },
         ],
     },
@@ -1061,38 +945,30 @@ function getGuideCurrentRecommendation() {
             gameStab: 0,
         };
     }
-    if (!player.gen || !player.gen.unl) {
+    if (!player.nebula || !player.nebula.unl) {
         return {
-            phase: "Phase 11: Endgame Complete / Challenge 24",
-            next: "Buy final Quantum+ upgrades (qp38–qp41), push Challenge 24 — and hold eee100 g mass with [ax42] bought to unlock GENESIS!",
+            phase: "Phase 12: Endgame Complete / Challenge 24",
+            next: "Buy final Quantum+ upgrades (qp38–qp41), push Challenge 24 — and then collapse your Supernova Clusters into the NEBULA!",
             guideSub: 10,
             gameTab: 3,
             gameStab: 0,
         };
     }
-    if (!player.gen.complete) {
-        let ms = player.gen.milestones;
-        let nextMs = !ms[1] ? "reach depth 0.05 for the Deeper Layers milestone"
-            : !ms[2] ? "reach depth 0.10 for the Genesis Autobuyer"
-            : !ms[3] ? "reach depth 0.20 for Event Horizon"
-            : !ms[4] ? "reach depth 0.35 for the Collapse Automator"
-            : !ms[5] ? "reach depth 0.50 for the Singularity Drive"
-            : !ms[6] ? "reach depth 0.75 for Tetration Apex"
-            : "reach depth 1.00 to finish Genesis at eeee100 g";
+    if (player.nebula.times.lt(1)) {
         return {
-            phase: "Phase 12: Genesis — Tetration Layers",
-            next: `Collapse regularly for Genesis Motes (spend them on Mote Flux & Tetration Engine), clear Trials, and ${nextMs}!`,
+            phase: "Phase 12: Supernova Nebula",
+            next: `Reach ${format(SUPERNOVA_NEBULA.req(), 0)} Supernova Clusters and make your first Nebula Collapse for Dust — that unlocks Element Tier 5 and the Nebula tree branch!`,
             guideSub: 10,
             gameTab: 11,
             gameStab: 0,
         };
     }
     return {
-        phase: "Phase 12: Genesis Complete",
-        next: "Genesis is finished at eeee100 g. Farm Motes at depth 1 with Genesis Mastery, clear the remaining Trials, and push Challenge 24 / Beyond Ranks for fun!",
+        phase: "Phase 12: Nebula Loop",
+        next: "Keep collapsing the Nebula (the requirement rises ×1.06 each time), spend Dust on Nebula upgrades and the Nebula tree branch, and clear the Element Tier 5 elements one by one.",
         guideSub: 10,
         gameTab: 11,
-        gameStab: 3,
+        gameStab: 0,
     };
 }
 

@@ -249,7 +249,10 @@ function updateBlackHoleTemp() {
 
 function updateTemp() {
 	
-    if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.updateTemp()
+    if (typeof SUPERNOVA_NEBULA !== "undefined") {
+        if (!tmp.nebula) tmp.nebula = {}
+        SUPERNOVA_NEBULA.updateTemp()
+    }
     tmp.offlineActive = player.offline.time > 1
     tmp.offlineMult = tmp.offlineActive?player.offline.time+1:1
 
@@ -281,5 +284,4 @@ function updateTemp() {
 
     tmp.preQUGlobalSpeed = FORMS.getPreQUGlobalSpeed()
 
-    if (typeof GENESIS !== "undefined") GENESIS.updateTemp()
 }

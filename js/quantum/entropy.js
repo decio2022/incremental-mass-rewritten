@@ -29,6 +29,8 @@ const ENTROPY = {
         if (hasElement(139)) x = x.mul(tmp.elements.effect[139]||1)
 		if (player.ranks.hept.gte(52)) x = x.mul(E(10).pow(player.ranks.hept));
 		x = x.mul(SUPERNOVA_GALAXY.effects.entropyg())
+		if (typeof SUPERNOVA_NEBULA !== "undefined") x = x.mul(SUPERNOVA_NEBULA.effects.entropy())
+		if (typeof nebElementMult === "function") x = x.mul(nebElementMult("entropy"))
 		if(hasElement(394)) x = x.mul(EXOTIC.dsEff().en)
         if (hasChargedElement(109)) x = x.mul(tmp.elements.ceffect[109]||1)
         if (hasChargedElement(114)) x = x.mul(tmp.elements.ceffect[114]||1)

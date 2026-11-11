@@ -228,8 +228,7 @@ function setupHTML() {
 
 	setupAllStatsHTML()
 	setupGuideHTML()
-	if (typeof GENESIS !== "undefined") GENESIS.setupHTML()
-	if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.setupHTML()
+	if (typeof setupNebulaHTML === "function") setupNebulaHTML()
 
     tmp.el = {}
 	let all = document.getElementsByTagName("*")
@@ -318,6 +317,10 @@ function updateUpperHTML() {
 	unl = player.superCluster.gte(21)
 	tmp.el.stardust_div.setDisplay(unl)
 	if (unl) tmp.el.stardustAmt.setHTML(format(player.stardust,0)+"<br>"+player.stardust.formatGain(SUPERNOVA_CLUSTER.stardustGain(),0))
+	
+	unl = !!(player.nebula && player.nebula.unl)
+	tmp.el.nebDust_div.setDisplay(unl)
+	if (unl) tmp.el.nebDustAmt.setHTML(format(player.nebula.dust,0)+"<br>"+player.nebula.dust.formatGain(SUPERNOVA_NEBULA.dustGain(),0))
 }
 
 function updateMassUpgradesHTML() {
@@ -659,11 +662,8 @@ function updateHTML() {
 		if (tmp.tab == 10) {
 			updateOptionsHTML()
 		}
-		if (tmp.tab == 11 && typeof GENESIS !== "undefined") {
-			GENESIS.updateHTML()
-		}
-		if (tmp.tab == 12 && typeof SUPERNOVA_NEBULA !== "undefined") {
-			SUPERNOVA_NEBULA.updateHTML()
+		if (tmp.tab == 11 && typeof SUPERNOVA_NEBULA !== "undefined") {
+			updateNebulaHTML()
 		}
 	}
 }

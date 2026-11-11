@@ -187,7 +187,6 @@ function calc(dt, dt_offline) {
         addPopup(POPUP_GROUPS.fermions)
     }
     if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.calc(dt, dt_offline)
-    if (typeof GENESIS !== "undefined") GENESIS.calc(dt, dt_offline)
     if (typeof SANDBOX !== "undefined") SANDBOX.afterCalc(sbSnap)
 }
 
@@ -386,31 +385,6 @@ function getPlayerData() {
 			antiNan: true,
 			caps: {},
 		},
-        // Genesis (post-endgame expansion). Arrays are sized by GENESIS_UPG_COUNT /
-        // GENESIS_MILESTONE_COUNT / GENESIS_TRIAL_COUNT in js/genesis.js.
-        gen: {
-            unl: false,
-            complete: false,
-            depth: E(0),
-            bestDepth: E(0),
-            motes: E(0),
-            totalMotes: E(0),
-            lastGain: E(0),
-            collapses: 0,
-            upgs: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            milestones: [false,false,false,false,false,false,false,false,false,false,false,false,false],
-            trials: [false,false,false,false,false,false,false,false,false,false],
-            activeTrial: -1,
-            autoBuy: false,
-            autoCollapse: false,
-            autoDepth: -1,
-            sparks: E(0),
-            totalSparks: E(0),
-            lastSparks: E(0),
-            reforges: 0,
-            runBest: E(0),
-            relics: [0,0,0,0,0,0,0,0,0],
-        },
         // Supernova Nebula (post-endgame reset above Supernova Cluster)
         nebula: {
             unl: false,
@@ -483,7 +457,6 @@ function loadPlayer(load) {
         let f = FERMIONS.types[i][x]
         player.supernova.fermions.tiers[i][x] = player.supernova.fermions.tiers[i][x].min(typeof f.maxTier == "function" ? f.maxTier() : f.maxTier||1/0)
     }
-    if (typeof GENESIS !== "undefined") GENESIS.sanitize()
     if (typeof SUPERNOVA_NEBULA !== "undefined") SUPERNOVA_NEBULA.sanitize()
     let tsp = sanitizeTimeSpeed(player.timeSpeed)
     player.timeSpeed = tsp === null ? 1 : tsp

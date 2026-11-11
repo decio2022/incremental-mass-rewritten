@@ -1482,7 +1482,7 @@ const UPGS = {
                 }
             },
             auto_unl() { return false },
-            lens: 32,
+            lens: 35,
             1: {
                 desc: `Multiply your Eternity times gain by (200+Exotic reset times). Remove Mass and Star Overflow.`,
                 cost: E(1),
@@ -1626,7 +1626,7 @@ const UPGS = {
             },
             27: {
                 unl() { return hasUpgrade('exotic',25) },
-                desc: "Multiply Genesis Tetration Speed by 1.5.",
+                desc: "Multiply Pre-Quantum Global Speed by 1.5.",
                 cost: E(1e36),
             },
             28: {
@@ -1646,13 +1646,28 @@ const UPGS = {
             },
             31: {
                 unl() { return player.exotic.times.gte(150) },
-                desc: "Multiply Genesis Mote gain by 2.",
+                desc: "Multiply Entropy gain by 2.",
                 cost: E(1e52),
             },
             32: {
                 unl() { return player.exotic.times.gte(300) },
                 desc: "Multiply Exotic Matter gain by 5 and Nebula Dust gain by 2.",
                 cost: E(1e60),
+            },
+            33: {
+                unl() { return player.exotic.times.gte(500) },
+                desc: "Multiply Stardust gain by 2 and Nebula Harmony by 1.5.",
+                cost: E(1e64),
+            },
+            34: {
+                unl() { return hasUpgrade('exotic',33) },
+                desc: "Multiply Exotic Matter gain by 3 and Element costs by 0.95.",
+                cost: E(1e68),
+            },
+            35: {
+                unl() { return hasUpgrade('exotic',34) },
+                desc: "Multiply Entropy gain by 5 and Pre-Quantum Global Speed by 2.",
+                cost: E(1e72),
             },
         },
     },

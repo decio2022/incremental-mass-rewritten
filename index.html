@@ -51,7 +51,6 @@
     <script src="js/elemental.js"></script>
     <script src="js/atom.js"></script>
     <script src="js/tabs.js"></script>
-    <script src="js/genesis.js"></script>
     <script src="js/stats.js"></script>
     <script src="js/guide.js"></script>
     <script src="js/scaling.js"></script>
@@ -265,6 +264,9 @@
                     </div><div class="resources sml" id="stardust_div" style="color:#00ffff;">
                         <div tooltip="Stardust" t-size="small"><img class="res_img" src="images/sd.png"></div>
                         <span style="margin-left: 5px; text-align: left;" id="stardustAmt">X</span>
+                    </div><div class="resources sml" id="nebDust_div" style="color:#2fb8cc;">
+                        <div tooltip="Nebula Dust" t-size="small"><img class="res_img" src="images/sd.png"></div>
+                        <span style="margin-left: 5px; text-align: left;" id="nebDustAmt">X</span>
                     </div>
                 </div>
             </div>
@@ -1075,7 +1077,42 @@
             <div style="position: absolute; bottom: 35px; right: 35px;">
                 <img id="omega_badge" src="images/omega.png">
             </div>
-        </div><div id="tab_frame11"></div><div id="tab_frame12"></div>
+        </div><div id="tab_frame11">
+			<div id="stab_frame11_0">
+				<div class="neb_wrap">
+					<div class="neb_top">
+						You have <span id="nebDust">0</span> Nebula Dust<br>
+						A Collapse would give you <span id="nebGain">0</span> Nebula Dust<br>
+						Your Supernova Clusters are multiplying Dust by <span id="nebDustMult">1</span>x<br>
+						Next Nebula at <span id="nebReq">14</span> Supernova Clusters (you have <span id="nebSCCount">0</span>)<br>
+						<button class="btn neb_big" id="nebResetBtn" onclick="nebReset()">Reset for a Nebula</button><br>
+						<span class="neb_sub">Resets Supernova Clusters, Stardust, Stellar Mass and the Galaxy layer. Element and Exotic progress is kept.</span>
+					</div>
+					<hr>
+					<center><span id="nebEff" class="neb_eff"></span></center>
+					<hr>
+					<div class="neb_top">
+						<button class="btn" id="nebAutoBuyBtn" onclick="nebToggleAutoBuy()">OFF</button> Auto-Buy Nebula Upgrades<br>
+						<button class="btn" id="nebAutoCollapseBtn" onclick="nebToggleAutoCollapse()">OFF</button> Auto-Collapse (needs a Nebula milestone)<br>
+						<hr>
+						You have collapsed <span id="nebTimes">0</span> times, best Collapse <span id="nebBest">0</span> Dust<br>
+						Total Dust earned: <span id="nebTotal">0</span><br>
+						Harmony: <span id="nebHarmony">1</span>x
+					</div>
+				</div>
+			</div>
+			<div id="stab_frame11_1">
+				<div class="neb_wrap">
+					<center>You have <span id="nebDust2">0</span> Nebula Dust</center>
+					<div id="nebUpgsTable" class="neb_grid"></div>
+				</div>
+			</div>
+			<div id="stab_frame11_2">
+				<div class="neb_wrap">
+					<div id="nebMilesTable" class="neb_grid"></div>
+				</div>
+			</div>
+		</div>
     </div>
 </body>
 </html>

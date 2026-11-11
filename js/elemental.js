@@ -1,7 +1,7 @@
 const ELEMENTS = {
     map: [`x_________________xvxx___________xxxxxxvxx___________xxxxxxvxxx_xxxxxxxxxxxxxxxvxxx_xxxxxxxxxxxxxxxvxxx1xxxxxxxxxxxxxxxvxxx2xxxxxxxxxxxxxxxv_v___3xxxxxxxxxxxxxx_v___4xxxxxxxxxxxxxx_`],
     la: [null,'*','**','*','**'],
-    exp: [0,118,218,362,558,598,1138],
+    exp: [0,118,218,362,558,638,1138],
     names: [
         null,
         'H','He','Li','Be','B','C','N','O','F','Ne',
@@ -3778,7 +3778,7 @@ const ELEMENTS = {
     },
     */
     getUnlLength() {
-		if((player.nebula && player.nebula.times && player.nebula.times.gte && player.nebula.times.gte(1)) || (typeof hasElement === "function" && hasElement(596)))return 598;
+		if((player.nebula && player.nebula.times && player.nebula.times.gte && player.nebula.times.gte(1)) || (typeof hasElement === "function" && hasElement(596)))return 638;
 		if(hasElement(545))return 558;
 		if(hasElement(542))return 545;
 		if(hasElement(534))return 542;
@@ -3879,18 +3879,18 @@ for (let x = 2; x <= MAX_ELEM_TIERS; x++) {
 }
 
 // ---------------------------------------------------------------------------
-// Element Tier 5 — Nebula Elements (559 - 598)
+// Element Tier 5 — Nebula Elements (559 - 638)
 // ---------------------------------------------------------------------------
 // Bought with Nebula Dust. Each one multiplies one of the post-endgame
 // resources; every eighth element can also be charged for a much bigger
 // version of the same effect.
 
-const NEB_ELEMENT_KINDS = ["dust", "genrate", "genmotes", "exotic", "stardust", "galqk", "stars", "harmony"];
+const NEB_ELEMENT_KINDS = ["dust", "pqgs", "entropy", "exotic", "stardust", "galqk", "stars", "harmony"];
 
 const NEB_ELEMENT_KIND_TEXT = {
     dust: "Nebula Dust gain",
-    genrate: "Genesis Tetration Speed",
-    genmotes: "Genesis Mote gain",
+    pqgs: "Pre-Quantum Global Speed",
+    entropy: "Entropy gain",
     exotic: "Exotic Matter gain",
     stardust: "Stardust gain",
     galqk: "Galactic Quark gain",
@@ -3902,7 +3902,7 @@ const NEB_ELEMENT_KIND = {};
 
 function nebElementMult(kind) {
     let x = E(1);
-    for (let i = 559; i <= 598; i++) {
+    for (let i = 559; i <= 638; i++) {
         if (NEB_ELEMENT_KIND[i] !== kind) continue;
         if (typeof hasElement !== "function" || !hasElement(i)) continue;
         if (tmp.elements && tmp.elements.effect && tmp.elements.effect[i]) x = x.mul(tmp.elements.effect[i]);
@@ -3920,12 +3920,22 @@ const NEB_ELEMENT_NAMES = [
     ["Pha", "Phasium"], ["Ty", "Tachyite"], ["Nu", "Nullium"], ["Aur", "Auralite"],
     ["Cy", "Cryonite"], ["Py", "Pyrite"], ["Um", "Umbrate"], ["So", "Solarium"],
     ["Aes", "Aetherstone"], ["Xl", "Xenolite"], ["Or", "Orichalcum"], ["Vb", "Vantablackium"],
-    ["Cst", "Chronosteel"], ["Rd", "Radiantite"], ["Nt", "Netherium"], ["Gs", "Genesisite"],
+    ["Cst", "Chronosteel"], ["Rd", "Radiantite"], ["Nt", "Netherium"], ["Gs", "Genesite"],
     ["Nl", "Nebulite"], ["Ap", "Aphelion"], ["El", "Eclipsite"], ["Tr", "Transcendium"],
+    ["Av", "Avalite"], ["By", "Baryte"], ["Cd", "Cinderite"], ["Dr", "Dracite"],
+    ["Em", "Empyrium"], ["Fr", "Frostium"], ["Gc", "Glaciom"], ["Hx", "Hexite"],
+    ["Ir", "Iridium"], ["Jd", "Jadeite"], ["Kr", "Kryon"], ["Lx", "Luxite"],
+    ["Mo", "Morbium"], ["Ny", "Nyxite"], ["Oc", "Obscurite"], ["Ph", "Photonite"],
+    ["Qz", "Quartzite"], ["Rv", "Reverium"], ["Sk", "Skarnium"], ["Tz", "Tesserite"],
+    ["Ul", "Ultravium"], ["Ve", "Vesperite"], ["Wl", "Wellstone"], ["Xe", "Xenonium"],
+    ["Yb", "Ybrium"], ["Zv", "Zephyrite"], ["Arc", "Arcanite"], ["Br", "Brightsteel"],
+    ["Cv", "Cavium"], ["Dk", "Darkstone"], ["Eb", "Ebonite"], ["Fy", "Fayrium"],
+    ["Gm", "Geminite"], ["Hy", "Halcyite"], ["Iv", "Ivoryte"], ["Jn", "Jasperite"],
+    ["Kg", "Kyanite"], ["Ln", "Lanthanide"], ["Mg", "Magnetite"], ["Nr", "Nebularite"],
 ];
 
 (function buildNebulaElements() {
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 80; i++) {
         let id = 559 + i;
         let kind = NEB_ELEMENT_KINDS[i % NEB_ELEMENT_KINDS.length];
         let tier = Math.floor(i / NEB_ELEMENT_KINDS.length);      // 0 - 4

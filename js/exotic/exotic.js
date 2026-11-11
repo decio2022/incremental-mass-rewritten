@@ -62,8 +62,9 @@ const EXOTIC = {
         [E(10), `You start with 15 Supernova Galaxies, and keep C20 completions on Exotic resets.`],
         [E(50), `Automatically Gain Supernova Galaxies, Supernova Galaxies don't reset anything.`],
         [E(60), `Multiply Nebula Dust gain by 2. Stellar Mass and Stardust are kept on Nebula resets.`],
-        [E(150), `Multiply Genesis Tetration Speed by 2 and Nebula Harmony by 1.5.`],
+        [E(150), `Multiply Pre-Quantum Global Speed by 2 and Nebula Harmony by 1.5.`],
         [E(300), `Multiply every Nebula effect by 3. Unlock Exotic Upgrade 32.`],
+        [E(500), `Multiply Nebula Dust gain by 3. Unlock Exotic Upgrades 33, 34 and 35.`],
     ],
     enter() {
         if (EXOTIC.gain().gte(1)) {

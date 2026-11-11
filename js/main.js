@@ -28,6 +28,8 @@ const FORMS = {
         if (hasElement(136)) x = x.mul(tmp.elements.effect[136])
 		if (player.ranks.hept.gte(6)) x = x.mul(player.ranks.hept.add(1));
 		x = x.mul(SUPERNOVA_GALAXY.effects.pqgs());
+		if (typeof SUPERNOVA_NEBULA !== "undefined") x = x.mul(SUPERNOVA_NEBULA.effects.pqgs());
+		if (typeof nebElementMult === "function") x = x.mul(nebElementMult("pqgs"));
         if (player.mainUpg.br.includes(3)) x = x.pow(tmp.upgs.main[4][3].effect)
         if (hasPrestige(0,5)) x = x.pow(2)
 		x = x.pow(calcShardsEffect())
@@ -126,8 +128,7 @@ const FORMS = {
 			
 		if((player.gc.active || player.chal.active >= 21) && hasElement(423))x = x.add(1)
 		
-        // Genesis raises the endgame cap from eee100 g to eeee100 g
-        return x.min((typeof GENESIS !== "undefined" && player.gen && player.gen.unl) ? "eeee100" : "eee100")
+        return x.min("eee100")
     },
     massSoftGain() {
         let s = E(1.5e156)
