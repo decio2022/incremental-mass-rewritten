@@ -383,7 +383,7 @@ const SUPERNOVA_NEBULA = {
                 addNotify("Not enough Supernova Clusters for a Nebula", 4);
                 return false;
             }
-            if (player.confirms.sg && !confirm("Reset for a Supernova Nebula?\n\nThis resets Supernova Clusters, Stardust, Stellar Mass and the Galaxy layer. Elements and Exotic Matter are kept.")) return false;
+            if (player.confirms.neb && !confirm("Reset for a Supernova Nebula?\n\nThis resets Supernova Clusters, Stardust, Stellar Mass and the Galaxy layer. Elements and Exotic Matter are kept.")) return false;
         }
         let gain = this.dustGain();
         s.dust = s.dust.add(gain);

@@ -1419,7 +1419,8 @@ function buildSection8Options() {
             : key == "et" ? (player.et.times.gte(1) || player.superGal.gte(1))
             : key == "sg" ? player.superGal.gte(1)
             : key == "exotic" ? player.exotic.times.gte(1)
-            : (player[key].unl || player.superGal.gte(1));
+            : key == "neb" ? !!(player.nebula && player.nebula.unl)
+            : ((player[key] && player[key].unl) || player.superGal.gte(1));
         confRows.push(sRow(`Confirm: ${key.toUpperCase()}`, player.confirms[key] ? "ON" : "OFF", { locked: !unl }));
     }
     cards.push(sCard("Confirmation Settings", confRows));
