@@ -446,6 +446,8 @@ function loadPlayer(load) {
 			return true;
 		}else delete load.dark;
 	}
+    // the Genesis layer no longer exists: drop its leftover save block
+    if (load && typeof load == "object") delete load.gen
     player = deepNaN(load, DATA)
     player = deepUndefinedAndDecimal(player, DATA)
     convertStringToDecimal()
