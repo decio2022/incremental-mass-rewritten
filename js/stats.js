@@ -155,6 +155,61 @@ function setAllStatsCollapsed(collapsed) {
     updateAllStatsHTML(true);
 }
 
+// ---- Time Speed ----
+
+function formatTimeSpeed(v) {
+    let n = sanitizeTimeSpeed(v);
+    if (n === null) return "1x";
+    return String(Number(n.toPrecision(6))) + "x";
+}
+
+// Section bodies are re-rendered whenever any row changes (e.g. Time Played),
+// so restore the Time Speed input's text/selection if the player is typing.
+function keepTimeSpeedInputFocus(render) {
+    let active = document.getElementById("time_speed_input");
+    let keep = active && active === document.activeElement;
+    let val = keep ? active.value : null;
+    let s0 = null, s1 = null;
+    if (keep) { try { s0 = active.selectionStart; s1 = active.selectionEnd; } catch (e) {} }
+    render();
+    if (!keep) return;
+    let inp = document.getElementById("time_speed_input");
+    if (!inp) return;
+    inp.value = val;
+    inp.focus();
+    try { if (s0 !== null) inp.setSelectionRange(s0, s1); } catch (e) {}
+}
+
+function refreshTimeSpeedUI() {
+    let effEl = document.getElementById("time_speed_effective");
+    if (effEl) effEl.textContent = formatTimeSpeed(getTimeSpeed());
+    let bankEl = document.getElementById("time_speed_bank");
+    if (bankEl) bankEl.textContent = tmp.offlineActive ? formatTimeSpeed(tmp.offlineMult) : "Idle";
+}
+
+function setTimeSpeed(v) {
+    let n = sanitizeTimeSpeed(v);
+    if (n === null) {
+        alert(`Time Speed must be a number greater than 0 (max ${formatTimeSpeed(TIME_SPEED_MAX)}).`);
+        return false;
+    }
+    player.timeSpeed = n;
+    save();
+    if (typeof addNotify === "function") addNotify("Time Speed set to " + formatTimeSpeed(n), 3);
+    updateAllStatsHTML(true);
+    return true;
+}
+
+function applyTimeSpeedFromInput() {
+    let inp = document.getElementById("time_speed_input");
+    if (!inp) return;
+    setTimeSpeed(inp.value);
+}
+
+function resetTimeSpeed() {
+    setTimeSpeed(1);
+}
+
 function jumpToStatsTargetTab(tabIdx, event) {
     if (event) event.stopPropagation();
     if (!isStatsTabUnlocked(tabIdx)) return;
@@ -232,6 +287,7 @@ function buildAllStatsSummary() {
         ["Time Played", formatTime(player.time)],
         ["Current Mass", `${sMass(player.mass)}<span class="stats_subnote">${sGain(player.mass, sSafe(() => tmp.massGain, E(0)).mul(gs), true)}</span>`],
         ["Pre-QU Global Speed", sMult(gs)],
+        ["Time Speed", formatTimeSpeed(getTimeSpeed())],
         ["Unlocked Tabs", `${unlTabs} / ${TABS[1].length}`],
         ["Highest Rank Tier", highRank],
         ["Supernovas / SG / SC", `${sFormat(player.supernova.times, 0)} / ${sFormat(player.superGal, 0)} / ${sFormat(player.superCluster, 0)}`],
@@ -1313,6 +1369,26 @@ function buildSection7Exotic() {
 function buildSection8Options() {
     let cards = [];
 
+    // 0. Time Speed
+    let tsNow = getTimeSpeed();
+    let tsPresets = [1, 2, 5, 10, 100, 1000];
+    let tsRows = [
+        sRow("Time Speed Multiplier",
+            `<span class="stats_speed_wrap"><input id="time_speed_input" class="stats_input" type="number" min="${TIME_SPEED_MIN}" max="${TIME_SPEED_MAX}" step="0.1" value="${sEsc(tsNow)}" onkeydown="if(event.key==='Enter')applyTimeSpeedFromInput()"><button class="btn stats_btn_sm" onclick="applyTimeSpeedFromInput()">Apply</button></span>`,
+            { tags: "time speed multiplier faster tick game speed" }),
+        sRow("Quick Set",
+            tsPresets.map(v => `<button class="btn stats_btn_sm${tsNow == v ? " stats_btn_on" : ""}" onclick="setTimeSpeed(${v})">${v}x</button>`).join(" ") +
+            `<button class="btn stats_btn_sm" onclick="resetTimeSpeed()">Reset</button>`,
+            { tags: "time speed preset quick set" }),
+        sRow("Effective Time Speed", `<b id="time_speed_effective">--</b>`, { tags: "effective current time speed" }),
+        sRow("Offline Playback Speed", `<span id="time_speed_bank">--</span>`, { tags: "offline speed bank" }),
+        sRow("Allowed Range", `${formatTimeSpeed(TIME_SPEED_MIN)} – ${formatTimeSpeed(TIME_SPEED_MAX)}`, { tags: "range limit min max" }),
+    ];
+    let tsRows2 = tsRows.concat([
+        sRow("How it works", "Multiplies all game progression: mass gain, every sub-system, automators, neutron-tree timers, offline gains and timed gains. Wall-clock time and save timestamps are unaffected.", { tags: "help explain description" }),
+    ]);
+    cards.push(sCard("Time Speed", tsRows2, { meta: sBadge("2 = twice as fast", "info") }));
+
     // 1. Session & Display Settings
     let massDispNames = ["Normal", "Always show g", "Always show uni", "Always show mlt"];
     let sessRows = [
@@ -1465,7 +1541,7 @@ function updateAllStatsHTML(force = false) {
 
         let finalBody = bodyHtml || `<div class="stats_empty">No matching stats in ${sEsc(secInfo.title)}.</div>`;
         if (force || STATS_STATE.lastSectionHTML[i] !== finalBody) {
-            bodyEl.innerHTML = finalBody;
+            keepTimeSpeedInputFocus(() => { bodyEl.innerHTML = finalBody; });
             STATS_STATE.lastSectionHTML[i] = finalBody;
         }
     }
@@ -1478,4 +1554,6 @@ function updateAllStatsHTML(force = false) {
             STATS_STATE.lastFilterCount = txt;
         }
     }
+
+    refreshTimeSpeedUI();
 }

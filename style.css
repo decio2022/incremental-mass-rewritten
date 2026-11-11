@@ -1059,6 +1059,36 @@ h2 {
 	word-break: break-word;
 }
 
+.stats_input {
+	background-color: #111;
+	color: white;
+	border: solid 2px #777;
+	padding: 4px 8px;
+	font-size: 12px;
+	font-family: inherit;
+	width: 92px;
+	text-align: center;
+}
+
+.stats_input:focus {
+	outline: none;
+	border-color: white;
+}
+
+.stats_speed_wrap {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 6px;
+}
+
+.stats_btn_on {
+	border-color: #ffe066 !important;
+	background-color: #3a2b00 !important;
+	color: #ffe066 !important;
+}
+
 .stats_badge {
 	display: inline-block;
 	font-size: 10.5px;

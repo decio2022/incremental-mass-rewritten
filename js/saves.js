@@ -73,8 +73,31 @@ function softcapHTML(x, start) { return E(x).gte(start)?` <span class='soft'>(so
 
 Decimal.prototype.softcapHTML = function (start) { return softcapHTML(this.clone(), start) }
 
+// Time Speed: multiplies all game-time progression (2 = twice as fast).
+// Range is clamped so a typo can't freeze the game or overflow a tick.
+const TIME_SPEED_MIN = 0.1
+const TIME_SPEED_MAX = 1e6
+
+function sanitizeTimeSpeed(v) {
+    let n = Number(v)
+    if (!Number.isFinite(n) || n <= 0) return null
+    return Math.min(Math.max(n, TIME_SPEED_MIN), TIME_SPEED_MAX)
+}
+
+function getTimeSpeed() {
+    if (typeof player === "undefined" || !player) return 1
+    let s = sanitizeTimeSpeed(player.timeSpeed)
+    return s === null ? 1 : s
+}
+
 function calc(dt, dt_offline) {
     const sbSnap = (typeof SANDBOX !== "undefined") ? SANDBOX.beforeCalc() : null
+    // Apply Time Speed to both game time and real-time timers so
+    // everything (production, neutron stars, auto-quantum, offline
+    // playback drain, tree animation) runs proportionally faster.
+    let ts = getTimeSpeed()
+    dt = dt * ts
+    dt_offline = dt_offline * ts
     let du_gs = tmp.preQUGlobalSpeed.mul(dt)
 
     if (tmp.pass) {
@@ -310,6 +333,7 @@ function getPlayerData() {
             time: 0,
         },
         time: 0,
+        timeSpeed: 1,
 		inf: {
 			reached: false,
 			points: E(0),
@@ -420,8 +444,13 @@ function loadPlayer(load) {
         let f = FERMIONS.types[i][x]
         player.supernova.fermions.tiers[i][x] = player.supernova.fermions.tiers[i][x].min(typeof f.maxTier == "function" ? f.maxTier() : f.maxTier||1/0)
     }
+    let tsp = sanitizeTimeSpeed(player.timeSpeed)
+    player.timeSpeed = tsp === null ? 1 : tsp
     let off_time = (Date.now() - player.offline.current)/1000
-    if (off_time >= 60 && player.offline.active) player.offline.time += off_time
+    // Time Speed also speeds up offline bank accumulation while away,
+    // so the same away time yields proportionally more bank (and the
+    // playback in calc() runs faster too). Threshold stays in real time.
+    if (off_time >= 60 && player.offline.active) player.offline.time += off_time * getTimeSpeed()
 }
 
 function deepNaN(obj, data) {
