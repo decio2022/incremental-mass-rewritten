@@ -1574,12 +1574,222 @@ function sbRestoreNaNFromSnap(obj, snap) {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Pre-Nebula preset
+// ---------------------------------------------------------------------------
+// Fills in every layer that sits below the Supernova Nebula: unlocks, upgrade
+// lists, elements 1-558, the whole Neutron Tree (except its Nebula branch),
+// the Axionic branch, Exotic Matter, Clusters and so on. Nebula progress is
+// left at zero - the layer unlocks on its own on the next tick, because the
+// jump lands exactly on its unlock condition ([ax42] + eee100 g).
+function sbPreNebulaState() {
+    const BIG = E("1e100");
+    const MASS = E("eee100");
+    const fill = (arr, val) => {
+        if (!arr || typeof arr.length !== "number") return;
+        for (let i = 0; i < arr.length; i++) arr[i] = (typeof val === "function") ? val(i) : val;
+    };
+    const range = (a, b) => { let r = []; for (let i = a; i <= b; i++) r.push(i); return r; };
+    const step = (fn) => { try { fn(); } catch (e) { /* keep the jump resilient */ } };
+
+    // ---- Core -------------------------------------------------------------
+    player.mass = MASS;
+    player.tickspeed = E(50);
+    player.accelerator = E(50);
+    player.rp.unl = true;
+    player.bh.unl = true;
+    player.atom.unl = true;
+    player.chal.unl = true;
+    player.rp.points = BIG;
+    player.bh.dm = BIG;
+    player.bh.mass = BIG;
+    player.bh.condenser = E(100);
+    if (player.ranks) {
+        player.ranks.rank = E(400);
+        player.ranks.tier = E(5);
+        player.ranks.tetr = E(20);
+        player.ranks.pent = E(20);
+        player.ranks.hex = E(300);
+        player.ranks.hept = E(200);
+        player.ranks.oct = E(100);
+        player.ranks.enne = E(300);
+    }
+    step(() => fill(player.prestiges, E(500)));
+    step(() => fill(player.ascensions, E(60)));
+    player.prestigeMass = BIG;
+    player.ascensionMass = BIG;
+    step(() => fill(player.prestigeMassUpg, E(100)));
+    step(() => fill(player.ascensionMassUpg, E(100)));
+    player.prestigeRP = BIG;
+    player.prestigeTickspeed = BIG;
+    player.prestigeBH = BIG;
+    player.prestigeDM = BIG;
+    player.prestigeBHC = E(100);
+
+    // every main upgrade in every column
+    step(() => {
+        for (let x = 1; x <= UPGS.main.cols; x++) {
+            const id = UPGS.main.ids[x];
+            const lens = UPGS.main[x] && UPGS.main[x].lens ? UPGS.main[x].lens : 0;
+            player.mainUpg[id] = range(1, lens);
+        }
+    });
+
+    // every challenge completed
+    step(() => { for (let x = 1; x <= CHALS.cols; x++) player.chal.comps[x] = E(24); });
+    player.chal.active = 0;
+    player.chal.choosed = 0;
+
+    // ---- Atom / Elements ---------------------------------------------------
+    player.atom.points = BIG;
+    player.atom.quarks = BIG;
+    player.atom.atomic = BIG;
+    player.atom.gamma_ray = BIG;
+    step(() => { fill(player.atom.particles, BIG); fill(player.atom.powers, BIG); });
+    step(() => {
+        player.atom.elements = range(1, 558).filter(x => ELEMENTS.upgs[x] && ELEMENTS.upgs[x].cost !== EINF);
+        player.atom.chargedElements = player.atom.elements.filter(x => ELEMENTS.upgs[x].ccost);
+    });
+    step(() => { fill(player.md.upgs, E(1000)); fill(player.md.break.upgs, E(1000)); });
+    player.md.particles = BIG;
+    player.md.mass = BIG;
+    player.md.break.energy = BIG;
+    player.md.break.mass = BIG;
+    player.md.active = false;
+    player.md.break.active = false;
+
+    // ---- Stars / Supernova ------------------------------------------------
+    player.stars.unls = 5;
+    player.stars.boost = E(100);
+    player.stars.points = BIG;
+    step(() => fill(player.stars.generators, BIG));
+    player.supernova.times = E(5000);
+    player.supernova.post_10 = true;
+    player.supernova.stars = BIG;
+    step(() => {
+        player.supernova.tree = Object.keys(TREE_UPGS.ids).filter(id => !TREE_UPGS.ids[id].ax && !TREE_UPGS.ids[id].neb);
+    });
+    step(() => {
+        for (const k in player.supernova.bosons) player.supernova.bosons[k] = BIG;
+        for (const type of BOSONS.upgs.ids) {
+            const arr = player.supernova.b_upgs[type] || [];
+            for (let i = 0; i < arr.length; i++) arr[i] = E(100);
+        }
+    });
+    step(() => {
+        player.supernova.fermions.unl = true;
+        fill(player.supernova.fermions.points, BIG);
+        player.supernova.fermions.choosed = "";
+        const tiers = player.supernova.fermions.tiers;
+        for (let i = 0; i < tiers.length; i++) {
+            for (let j = 0; j < tiers[i].length; j++) {
+                let def = FERMIONS.types[i] && FERMIONS.types[i][j];
+                let mt = def ? (typeof def.maxTier === "function" ? def.maxTier() : (def.maxTier || 5)) : 5;
+                tiers[i][j] = E(mt);
+            }
+        }
+    });
+    step(() => {
+        player.supernova.radiation.hz = BIG;
+        fill(player.supernova.radiation.ds, BIG);
+        fill(player.supernova.radiation.bs, BIG);
+    });
+
+    // ---- Quantum ----------------------------------------------------------
+    player.qu.reached = true;
+    player.qu.points = BIG;
+    player.qu.times = E(100);
+    player.qu.bp = BIG;
+    player.qu.cosmic_str = BIG;
+    step(() => { player.qu.chr_get = [0, 1, 2]; fill(player.qu.chroma, BIG); });
+    step(() => { player.qu.prim.theorems = BIG; fill(player.qu.prim.particles, BIG); });
+    step(() => { player.qu.qc.shard = 10; });
+    step(() => {
+        player.qu.en.unl = true;
+        player.qu.en.amt = BIG;
+        player.qu.en.eth[0] = true; player.qu.en.eth[1] = BIG; player.qu.en.eth[2] = BIG;
+        player.qu.en.hr[0] = true; player.qu.en.hr[1] = BIG; player.qu.en.hr[2] = BIG;
+        fill(player.qu.en.rewards, BIG);
+    });
+    player.qu.rip.first = true;
+    player.qu.rip.active = false;
+    player.qu.rip.amt = BIG;
+
+    // ---- Infinity / Eternity / Galaxy / Cluster ---------------------------
+    player.inf.reached = true;
+    player.inf.points = BIG;
+    player.inf.times = E(100);
+    player.et.points = BIG;
+    player.et.times = E(100);
+    player.et.shards = BIG;
+    player.et.shard_gen = BIG;
+    player.superGal = E("1e30");
+    player.galQk = BIG;
+    step(() => { fill(player.galPow, BIG); fill(player.galParticles, BIG); });
+    step(() => { player.gc.depth = 10; player.gc.shard = BIG; player.gc.active = false; });
+    player.superCluster = SUPERNOVA_CLUSTER.req ? SUPERNOVA_CLUSTER.req().max(30) : E(30);
+    player.stardust = BIG;
+    player.stellar = BIG;
+    player.stellar_gen = E(100);
+
+    // ---- Exotic -----------------------------------------------------------
+    player.exotic.points = BIG;
+    player.exotic.times = E(400);
+    player.exotic.bp = BIG;
+    player.exotic.dr = BIG;
+    player.exotic.ds = BIG;
+    player.exotic.ab = BIG;
+    player.exotic.fss = BIG;
+    step(() => { fill(player.exotic.rcb, BIG); fill(player.exotic.ax, BIG); fill(player.exotic.axg, BIG); });
+    step(() => { fill(player.exotic.boosts, E(100)); fill(player.exotic.matters, E(100)); });
+    step(() => { fill(player.exotic.dark_run.upgs, E(100)); player.exotic.dark_run.points = BIG; });
+    step(() => {
+        player.exotic.tree = Object.keys(TREE_UPGS.ids).filter(id => TREE_UPGS.ids[id].ax);
+    });
+
+    // ---- Nebula stays untouched ------------------------------------------
+    if (!player.nebula) player.nebula = {};
+    player.nebula.unl = false;
+    player.nebula.times = E(0);
+    player.nebula.dust = E(0);
+    player.nebula.total = E(0);
+    player.nebula.best = E(0);
+    player.nebula.upgs = [];
+    player.nebula.milestones = [];
+    player.nebula.autoBuy = false;
+    player.nebula.autoCollapse = false;
+}
+
 const SANDBOX = {
     getCurrency(id) {
         return SANDBOX_CURRENCY_MAP[id] || null;
     },
     getCurrencies() {
         return SANDBOX_CURRENCIES;
+    },
+    jumpPreNebula() {
+        if (typeof player === "undefined" || !player) return;
+        if (player.confirms && player.confirms.sandbox_jump !== false) {
+            if (!confirm("Jump to everything BEFORE the Supernova Nebula?\n\nThis unlocks and completes every layer below the Nebula, sets mass to eee100 g, buys every upgrade and tree node that is not part of the Nebula branch, and leaves Nebula progress at zero.\n\nIt overwrites your current run.")) return;
+        }
+        try {
+            sbPreNebulaState();
+            resetTemp();
+            tree_update = true;
+            updateTemp();
+            updateHTML();
+            save();
+            if (typeof SUPERNOVA_NEBULA !== "undefined") {
+                SUPERNOVA_NEBULA.checkUnlock();
+                updateTemp();
+                updateNebulaTemp();
+                updateHTML();
+            }
+            SANDBOX_STATE.globalFeedback = "Jumped to the pre-Nebula endgame: mass eee100 g, every layer below the Nebula completed, Nebula at 0 collapses.";
+        } catch (e) {
+            SANDBOX_STATE.globalFeedback = "Jump failed: " + e.message;
+        }
+        this.renderGrid(true);
     },
     hasAnyActiveHardcap() {
         const sb = sbEnsureState();
@@ -1877,6 +2087,11 @@ const SANDBOX = {
                         <button class="btn stats_btn_sm" onclick="SANDBOX.disableAllCaps(false)">Disable All Caps</button>
                         <button class="btn stats_btn_sm" onclick="SANDBOX.disableAllCaps(true)">Reset Caps</button>
                         <span id="sb_global_fb" class="sb_feedback ok"></span>
+                    </div>
+                    <div class="sb_toolbar_row sb_jump_row">
+                        <span class="sb_bulk_label">Presets:</span>
+                        <button class="btn stats_btn_sm sb_jump_btn" onclick="SANDBOX.jumpPreNebula()">Unlock Everything Before the Nebula</button>
+                        <span class="sb_jump_note">Mass eee100 g, every upgrade, element, challenge and tree node below the Nebula. Nebula progress is reset to zero (it unlocks on the next tick).</span>
                     </div>
                     <div class="sb_help">
                         Formats: <code>1e100</code>, <code>ee50</code>, <code>eee10</code>, <code>Fe308</code> (= 10^^1e308 max), <code>10^^1e308</code>, <code>(e^L)M</code>.

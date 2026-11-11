@@ -1221,6 +1221,26 @@ h2 {
 	color: #ffd599;
 }
 
+.sb_jump_row {
+	border-top: 1px dashed #5a4520;
+	padding-top: 8px;
+}
+
+.btn.sb_jump_btn {
+	border-color: #ffaa33;
+	color: #ffe0b3;
+	background-color: #2a1d0b;
+}
+
+.btn.sb_jump_btn:hover {
+	background-color: #3d2a10;
+}
+
+.sb_jump_note {
+	font-size: 11.5px;
+	color: #bbb;
+}
+
 .sb_help {
 	font-size: 11.5px;
 	color: #bbb;
