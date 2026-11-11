@@ -1582,9 +1582,32 @@ function sbRestoreNaNFromSnap(obj, snap) {
 // the Axionic branch, Exotic Matter, Clusters and so on. Nebula progress is
 // left at zero - the layer unlocks on its own on the next tick, because the
 // jump lands exactly on its unlock condition ([ax42] + eee100 g).
+// Magnitudes are deliberately restrained: a jump that hands out layered
+// values (1e100 coins, level 1000 upgrades) makes every gain formula overflow,
+// and the anti-NaN guard then clamps the whole save to Fe308.
+const PRE_NEB_TUNE = {
+    mass: "eee100",      // needed for the Nebula unlock itself
+    big: "1e10",         // generic currency amount
+    ranks: { rank: 200, tier: 3, tetr: 8, pent: 8, hex: 60, hept: 30, oct: 10, enne: 30 },
+    prestige: 120,
+    ascension: 30,
+    prestigeUpg: 30,
+    mdUpg: 20,
+    bosonUpg: 15,
+    exoticLevel: 15,
+    exoticCur: "1e9",
+    exoticTimes: 60,      // covers Exotic milestones 8-10
+    snTimes: 300,
+    quTimes: 30,
+    infTimes: 30,
+    etTimes: 30,
+    chargeElements: true,
+};
+
 function sbPreNebulaState() {
-    const BIG = E("1e100");
-    const MASS = E("eee100");
+    const BIG = E(PRE_NEB_TUNE.big);
+    const MASS = E(PRE_NEB_TUNE.mass);
+    const EXO = E(PRE_NEB_TUNE.exoticCur);
     const fill = (arr, val) => {
         if (!arr || typeof arr.length !== "number") return;
         for (let i = 0; i < arr.length; i++) arr[i] = (typeof val === "function") ? val(i) : val;
@@ -1605,21 +1628,14 @@ function sbPreNebulaState() {
     player.bh.mass = BIG;
     player.bh.condenser = E(100);
     if (player.ranks) {
-        player.ranks.rank = E(400);
-        player.ranks.tier = E(5);
-        player.ranks.tetr = E(20);
-        player.ranks.pent = E(20);
-        player.ranks.hex = E(300);
-        player.ranks.hept = E(200);
-        player.ranks.oct = E(100);
-        player.ranks.enne = E(300);
+        for (const k in PRE_NEB_TUNE.ranks) player.ranks[k] = E(PRE_NEB_TUNE.ranks[k]);
     }
-    step(() => fill(player.prestiges, E(500)));
-    step(() => fill(player.ascensions, E(60)));
+    step(() => fill(player.prestiges, E(PRE_NEB_TUNE.prestige)));
+    step(() => fill(player.ascensions, E(PRE_NEB_TUNE.ascension)));
     player.prestigeMass = BIG;
     player.ascensionMass = BIG;
-    step(() => fill(player.prestigeMassUpg, E(100)));
-    step(() => fill(player.ascensionMassUpg, E(100)));
+    step(() => fill(player.prestigeMassUpg, E(PRE_NEB_TUNE.prestigeUpg)));
+    step(() => fill(player.ascensionMassUpg, E(PRE_NEB_TUNE.prestigeUpg)));
     player.prestigeRP = BIG;
     player.prestigeTickspeed = BIG;
     player.prestigeBH = BIG;
@@ -1648,9 +1664,9 @@ function sbPreNebulaState() {
     step(() => { fill(player.atom.particles, BIG); fill(player.atom.powers, BIG); });
     step(() => {
         player.atom.elements = range(1, 558).filter(x => ELEMENTS.upgs[x] && ELEMENTS.upgs[x].cost !== EINF);
-        player.atom.chargedElements = player.atom.elements.filter(x => ELEMENTS.upgs[x].ccost);
+        player.atom.chargedElements = PRE_NEB_TUNE.chargeElements ? player.atom.elements.filter(x => ELEMENTS.upgs[x].ccost) : [];
     });
-    step(() => { fill(player.md.upgs, E(1000)); fill(player.md.break.upgs, E(1000)); });
+    step(() => { fill(player.md.upgs, E(PRE_NEB_TUNE.mdUpg)); fill(player.md.break.upgs, E(PRE_NEB_TUNE.mdUpg)); });
     player.md.particles = BIG;
     player.md.mass = BIG;
     player.md.break.energy = BIG;
@@ -1660,10 +1676,10 @@ function sbPreNebulaState() {
 
     // ---- Stars / Supernova ------------------------------------------------
     player.stars.unls = 5;
-    player.stars.boost = E(100);
+    player.stars.boost = E(PRE_NEB_TUNE.mdUpg);
     player.stars.points = BIG;
     step(() => fill(player.stars.generators, BIG));
-    player.supernova.times = E(5000);
+    player.supernova.times = E(PRE_NEB_TUNE.snTimes);
     player.supernova.post_10 = true;
     player.supernova.stars = BIG;
     step(() => {
@@ -1673,7 +1689,7 @@ function sbPreNebulaState() {
         for (const k in player.supernova.bosons) player.supernova.bosons[k] = BIG;
         for (const type of BOSONS.upgs.ids) {
             const arr = player.supernova.b_upgs[type] || [];
-            for (let i = 0; i < arr.length; i++) arr[i] = E(100);
+            for (let i = 0; i < arr.length; i++) arr[i] = E(PRE_NEB_TUNE.bosonUpg);
         }
     });
     step(() => {
@@ -1685,7 +1701,10 @@ function sbPreNebulaState() {
             for (let j = 0; j < tiers[i].length; j++) {
                 let def = FERMIONS.types[i] && FERMIONS.types[i][j];
                 let mt = def ? (typeof def.maxTier === "function" ? def.maxTier() : (def.maxTier || 5)) : 5;
-                tiers[i][j] = E(mt);
+                // Fermion types 2/3 report Infinity as their tier cap; a finite
+                // tier is required or the whole multiplier chain turns into NaN.
+                if (!Number.isFinite(mt) || mt > 100) mt = 5;
+                tiers[i][j] = E(Math.max(1, Math.floor(mt)));
             }
         }
     });
@@ -1698,7 +1717,7 @@ function sbPreNebulaState() {
     // ---- Quantum ----------------------------------------------------------
     player.qu.reached = true;
     player.qu.points = BIG;
-    player.qu.times = E(100);
+    player.qu.times = E(PRE_NEB_TUNE.quTimes);
     player.qu.bp = BIG;
     player.qu.cosmic_str = BIG;
     step(() => { player.qu.chr_get = [0, 1, 2]; fill(player.qu.chroma, BIG); });
@@ -1718,34 +1737,44 @@ function sbPreNebulaState() {
     // ---- Infinity / Eternity / Galaxy / Cluster ---------------------------
     player.inf.reached = true;
     player.inf.points = BIG;
-    player.inf.times = E(100);
+    player.inf.times = E(PRE_NEB_TUNE.infTimes);
     player.et.points = BIG;
-    player.et.times = E(100);
+    player.et.times = E(PRE_NEB_TUNE.etTimes);
     player.et.shards = BIG;
     player.et.shard_gen = BIG;
-    player.superGal = E("1e30");
+    player.superGal = E("1e12");
     player.galQk = BIG;
     step(() => { fill(player.galPow, BIG); fill(player.galParticles, BIG); });
     step(() => { player.gc.depth = 10; player.gc.shard = BIG; player.gc.active = false; });
     player.superCluster = SUPERNOVA_CLUSTER.req ? SUPERNOVA_CLUSTER.req().max(30) : E(30);
-    player.stardust = BIG;
-    player.stellar = BIG;
-    player.stellar_gen = E(100);
+    player.stardust = E("1e8");
+    player.stellar = E("1e8");
+    player.stellar_gen = E(PRE_NEB_TUNE.mdUpg);
 
     // ---- Exotic -----------------------------------------------------------
-    player.exotic.points = BIG;
-    player.exotic.times = E(400);
-    player.exotic.bp = BIG;
-    player.exotic.dr = BIG;
-    player.exotic.ds = BIG;
-    player.exotic.ab = BIG;
-    player.exotic.fss = BIG;
-    step(() => { fill(player.exotic.rcb, BIG); fill(player.exotic.ax, BIG); fill(player.exotic.axg, BIG); });
-    step(() => { fill(player.exotic.boosts, E(100)); fill(player.exotic.matters, E(100)); });
-    step(() => { fill(player.exotic.dark_run.upgs, E(100)); player.exotic.dark_run.points = BIG; });
+    player.exotic.points = EXO;
+    player.exotic.times = E(PRE_NEB_TUNE.exoticTimes);
+    player.exotic.bp = EXO;
+    player.exotic.dr = EXO;
+    player.exotic.ds = EXO;
+    player.exotic.ab = EXO;
+    player.exotic.fss = EXO;
+    step(() => { fill(player.exotic.rcb, EXO); fill(player.exotic.ax, EXO); fill(player.exotic.axg, EXO); });
+    step(() => { fill(player.exotic.boosts, E(PRE_NEB_TUNE.exoticLevel)); fill(player.exotic.matters, E(PRE_NEB_TUNE.exoticLevel)); });
+    step(() => { fill(player.exotic.dark_run.upgs, E(PRE_NEB_TUNE.exoticLevel)); player.exotic.dark_run.points = EXO; });
     step(() => {
         player.exotic.tree = Object.keys(TREE_UPGS.ids).filter(id => TREE_UPGS.ids[id].ax);
     });
+
+    // ---- Quiet down anything that would fire mid-jump --------------------
+    step(() => { player.qu.qc.active = false; player.qu.qc.mods = [0, 0, 0, 0, 0, 0, 0, 0]; });
+    step(() => { player.qu.auto.enabled = false; });
+    step(() => { player.exotic.dark_run.active = false; });
+    step(() => { player.gc.active = false; });
+    player.offline.time = 0;
+    player.offline.current = Date.now();
+    player.reset_msg = "";
+    player.main_upg_msg = [0, 0];
 
     // ---- Nebula stays untouched ------------------------------------------
     if (!player.nebula) player.nebula = {};
