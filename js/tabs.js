@@ -22,6 +22,7 @@ const TABS = {
         { id: "Stats" },
         { id: "Guide", style: "guide" },
         { id: "Options" },
+        { id: "Genesis", unl() { return player.gen && player.gen.unl }, style: "genesis" },
     ],
     2: {
         0: [
@@ -88,6 +89,7 @@ const TABS = {
             { id: "Quantum", style: "qu" },
             { id: "Exotic", style: "red" },
             { id: "Options" },
+            { id: "Genesis", unl() { return player.gen && player.gen.unl }, style: "genesis" },
             { id: "Sandbox", style: "sandbox" },
         ],
         9: [
@@ -101,6 +103,13 @@ const TABS = {
             { id: "Quantum", style: "qu" },
             { id: "Inf & Eternity" },
             { id: "Exotic & Axions", style: "red" },
+            { id: "Genesis", style: "genesis" },
         ],
     },
+    11: [
+        { id: "Overview" },
+        { id: "Upgrades" },
+        { id: "Milestones" },
+        { id: "Trials" },
+    ],
 }

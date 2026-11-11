@@ -17,6 +17,7 @@ const STATS_SECTIONS = [
     { id: 6, tab: 6, title: "Quantum", desc: "Quantum Foam, Chroma, Milestones, Auto-Quantum, Primordium, Entropy & Big Rip" },
     { id: 7, tab: 7, title: "Exotic", desc: "Exotic Matter, Milestones, RC Boosters, Exotic Boosts, Darkness, Dark Run, Matters & Axions" },
     { id: 8, tab: 10, title: "Options & Misc", desc: "Session Time, Offline Progress, Display Preferences, Confirmations & Automators" },
+    { id: 9, tab: 11, title: "Genesis", desc: "Tetration Depth, Genesis Motes, Upgrades, Milestones & Trials (post-endgame)" },
 ];
 
 function sSafe(fn, fallback = E(0)) {
@@ -288,6 +289,7 @@ function buildAllStatsSummary() {
         ["Current Mass", `${sMass(player.mass)}<span class="stats_subnote">${sGain(player.mass, sSafe(() => tmp.massGain, E(0)).mul(gs), true)}</span>`],
         ["Pre-QU Global Speed", sMult(gs)],
         ["Time Speed", formatTimeSpeed(getTimeSpeed())],
+        ["Genesis Depth", (player.gen && player.gen.unl) ? `${format(player.gen.depth, 4)} / 1` : "Locked"],
         ["Unlocked Tabs", `${unlTabs} / ${TABS[1].length}`],
         ["Highest Rank Tier", highRank],
         ["Supernovas / SG / SC", `${sFormat(player.supernova.times, 0)} / ${sFormat(player.superGal, 0)} / ${sFormat(player.superCluster, 0)}`],
@@ -1469,6 +1471,7 @@ const STATS_BUILDERS = [
     buildSection6Quantum,
     buildSection7Exotic,
     buildSection8Options,
+    buildSection9Genesis,
 ];
 
 function updateAllStatsHTML(force = false) {
@@ -1477,7 +1480,7 @@ function updateAllStatsHTML(force = false) {
     let summaryEl = document.getElementById("all_stats_summary");
     let sbEl = document.getElementById("all_stats_sandbox");
 
-    if (sub === 10) {
+    if (sub === 11) {
         if (ctrlEl) ctrlEl.style.display = "none";
         if (summaryEl) summaryEl.style.display = "none";
         for (let i = 0; i < STATS_SECTIONS.length; i++) {

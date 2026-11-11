@@ -305,6 +305,20 @@ button {
 	background-color: #38d9ff;
 }
 
+.btn_tab.genesis {
+	color: #b78cff;
+	border-color: #b78cff;
+}
+
+.btn_tab.genesis:not(.choosed):hover {
+	background-color: #2a1a4d;
+}
+
+.btn_tab.genesis.choosed {
+	color: black;
+	background-color: #b78cff;
+}
+
 .btn_tab.sandbox {
 	color: #ffaa33;
 	border-color: #ffaa33;
@@ -1454,6 +1468,7 @@ h2 {
 .guide_accent_sn { border-left-color: magenta; }
 .guide_accent_qu { border-left-color: #00ff66; }
 .guide_accent_red { border-left-color: #ff4747; }
+.guide_accent_genesis { border-left-color: #b78cff; }
 
 .guide_card_head {
 	display: flex;
@@ -1590,3 +1605,279 @@ h2 {
 	font-size: 12px;
 	color: #b5b5b5;
 }
+/* Genesis (post-endgame) */
+
+.gen_container {
+	text-align: center;
+	padding: 6px 0 24px 0;
+}
+
+.gen_sub {
+	text-align: center;
+}
+
+.gen_hero {
+	margin: 6px auto 14px auto;
+	padding: 12px;
+	border: solid 2px #6b4bc4;
+	background: linear-gradient(180deg, #1a1230, #12101c);
+	max-width: 980px;
+}
+
+.gen_hero_title {
+	font-size: 26px;
+	font-weight: bold;
+	letter-spacing: 4px;
+	color: #c9aaff;
+	text-shadow: 0 0 12px #6b4bc4;
+}
+
+.gen_hero_sub {
+	font-size: 13px;
+	color: #cfc6e8;
+	margin-top: 4px;
+}
+
+.gen_banner {
+	margin-top: 8px;
+	padding: 6px 10px;
+	border: solid 1px #ffe066;
+	background-color: #3a2b00;
+	color: #ffe066;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.gen_kpis {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+	gap: 8px;
+	max-width: 980px;
+	margin: 0 auto 12px auto;
+}
+
+.gen_kpi {
+	background-color: #17131f;
+	border: solid 1px #3a2f52;
+	padding: 6px 8px;
+}
+
+.gen_kpi_label {
+	font-size: 11px;
+	color: #a79bc4;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.gen_kpi_val {
+	font-size: 15px;
+	font-weight: bold;
+	color: #f0ecff;
+	word-break: break-word;
+}
+
+.gen_progress_wrap {
+	max-width: 980px;
+	margin: 0 auto 12px auto;
+}
+
+.gen_progress_label {
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	color: #b9aed6;
+	margin-bottom: 4px;
+}
+
+.gen_bar {
+	height: 18px;
+	border: solid 1px #5b4a86;
+	background-color: #0e0c14;
+	overflow: hidden;
+}
+
+.gen_bar_fill {
+	height: 100%;
+	background: linear-gradient(90deg, #6b4bc4, #38d9ff);
+	transition: width 0.2s linear;
+}
+
+.gen_actions {
+	max-width: 980px;
+	margin: 0 auto 14px auto;
+}
+
+.gen_big_btn {
+	font-size: 18px;
+	font-weight: bold;
+	padding: 14px 34px;
+	min-width: 260px;
+	border-color: #b78cff;
+	color: #e3d5ff;
+}
+
+.gen_big_btn:hover {
+	background-color: #2a1a4d;
+}
+
+.gen_big_btn.gen_disabled {
+	opacity: 0.45;
+}
+
+.gen_collapse_note {
+	font-size: 12px;
+	color: #a79bc4;
+	margin-top: 6px;
+}
+
+.gen_grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+	gap: 10px;
+	max-width: 1180px;
+	margin: 0 auto;
+	align-items: start;
+}
+
+.gen_card {
+	background-color: #17131f;
+	border: solid 1px #3a2f52;
+	padding: 10px;
+	text-align: left;
+}
+
+.gen_card.gen_locked {
+	opacity: 0.6;
+}
+
+.gen_card.gen_trial_done {
+	border-color: #2d8a3e;
+	box-shadow: inset 0 0 0 1px #14361b;
+}
+
+.gen_card.gen_trial_active {
+	border-color: #d49b00;
+}
+
+.gen_card_title {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	font-weight: bold;
+	font-size: 13.5px;
+	color: #eee7ff;
+	border-bottom: solid 1px #2e2545;
+	padding-bottom: 5px;
+	margin-bottom: 6px;
+}
+
+.gen_tag {
+	font-size: 11px;
+	font-weight: normal;
+	color: #b9aed6;
+	white-space: nowrap;
+}
+
+.gen_row {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 8px;
+	font-size: 12px;
+	color: #cfc6e8;
+	padding: 3px 0;
+	border-bottom: 1px solid #241d33;
+}
+
+.gen_row:last-child {
+	border-bottom: none;
+}
+
+.gen_row_wrap {
+	flex-wrap: wrap;
+}
+
+.gen_note {
+	font-size: 11.5px;
+	color: #a79bc4;
+	margin-top: 6px;
+}
+
+.gen_note_left {
+	text-align: left;
+	margin-top: 2px;
+	margin-bottom: 6px;
+}
+
+.gen_btn_row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.gen_on {
+	border-color: #7fff9a !important;
+	color: #7fff9a !important;
+}
+
+.gen_depth_btn {
+	padding: 3px 8px;
+	font-size: 11px;
+}
+
+.gen_section {
+	max-width: 1180px;
+	margin: 0 auto;
+}
+
+.gen_section_head {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	font-size: 15px;
+	font-weight: bold;
+	color: #d9caff;
+	margin: 8px 0 10px 0;
+	padding-bottom: 6px;
+	border-bottom: solid 1px #3a2f52;
+}
+
+.gen_mile {
+	background-color: #17131f;
+	border: solid 1px #3a2f52;
+	padding: 8px 10px;
+	text-align: left;
+}
+
+.gen_mile.gen_mile_done {
+	border-color: #2d8a3e;
+}
+
+.gen_mile_head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	font-weight: bold;
+	font-size: 13px;
+	color: #eee7ff;
+}
+
+.gen_empty {
+	padding: 18px;
+	border: dashed 1px #4a3d6b;
+	color: #a79bc4;
+	font-size: 13px;
+	max-width: 780px;
+	margin: 0 auto;
+}
+
+.gen_sub button.btn:disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+

@@ -186,6 +186,7 @@ function calc(dt, dt_offline) {
         player.supernova.fermions.unl = true
         addPopup(POPUP_GROUPS.fermions)
     }
+    if (typeof GENESIS !== "undefined") GENESIS.calc(dt, dt_offline)
     if (typeof SANDBOX !== "undefined") SANDBOX.afterCalc(sbSnap)
 }
 
@@ -384,6 +385,25 @@ function getPlayerData() {
 			antiNan: true,
 			caps: {},
 		},
+        // Genesis (post-endgame expansion). Arrays are sized by GENESIS_UPG_COUNT /
+        // GENESIS_MILESTONE_COUNT / GENESIS_TRIAL_COUNT in js/genesis.js.
+        gen: {
+            unl: false,
+            complete: false,
+            depth: E(0),
+            bestDepth: E(0),
+            motes: E(0),
+            totalMotes: E(0),
+            lastGain: E(0),
+            collapses: 0,
+            upgs: [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            milestones: [false,false,false,false,false,false,false,false],
+            trials: [false,false,false,false,false,false],
+            activeTrial: -1,
+            autoBuy: false,
+            autoCollapse: false,
+            autoDepth: -1,
+        },
     }
     for (let x = 0; x < EXOTIC_BOOST_LENGTH; x++) s.exotic.boosts.push(E(0))
     for (let x = 0; x < MATTERS_LENGTH; x++) s.exotic.matters.push(E(0))
@@ -444,6 +464,7 @@ function loadPlayer(load) {
         let f = FERMIONS.types[i][x]
         player.supernova.fermions.tiers[i][x] = player.supernova.fermions.tiers[i][x].min(typeof f.maxTier == "function" ? f.maxTier() : f.maxTier||1/0)
     }
+    if (typeof GENESIS !== "undefined") GENESIS.sanitize()
     let tsp = sanitizeTimeSpeed(player.timeSpeed)
     player.timeSpeed = tsp === null ? 1 : tsp
     let off_time = (Date.now() - player.offline.current)/1000

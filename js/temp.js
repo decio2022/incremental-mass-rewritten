@@ -279,4 +279,6 @@ function updateTemp() {
     updateMassTemp()
 
     tmp.preQUGlobalSpeed = FORMS.getPreQUGlobalSpeed()
+
+    if (typeof GENESIS !== "undefined") GENESIS.updateTemp()
 }

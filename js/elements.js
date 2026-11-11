@@ -228,6 +228,7 @@ function setupHTML() {
 
 	setupAllStatsHTML()
 	setupGuideHTML()
+	if (typeof GENESIS !== "undefined") GENESIS.setupHTML()
 
     tmp.el = {}
 	let all = document.getElementsByTagName("*")
@@ -656,6 +657,9 @@ function updateHTML() {
 		}
 		if (tmp.tab == 10) {
 			updateOptionsHTML()
+		}
+		if (tmp.tab == 11 && typeof GENESIS !== "undefined") {
+			GENESIS.updateHTML()
 		}
 	}
 }

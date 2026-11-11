@@ -126,7 +126,8 @@ const FORMS = {
 			
 		if((player.gc.active || player.chal.active >= 21) && hasElement(423))x = x.add(1)
 		
-        return x.min("eee100")
+        // Genesis raises the endgame cap from eee100 g to eeee100 g
+        return x.min((typeof GENESIS !== "undefined" && player.gen && player.gen.unl) ? "eeee100" : "eee100")
     },
     massSoftGain() {
         let s = E(1.5e156)
