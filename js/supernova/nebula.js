@@ -492,6 +492,16 @@ function updateNebulaHTML(force = false) {
     set("nebBest", format(s.best));
     set("nebTotal", format(s.total));
     set("nebHarmony", format(SUPERNOVA_NEBULA.harmony()));
+    let nextMile = "-";
+    for (let i = 0; i < NEB_MILESTONES.length; i++) {
+        if (s.milestones[i]) continue;
+        let m = NEB_MILESTONES[i], parts = [];
+        if (m.times) parts.push(format(m.times, 0) + "/" + format(s.times, 0) + " collapses");
+        if (m.dust) parts.push(format(s.total) + "/" + format(m.dust) + " dust");
+        nextMile = m.name + " — " + parts.join(", ");
+        break;
+    }
+    set("nebNextMile", nextMile);
     set("nebDust2", format(s.dust));
     set("nebReady", SUPERNOVA_NEBULA.canReset() ? "Ready" : "Not yet");
 

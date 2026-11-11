@@ -265,7 +265,7 @@
                         <div tooltip="Stardust" t-size="small"><img class="res_img" src="images/sd.png"></div>
                         <span style="margin-left: 5px; text-align: left;" id="stardustAmt">X</span>
                     </div><div class="resources sml" id="nebDust_div" style="color:#2fb8cc;">
-                        <div tooltip="Nebula Dust" t-size="small"><img class="res_img" src="images/sd.png"></div>
+                        <div tooltip="Nebula Dust" t-size="small"><img class="res_img" src="images/nebdust.png"></div>
                         <span style="margin-left: 5px; text-align: left;" id="nebDustAmt">X</span>
                     </div>
                 </div>
@@ -1087,6 +1087,7 @@
 						Next Nebula at <span id="nebReq">14</span> Supernova Clusters (you have <span id="nebSCCount">0</span>)<br>
 						<button class="btn neb_big" id="nebResetBtn" onclick="nebReset()">Reset for a Nebula</button><br>
 						<span class="neb_sub">Resets Supernova Clusters, Stardust, Stellar Mass and the Galaxy layer. Element and Exotic progress is kept.</span>
+						<br><span class="neb_sub">Dust = 1.5^(previous collapses) × (Clusters − 13) × multipliers</span>
 					</div>
 					<hr>
 					<center><span id="nebEff" class="neb_eff"></span></center>
@@ -1097,7 +1098,8 @@
 						<hr>
 						You have collapsed <span id="nebTimes">0</span> times, best Collapse <span id="nebBest">0</span> Dust<br>
 						Total Dust earned: <span id="nebTotal">0</span><br>
-						Harmony: <span id="nebHarmony">1</span>x
+						Harmony: <span id="nebHarmony">1</span>x<br>
+						Next milestone: <span id="nebNextMile">-</span>
 					</div>
 				</div>
 			</div>
