@@ -74,6 +74,7 @@ function softcapHTML(x, start) { return E(x).gte(start)?` <span class='soft'>(so
 Decimal.prototype.softcapHTML = function (start) { return softcapHTML(this.clone(), start) }
 
 function calc(dt, dt_offline) {
+    const sbSnap = (typeof SANDBOX !== "undefined") ? SANDBOX.beforeCalc() : null
     let du_gs = tmp.preQUGlobalSpeed.mul(dt)
 
     if (tmp.pass) {
@@ -162,6 +163,7 @@ function calc(dt, dt_offline) {
         player.supernova.fermions.unl = true
         addPopup(POPUP_GROUPS.fermions)
     }
+    if (typeof SANDBOX !== "undefined") SANDBOX.afterCalc(sbSnap)
 }
 
 function getPlayerData() {
@@ -354,6 +356,10 @@ function getPlayerData() {
 		stardust: E(0),
 		stellar: E(0),
 		stellar_gen: E(0),
+		sandbox: {
+			antiNan: true,
+			caps: {},
+		},
     }
     for (let x = 0; x < EXOTIC_BOOST_LENGTH; x++) s.exotic.boosts.push(E(0))
     for (let x = 0; x < MATTERS_LENGTH; x++) s.exotic.matters.push(E(0))
@@ -544,12 +550,14 @@ function loadGame(start=true, gotNaN=false) {
     if (!gotNaN) tmp.prevSave = localStorage.getItem("testSave")
     wipe()
     load(tmp.prevSave)
+    if (typeof SANDBOX !== "undefined") SANDBOX.enforceHardcaps()
     setupHTML()
     updateQCModPresets()
     
     if (start) {
         setInterval(save,60000)
         for (let x = 0; x < 50; x++) updateTemp()
+        if (typeof SANDBOX !== "undefined") SANDBOX.enforceHardcaps()
         updateHTML()
         for (let x = 0; x < 3; x++) {
             let r = document.getElementById('ratio_d'+x)
@@ -607,16 +615,20 @@ function checkNaN() {
 }
 
 function findNaN(obj, str=false, data=getPlayerData()) {
+    if (!obj || typeof obj !== "object") return false
     if (str ? typeof obj == "string" : false) obj = JSON.parse(atob(obj))
-    for (let x = 0; x < Object.keys(obj).length; x++) {
-        let k = Object.keys(obj)[x]
+    const keys = Object.keys(obj)
+    for (let x = 0; x < keys.length; x++) {
+        let k = keys[x]
+        if (k === "sandbox") continue
+        let dVal = data ? data[k] : undefined
         if (typeof obj[k] == "number") if (isNaN(obj[k])) return true
         if (str) {
-            if (typeof obj[k] == "string") if (data[k] == null || data[k] == undefined ? false : Object.getPrototypeOf(data[k]).constructor.name == "Decimal") if (isNaN(E(obj[k]).mag)) return true
+            if (typeof obj[k] == "string") if (dVal == null || dVal == undefined ? false : Object.getPrototypeOf(dVal).constructor.name == "Decimal") if (isNaN(E(obj[k]).mag)) return true
         } else {
             if (obj[k] == null || obj[k] == undefined ? false : Object.getPrototypeOf(obj[k]).constructor.name == "Decimal") if (isNaN(E(obj[k]).mag)) return true
         }
-        if (typeof obj[k] == "object") return findNaN(obj[k], str, data[k])
+        if (typeof obj[k] == "object" && obj[k] !== null) return findNaN(obj[k], str, dVal)
     }
     return false
 }

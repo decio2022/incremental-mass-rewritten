@@ -254,10 +254,10 @@ button {
 	align-content: start;
 	justify-content: start;
 	width: calc(100% - 100px);
-	min-height: 110px;
-	max-height: 115px;
+	min-height: 150px;
+	max-height: 175px;
 	margin: 5px 0px;
-	padding-top: 40px;
+	padding-top: 44px;
 }
 
 #chal_upper {
@@ -268,14 +268,47 @@ button {
 }
 
 #table_res_main {
-	overflow-y: auto;
+	width: 100%;
+	overflow-x: auto;
+	overflow-y: visible;
 }
 
 .resources {
 	display: flex;
 	justify-content: start;
 	align-items: center;
-	min-width: 300px;
+	min-width: 315px;
+}
+
+.res_text_col {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-left: 5px;
+	text-align: left;
+	max-width: 320px;
+}
+
+.res_formula {
+	font-size: 10px;
+	line-height: 1.15;
+	color: #9fc4d8;
+	opacity: 0.9;
+	max-width: 310px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: left;
+}
+
+.formula_line {
+	font-size: 11px;
+	line-height: 1.3;
+	color: #9fc4d8;
+	opacity: 0.92;
+	margin: 3px auto 4px auto;
+	max-width: 960px;
+	word-break: break-word;
 }
 
 .top_text {
@@ -289,6 +322,20 @@ button {
 
 .btn_tab {
 	width: 140px;
+}
+
+.btn_tab.sandbox {
+	color: #ffaa33;
+	border-color: #ffaa33;
+}
+
+.btn_tab.sandbox:not(.choosed):hover {
+	background-color: #4d2e00;
+}
+
+.btn_tab.sandbox.choosed {
+	color: black;
+	background-color: #ffaa33;
 }
 
 .btn_tab.bh {
@@ -1078,4 +1125,209 @@ h2 {
 	font-size: 13px;
 	text-align: center;
 	grid-column: 1 / -1;
+}
+
+.stats_formula {
+	display: block;
+	font-size: 10.5px;
+	color: #8cb9d6;
+	margin-top: 2px;
+	text-align: right;
+	word-break: break-word;
+}
+
+/* Sandbox Tab */
+
+.sb_toolbar {
+	background-color: #161616;
+	border: solid 2px #ffaa33;
+	padding: 10px 12px;
+	margin-bottom: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.sb_toolbar_row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+}
+
+.sb_bulk_label {
+	font-size: 12px;
+	color: #ffd599;
+	font-weight: bold;
+}
+
+.sb_summary_pill {
+	font-size: 12px;
+	padding: 4px 10px;
+	background-color: #201a10;
+	border: solid 1px #9c6a22;
+	color: #ffd599;
+}
+
+.sb_help {
+	font-size: 11.5px;
+	color: #bbb;
+	line-height: 1.4;
+}
+
+.sb_help code {
+	background-color: #222;
+	border: 1px solid #3c3c3c;
+	padding: 0 4px;
+	color: #ffd599;
+}
+
+.sb_grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+	gap: 10px;
+	align-items: start;
+}
+
+.sb_card {
+	background-color: #151515;
+	border: solid 1px #444;
+	padding: 10px 12px;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.sb_card_head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	border-bottom: solid 1px #303030;
+	padding-bottom: 5px;
+}
+
+.sb_name {
+	font-size: 14px;
+	font-weight: bold;
+	color: #fff;
+	margin-right: 4px;
+}
+
+.sb_live_row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 8px;
+	font-size: 12.5px;
+}
+
+.sb_gain {
+	color: #9de8a6;
+	font-size: 12px;
+}
+
+.sb_formula_box {
+	background-color: #101418;
+	border: solid 1px #273440;
+	padding: 5px 8px;
+	text-align: left;
+}
+
+.sb_formula_expr {
+	font-size: 11.5px;
+	color: #9fc4d8;
+	text-align: left;
+	word-break: break-word;
+}
+
+.sb_formula_full {
+	font-size: 10.5px;
+	color: #7c96a6;
+	margin-top: 2px;
+	text-align: left;
+	word-break: break-word;
+}
+
+.sb_ctrl_row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 5px;
+}
+
+.sb_lbl {
+	font-size: 11.5px;
+	color: #ccc;
+	min-width: 42px;
+	text-align: left;
+}
+
+.sb_input {
+	background-color: #101010;
+	color: #fff;
+	border: solid 1px #777;
+	padding: 4px 7px;
+	font-size: 12px;
+	width: 145px;
+	text-align: left;
+}
+
+.sb_input:focus {
+	outline: none;
+	border-color: #ffaa33;
+}
+
+.sb_cap_status {
+	font-size: 11px;
+	color: #888;
+	margin-left: 2px;
+}
+
+.sb_cap_status.active {
+	color: #ffd066;
+	font-weight: bold;
+}
+
+.sb_feedback {
+	font-size: 11px;
+	min-height: 14px;
+	text-align: left;
+}
+
+.sb_feedback.ok {
+	color: #7fff9a;
+}
+
+.sb_feedback.err {
+	color: #ff7a7a;
+}
+
+.sb_readonly {
+	font-size: 11.5px;
+	color: #aaa;
+	font-style: italic;
+	text-align: left;
+}
+
+.btn.sb_on {
+	background-color: #184a22;
+	border-color: #46c45e;
+	color: #caffd3;
+}
+
+.btn.sb_off {
+	background-color: #2b2020;
+	border-color: #7a4c4c;
+	color: #ddd;
+}
+
+.btn.sb_cat_active {
+	background-color: #ffaa33;
+	border-color: #ffaa33;
+	color: #000;
+	font-weight: bold;
 }

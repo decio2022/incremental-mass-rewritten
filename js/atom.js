@@ -329,13 +329,17 @@ function updateAtomTemp() {
 function setupAtomHTML() {
     let particles_table = new Element("particles_table")
 	let table = ""
+    const partPowIds = ["proton_pow", "neutron_pow", "electron_pow"]
+    const partIds = ["proton", "neutron", "electron"]
     for (let x = 0; x < ATOM.particles.names.length; x++) {
         table += `
         <div style="width: 30%"><button class="btn" onclick="ATOM.particles.assign(${x})">Assign</button><br><br>
             <div style="color: ${ATOM.particles.colors[x]}; min-height: 120px">
-                <h2><span id="particle_${x}_amt">X</span> ${ATOM.particles.names[x]}</h2><br>
+                <h2><span id="particle_${x}_amt">X</span> ${ATOM.particles.names[x]}</h2>
+                <div class="formula_line" data-formula-id="${partIds[x]}"></div>
                 Which generates <span id="particle_${x}_amtEff">X</span> ${ATOM.particles.names[x]} Powers<br>
                 You have <span id="particle_${x}_power">X</span> ${ATOM.particles.names[x]} Powers, which:
+                <div class="formula_line" data-formula-id="${partPowIds[x]}"></div>
             </div><br><div id="particle_${x}_powerEff"></div>
         </div>
         `
@@ -343,11 +347,13 @@ function setupAtomHTML() {
 	particles_table.setHTML(table)
     let gparticles_table = new Element("gparticles_table")
 	table = ""
+    const gpartIds = ["g_proton", "g_neutron", "g_electron"]
     for (let x = 0; x < ATOM.particles.names.length; x++) {
         table += `
         <div style="width: 30%"><button class="btn" onclick="ATOM.particles.gassign(${x})">Assign</button><br><br>
             <div style="color: ${ATOM.particles.colors[x]}; min-height: 120px">
-                <h2><span id="gparticle_${x}_amt">X</span> Galactic ${ATOM.particles.names[x]}</h2><br>
+                <h2><span id="gparticle_${x}_amt">X</span> Galactic ${ATOM.particles.names[x]}</h2>
+                <div class="formula_line" data-formula-id="${gpartIds[x]}"></div>
 				<span id="gparticle_${x}_eff"></div>
 			</div><br>
         </div>

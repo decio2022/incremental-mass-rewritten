@@ -2114,7 +2114,7 @@
       base = D(base);
       
       var result = 0;
-      var copy = D(this);
+      var copy = new Decimal(this);
       if (copy.layer - base.layer > 3)
       {
         var layerloss = (copy.layer - base.layer - 3);

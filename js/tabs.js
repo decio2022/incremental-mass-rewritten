@@ -87,6 +87,7 @@ const TABS = {
             { id: "Quantum", style: "qu" },
             { id: "Exotic", style: "red" },
             { id: "Options" },
+            { id: "Sandbox", style: "sandbox" },
         ],
     },
 }
